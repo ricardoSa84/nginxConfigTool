@@ -5063,3 +5063,21 @@ footer .btn {
     margin-right: -20px;
   }
 }
+
+/* MY CSS */
+
+.centeredIconAsButton{
+  text-align: center;
+  cursor: pointer;
+  color: #08ff00;
+}
+
+.centerContent{
+    margin: 0;
+    background: yellow;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}

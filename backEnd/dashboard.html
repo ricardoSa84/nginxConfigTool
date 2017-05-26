@@ -40,40 +40,41 @@
 			<div class="sidebar-wrapper">
 						<ul class="nav">
 								<li class="active">
-										<a href="dashboard.html">
+										<a href="#dashboard">
 												<i class="material-icons">dashboard</i>
 												<p>Dashboard</p>
 										</a>
 								</li>
 								<li>
-										<a href="mainsettings.html">
+										<a href="#mainsettings">
 												<i class="material-icons">web</i>
 												<p>Main Settings</p>
 										</a>
 								</li>
 								<li>
-										<a href="httpsettings.html">
+										<a href="#httpsettings">
 												<i class="material-icons">http</i>
 												<p>HTTP Settings</p>
 										</a>
 								</li>
 								<li>
-										<a href="serversettings.html">
+										<a href="#serversettings">
 												<i class="material-icons">computer</i>
 												<p>Server settings</p>
 										</a>
 								</li>
 								<li>
-										<a href="upstreams.html">
+										<a href="#upstreams">
 												<i class="material-icons">backup</i>
 												<p>UpStreams</p>
 										</a>
 								</li>
 						</ul>
 			</div>
+    </div>
 
-	    </div>
-	    <div class="main-panel">
+    <div class="main-panel">
+		<!-- nav icon start -->
 			<nav class="navbar navbar-transparent navbar-absolute">
 				<div class="container-fluid">
 					<div class="navbar-header">
@@ -96,22 +97,24 @@
 					</div>
 				</div>
 			</nav>
+			<!-- nav icon end -->
 
 			<div class="content">
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-lg-3 col-md-6 col-sm-6">
+					<!-- Dashboard start -->
+					<div class="row" id="dashboard">
+						<div class="col-lg-4 col-md-12 col-sm-12">
 							<div class="card card-stats">
 								<div class="card-header" data-background-color="orange">
 									<i class="material-icons">thumbs_up_down</i>
 								</div>
 								<div class="card-content">
 									<p class="category">Pedidos recebidos</p>
-									<h3 class="title">500<small>PPS</small></h3>
+									<h3 class="title">5000<small>PPS</small></h3>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
+						<div class="col-lg-4 col-md-12 col-sm-12">
 							<div class="card card-stats">
 								<div class="card-header" data-background-color="green">
 									<i class="material-icons">thumb_up</i>
@@ -122,7 +125,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
+						<div class="col-lg-4 col-md-12 col-sm-12">
 							<div class="card card-stats">
 								<div class="card-header" data-background-color="red">
 									<i class="material-icons">thumb_down</i>
@@ -134,13 +137,87 @@
 							</div>
 						</div>
 					</div>
+					<!-- Dashboard end -->
+
+					<!-- Main Settings start -->
+					<div class="row" id="mainsettings">
+						<h2 class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+							Main Settings
+						</h2>
+					</div>
+					<div class="row">
+							<div id="mainContentPlaceholder" class="col-lg-4 col-md-6 col-sm-12">
+
+							</div>
+					</div>
+					<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 centeredIconAsButton">
+									<i id="addmainCircle" class="material-icons">add_circle_outline</i>
+							</div>
+					</div>
+					<!-- Main Settings end -->
+
+					<!-- Http Settings start -->
+					<div class="row" id="httpsettings">
+						<h2 class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+							Http Settings
+						</h2>
+					</div>
+					<div class="row">
+							<div id="httpContentPlaceholder" class="col-lg-4 col-md-6 col-sm-12">
+
+							</div>
+					</div>
+					<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 centeredIconAsButton">
+									<i id="addHttpCircle" class="material-icons">add_circle_outline</i>
+							</div>
+					</div>
+					<!-- Http Settings end -->
+
+					<!-- Server Settings start -->
+					<div class="row" id="serversettings">
+						<h2 class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+							Server Settings
+						</h2>
+					</div>
+					<div class="row">
+							<div id="serverContentPlaceholder" class="col-lg-4 col-md-6 col-sm-12">
+
+							</div>
+					</div>
+					<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 centeredIconAsButton">
+									<i id="addServerCircle" class="material-icons">add_circle_outline</i>
+							</div>
+					</div>
+					<!-- Server Settings end -->
+
+					<!-- Upstreams start -->
+					<div class="row" id="upstreams">
+						<h2 class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+							Upstreams
+						</h2>
+					</div>
+					<div class="row">
+							<div id="upstreamsContentPlaceholder" class="col-lg-4 col-md-6 col-sm-12">
+
+							</div>
+					</div>
+					<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 centeredIconAsButton">
+									<i id="addUpstreamsCircle" class="material-icons">add_circle_outline</i>
+							</div>
+					</div>
+					<!-- Upstreams end -->
+
 				</div>
 			</div>
 
 			<footer class="footer">
 				<div class="container-fluid">
 					<p class="copyright pull-right">
-						&copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">NginX Config Tool</a>
+						&copy; <script>document.write(new Date().getFullYear())</script> <a href="#">NginX Config Tool</a>
 					</p>
 				</div>
 			</footer>
@@ -162,15 +239,9 @@
 
 	<!-- Material Dashboard javascript methods -->
 	<script src="./assets/js/material-dashboard.js"></script>
+	<script src="./assets/js/mainscript.js"></script>
 
-	<!-- Material Dashboard DEMO methods, don't include it in your project! -->
-	<script src="./assets/js/demo.js"></script>
 
-	<script type="text/javascript">
-    	$(document).ready(function(){
-				
 
-    	});
-	</script>
 
 </html>
