@@ -65,7 +65,50 @@ window.SettingsView = Backbone.View.extend({
     showInfoMsg(false, '.my-modal');
     $.AdminLTE.boxWidget.activate();
 
+    var options = "<optgroup label='Imagens'>";
+    var extensionsimg = ["jpg", "gif", "jpeg", "png", "ico"];
+    var extensionsdoc = ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx"];
+    for (var i in extensionsimg.sort()) {
+      options += "<option>" + extensionsimg[i] + "</option>";
+    }
+    options += "</optgroup><optgroup label='Documentos'>";
+    for (var i in extensionsdoc.sort()) {
+      options += "<option>" + extensionsdoc[i] + "</option>";
+    }
+    options += "</optgroup>";
+
+    $("#select-extensao").html(options);    
+    $('.selectpicker').selectpicker();
+
+    var rangeSlider = function(){
+      var slider = $('#slider-cache'),
+      range = $('#range-slider-range'),
+      value = $('.range-slider__value');
+
+      slider.each(function(){
+
+        value.each(function(){
+          var value = $(this).prev().attr('value');
+          $(this).html(value);
+        });
+
+        range.on('input', function(){
+          $(this).next(value).html(this.value);
+          $("#slider-cache-value").text(self.secondsTimeSpanToHMS(this.value));
+        });
+      });
+    };
+
+    rangeSlider();
+
     self.checkImputs();
+  },
+  secondsTimeSpanToHMS: function (s) {
+    var h = Math.floor(s/3600); //Get whole hours
+    s -= h*3600;
+    var m = Math.floor(s/60); //Get remaining minutes
+    s -= m*60;
+    return h+":"+(m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
   },
   getiniconfigparams: function () {
     var self = this;
