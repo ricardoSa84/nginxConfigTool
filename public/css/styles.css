@@ -57,6 +57,11 @@
 .col-centred {
   margin: 0 auto;
 }
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
 
 @media (min-width: 500px) {
   /* STYLES HERE */

@@ -38,7 +38,7 @@ window.LoginView = Backbone.View.extend({
                     "dispaly": "none"
                   });
                   $('.my-modal').html("");
-                }, 2000);
+                }, 5000);
               }
             },
             function (xhr, ajaxOptions, thrownError) {

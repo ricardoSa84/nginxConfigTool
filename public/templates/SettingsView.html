@@ -12,31 +12,45 @@
         <div class="box-body">
           <div class="row with-border">
             <div class="col-md-1">
-              <label>Hostname:</label>
+              <label class="vcenter">Hostname:</label>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <input id="host-name" class="width100 valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="" data-inputmask="'alias': 'Hostname'" data-mask=""  >
-              </div>
-            </div><!-- /.box-body --> 
+            <div class="col-md-2">
+              <input id="host-name" class="width100 vcenter valid-input" data-typevalue="host-name" type="text" placeholder="hostname" value="" data-inputmask="'alias': 'Hostname'" data-mask="">
+            </div>         
             <div class="col-md-1">
-              <span class="whith10p color-red" data-toggle="tooltip" title="Inseert a valid name server.">
+              <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server.">
                 <i class="icon fa fa-close"></i>
               </span>
             </div><!-- /.box-body --> 
             <div class="col-md-1">
-              <label>Host Port</label>
+              <label class="vcenter">Host Port:</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <div class="form-group">
-                <input id="host-port" class="width100 valid-input form-control" data-typevalue="host-port" type="text" placeholder="3000" value="3000">
+                <input id="host-port" class="width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
               </div>
             </div><!-- /.box-body --> 
             <div class="col-md-1">
-              <span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid port namber.">
+              <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
                 <i class="icon fa fa-close"></i>
               </span>
+            </div>
+
+            <div class="col-md-1">
+              <label class="vcenter">Proxy:</label>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <input id="host-destination" class="width100 valid-input vcenter form-control" data-typevalue="host-destination" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
+              </div>
             </div><!-- /.box-body --> 
+            <div class="col-md-1">
+              <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
+                <i class="icon fa fa-close"></i>
+              </span>
+            </div>
+
+
           </div>
         </div>
       </div>    
@@ -60,7 +74,7 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <select id="select-extensao" class="selectpicker form-control" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
+                <select id="select-extensao" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
                 </select>
               </div>
             </div><!-- /.box-body --> 
@@ -72,11 +86,19 @@
             <div class="col-md-1">
               <label>Cache Time:</label>
             </div>
-            <div class="col-md-4"> 
-              <input id="slider-cache" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="5400" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
+            <div class="col-md-2"> 
+              <input id="slider-cache" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
             </div>
             <div class="col-md-1"> 
-              <label id="slider-cache-value" data-sliderValue="1">0h 00m 01s</label>
+              <label id="slider-cache-value" data-sliderValue="1">1</label>
+            </div>
+            <div class="col-md-2"> 
+              <select id="select-cache-time" class="selectpicker form-control" data-actions-box="true">
+                <option value="s">Segundos</option>
+                <option value="m">Minutos</option>
+                <option value="h">Horas</option>
+                <option value="d">Dias</option>
+              </select>
             </div>
           </div>
         </div>
@@ -103,10 +125,10 @@
           <button id="save-settings" type="button" class="btn btn-default width100" ><label> Save Settings <i class="fa fa-save"></i></label></button>
         </div><!-- /.col -->  
         <div class="col-md-2">
-          <button id="refresh-values" type="button" class="btn btn-default width100" ><label> Test Nginx </label></button>
+          <button id="test-nginx" type="button" disabled class="btn btn-default width100" ><label> Test Nginx </label></button>
         </div><!-- /.col -->  
         <div class="col-md-2">
-        <button id="start_monitor" type="button" class="btn btn-default width100" ><label> Restart Ngnix <i class="fa fa-refresh"></i></i></label></button>     
+          <button id="restart-nginx" type="button" disabled class="btn btn-default width100" ><label> Restart Ngnix <i class="fa fa-refresh"></i></i></label></button>     
         </div><!-- /.col -->  
         <!-- <div class="col-md-2">
           <button id="stop-monitor" type="button" class="btn btn-default width100" ><label> Stop Monitor <i class="fa fa-circle-o-notch"></i></label></button>
