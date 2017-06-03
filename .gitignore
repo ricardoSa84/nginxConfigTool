@@ -1,6 +1,5 @@
 *.class
+*.log
 nbproject/private/
 node_modules/
 .vagrant
-.vagrant/
-*.log
