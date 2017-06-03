@@ -24,7 +24,7 @@ window.LoginView = Backbone.View.extend({
 
     modem('POST', "/login",
             function (data) {
-              if (data.length > 0) {
+              if (data.length > 4) {
                 self.loginuser(data);
               } else {
                 $('.my-modal').html($("#login-error").html());

@@ -3,9 +3,22 @@ window.SettingsView = Backbone.View.extend({
   validinifile: false,
   inputchanged: false,
   continue: false,
+  textOpt : "",
   events: {
     'keyup input': function () {
       this.checkImputs();
+    },
+    "change .selectpicker" : function () {
+      var self = this;
+      var opts = "";
+      $(".selectpicker option:selected").each(function(index,element){
+       // console.log(index);
+       // console.log(element.value);
+       // console.log(element.text);
+       opts += element.text + "|";
+     });
+      self.textOpt = opts.slice(0,-1);
+      self.checkImputs();
     },
     "click #save-settings": "savesettings",
     "change .btn-on-off" : function (evt){
@@ -15,6 +28,7 @@ window.SettingsView = Backbone.View.extend({
   initialize: function () {
   },
   checkImputs: function () {
+    var self = this;
     $('.valid-input').each(function (i, obj) {
       if ($(obj).val().trim().length <= 3) {
         $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
@@ -49,6 +63,11 @@ window.SettingsView = Backbone.View.extend({
         break;
       }
     });
+    if (self.textOpt.trim().length > 0) {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+    } else {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+    }
   },
   init: function () {
     var self = this;
@@ -74,6 +93,9 @@ window.SettingsView = Backbone.View.extend({
 
     $("#select-extensao").html(options);    
     $('.selectpicker').selectpicker();
+
+
+
     
     $('#slider-cache').slider().on('slide', function(ev){
       $("#slider-cache-value").attr("data-sliderValue", this.value);
