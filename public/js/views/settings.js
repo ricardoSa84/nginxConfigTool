@@ -4,52 +4,47 @@ window.SettingsView = Backbone.View.extend({
   inputchanged: false,
   continue: false,
   events: {
-    'keyup .table input': function () {
+    'keyup input': function () {
       this.checkImputs();
     },
-    "click #save-settings": "savesettings"
+    "click #save-settings": "savesettings",
+    "change .btn-on-off" : function (evt){
+      $(evt.target).parent().next().click();
+    }
   },
   initialize: function () {
   },
   checkImputs: function () {
     $('.valid-input').each(function (i, obj) {
-      if ($(obj).val().trim().length <= 2) {
-        $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+      if ($(obj).val().trim().length <= 3) {
+        $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
       } else {
-        $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        $(obj).parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
       }
       switch ($(obj).data("typevalue")) {
         case "ipaddress":
         // var ipRegex = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
         var ipRegex = '^([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$';
         if ($(obj).val().trim().match(ipRegex)) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+          $(obj).parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
         } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          $(obj).parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         }
         break;
-        case "hostport":
+        case "host-port":
         if (($(obj).val().trim() * 1) >= 1 && ($(obj).val().trim() * 1) < 65536) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+          $(obj).parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
         } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         }
         break;
-        case "systempath":
-        var val = $(obj).val().replace(/\//g, "§").replace(".", "£");
-        
-
-        break;
-        case "siteName":
-        $(obj).val($(obj).val().replace(/[^\w]/gi, ''));
-        break;
-        case "hostename":
+        case "host-name":
         var ipRegex = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
         // var ipRegex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
-        if ($(obj).val().trim().match(ipRegex)) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        if ($(obj).val().trim().match(ipRegex) && $(obj).val().trim().length >= 3) {
+          $(obj).parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
         } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         }
         break;
       }
@@ -79,27 +74,20 @@ window.SettingsView = Backbone.View.extend({
 
     $("#select-extensao").html(options);    
     $('.selectpicker').selectpicker();
+    
+    $('#slider-cache').slider().on('slide', function(ev){
+      $("#slider-cache-value").attr("data-sliderValue", this.value);
+      $("#slider-cache-value").text(self.secondsTimeSpanToHMS(this.value));
+    });
 
-    var rangeSlider = function(){
-      var slider = $('#slider-cache'),
-      range = $('#range-slider-range'),
-      value = $('.range-slider__value');
+    $(".slider").css({
+      width: "100%"
+    });
+    $("#slider-cache-value").parent().css({
+      "margin-top": 0
+    });
 
-      slider.each(function(){
-
-        value.each(function(){
-          var value = $(this).prev().attr('value');
-          $(this).html(value);
-        });
-
-        range.on('input', function(){
-          $(this).next(value).html(this.value);
-          $("#slider-cache-value").text(self.secondsTimeSpanToHMS(this.value));
-        });
-      });
-    };
-
-    rangeSlider();
+    $('#control-cache').bootstrapToggle();
 
     self.checkImputs();
   },
@@ -108,7 +96,7 @@ window.SettingsView = Backbone.View.extend({
     s -= h*3600;
     var m = Math.floor(s/60); //Get remaining minutes
     s -= m*60;
-    return h+":"+(m < 10 ? '0'+m : m)+":"+(s < 10 ? '0'+s : s); //zero padding on minutes and seconds
+    return h + "h " + (m < 10 ? '0'+ m : m) + "m " + (s < 10 ? '0'+ s : s) + "s"; //zero padding on minutes and seconds
   },
   getiniconfigparams: function () {
     var self = this;

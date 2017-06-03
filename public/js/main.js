@@ -16,6 +16,7 @@ var Router = Backbone.Router.extend({
     content: undefined,
     footer: undefined,
     settingsform: undefined,
+    dashboardform: undefined,
     loginform: undefined,
     about: undefined,
     socketclt: null,
@@ -67,6 +68,7 @@ var Router = Backbone.Router.extend({
         "": "login",
         //Pagina Inicial
         "Inicio": "inicio",
+        "Dashboard": "dashboard",
         "Settings": "settings",
         "Terminal": "cmdterminal",
         "About": "aCercaDe",
@@ -149,6 +151,15 @@ var Router = Backbone.Router.extend({
             self.contentnav.setView("Settings");
         });
     },
+    dashboard: function () {
+        var self = this;
+        self.verificaLogin(function () {
+            self.dashboardform = new DashboardView({});
+            $('#content').html(self.dashboardform.render().el);
+            self.dashboardform.init();
+            self.contentnav.setView("Dashboard");
+        });
+    },
     cmdterminal: function () {
         var self = this;
         self.verificaLogin(function () {
@@ -190,6 +201,7 @@ templateLoader.load([
     "SideBarView",
     "FooterView",
     "SettingsView",
+    "DashboardView",
     "ContentNavView",
     "TerminalView",
     "AboutView"],

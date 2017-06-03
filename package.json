@@ -1,32 +1,22 @@
 {
-  "name": "wifinder",
+  "name": "NginxConfigTool",
   "version": "0.0.1",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "authors": [
-    "Nelson Gomes <nelsonmpg@hotmail.com>",
-    "Rui Dias <ruifgdias@sapo.pt>"
-  ],
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "*",
+    "body-parser": "^1.17.2",
     "btoa": "^1.1.2",
-    "colors": "*",
-    "crypto": "0.0.3",
-    "debug": "*",
-    "express": "*",
-    "ini": "*",
-    "line-reader": "^0.2.4",
+    "colors": "^1.1.2",
+    "express": "^4.15.3",
+    "ini": "^1.3.4",
     "md5": "^2.2.1",
     "mongoose": "^4.10.4",
-    "request": "^2.60.0",
-    "rethinkdb": "*",
-    "shell-interval": "*",
-    "socket.io": "*",
-    "underscore": "*",
-    "workerjs": "*"
-  }
+    "socket.io": "^2.0.2",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
 }
