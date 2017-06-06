@@ -4,115 +4,117 @@
       <div class="box">
          <div  class="box-header with-border">
             <h2 class="box-title">
-               <i class="fa fa-server"></i> 
-               Settings
+               <i class="fa fa-server"></i> Settings
             </h2>
          </div>
          <div class="box-body">
-            <div class="row with-border">
+          <div class="col-md-12">
+            <div class="box">
                <div  class="box-header with-border">
-                  <div class="box">
-                     <div  class="box-header with-border">
-                        <h4 class="box-title">
-                           <i class="fa fa-server"></i> 
-                           Config Host
-                        </h4>
-                     </div>
-                     <div class="box-body">
-                      <div class="col-md-12">
-                          <div class="col-md-1">
-                            <label class="vcenter">Hostname:</label>
-                          </div>
-                          <div class="col-md-2">
-                            <input id="host-name" class="width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
-                          </div>         
-                          <div class="col-md-1">
-                            <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server.">
-                              <i class="icon fa fa-close"></i>
-                            </span>
-                          </div>
-                          <div class="col-md-1">
-                            <label class="vcenter">Host Port:</label>
-                          </div>
-                          <div class="col-md-2">
-                              <input id="host-port" class="width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
-                          </div>
-                          <div class="col-md-1">
-                            <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
-                              <i class="icon fa fa-close"></i>
-                            </span>
-                          </div>
-
-                          <div class="col-md-1">
-                            <label class="vcenter">Proxy:</label>
-                          </div>
-                          <div class="col-md-2">
-                              <input id="host-destination" class="width100 valid-input vcenter form-control" data-typevalue="host-destination" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
-                          </div><!-- /.box-body --> 
-                          <div class="col-md-1">
-                            <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber.">
-                              <i class="icon fa fa-close"></i>
-                            </span>
-                          </div>
-                        </div>
-                     </div>
-                  </div>
-                  
-                  <div class="box">
-                    <div  class="box-header with-border">
-                      <h3 class="box-title display-start-elemet">
-                        Config Cache
-                      </h3>
-                      <div class="display-end-elemet">
-                        <input id="control-cache" class="btn-on-off" checked type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
-                        <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                          <i class="fa fa-minus"></i>
-                        </button>
-                      </div><!--  -->
-                    </div><!-- /.box-header -->
-                    <div class="box-body">
-                      <div class="row with-border">
-                        <div class="col-md-1">
-                          <label>Cache Files:</label>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <select id="select-extensao" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
-                            </select>
-                          </div>
-                        </div><!-- /.box-body --> 
-                        <div class="col-md-1">
-                          <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
-                            <i class="icon fa fa-close"></i>
-                          </span>
-                        </div><!-- /.box-body --> 
-                        <div class="col-md-1">
-                          <label>Cache Time:</label>
-                        </div>
-                        <div class="col-md-2"> 
-                          <input id="slider-cache" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
-                        </div>
-                        <div class="col-md-1"> 
-                          <label id="slider-cache-value" data-sliderValue="1">1</label>
-                        </div>
-                        <div class="col-md-2"> 
-                          <select id="select-cache-time" class="selectpicker form-control" data-actions-box="true">
-                            <option value="s">Segundos</option>
-                            <option value="m">Minutos</option>
-                            <option value="h">Horas</option>
-                            <option value="d">Dias</option>
-                            <option value="w">Semanas</option>
-                            <option value="M">Meses</option>
-                            <option value="y">Anos</option>
-                          </select>
-                        </div>
-                      </div>
+                  <h4 class="box-title">
+                     <i class="fa fa-server"></i> 
+                     Config Host
+                  </h4>
+               </div>
+               <div class="box-body">
+                <div class="col-md-12">
+                    <div class="col-md-1">
+                      <label class="vcenter">Hostname:</label>
                     </div>
-                  </div> 
+                    <div class="col-md-2">
+                      <input id="host-name" class="width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
+                    </div>         
+                    <div class="col-md-1">
+                      <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+                    <div class="col-md-1">
+                      <label class="vcenter">Host Port:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input id="host-port" class="width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
+                    </div>
+                    <div class="col-md-1">
+                      <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+
+                    <div class="col-md-1">
+                      <label class="vcenter">Proxy:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input id="host-destination" class="width100 valid-input vcenter form-control" data-typevalue="host-destination" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
+                    </div><!-- /.box-body --> 
+                    <div class="col-md-1">
+                      <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+                  </div>
                </div>
             </div>
-         </div>
+            
+            <div class="box">
+              <div  class="box-header with-border">
+                <h3 class="box-title display-start-elemet">
+                  Config Cache
+                </h3>
+                <div class="display-end-elemet">
+                  <input id="control-cache" class="btn-on-off" checked type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
+                  <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                  </button>
+                </div><!--  -->
+              </div><!-- /.box-header -->
+              <div class="box-body">
+                <div class="row with-border">
+                  <div class="col-md-1">
+                    <label>Cache Files:</label>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select id="select-extensao" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
+                      </select>
+                    </div>
+                  </div><!-- /.box-body --> 
+                  <div class="col-md-1">
+                    <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
+                      <i class="icon fa fa-close"></i>
+                    </span>
+                  </div><!-- /.box-body --> 
+                  <div class="col-md-1">
+                    <label>Cache Time:</label>
+                  </div>
+                  <div class="col-md-2"> 
+                    <input id="slider-cache" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
+                  </div>
+                  <div class="col-md-1"> 
+                    <label id="slider-cache-value" data-sliderValue="1">1</label>
+                  </div>
+                  <div class="col-md-2"> 
+                    <select id="select-cache-time" class="selectpicker form-control" data-actions-box="true">
+                      <option value="s">Segundos</option>
+                      <option value="m">Minutos</option>
+                      <option value="h">Horas</option>
+                      <option value="d">Dias</option>
+                      <option value="w">Semanas</option>
+                      <option value="M">Meses</option>
+                      <option value="y">Anos</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+   <div class="col-md-12">
       <div class="box">
         <div class="box-header with-border">
           <div class="box-tools pull-right">
@@ -141,7 +143,7 @@
       </div>
     </div>
   </div>
-   </div>
+  </div>
 </div>
 
 
