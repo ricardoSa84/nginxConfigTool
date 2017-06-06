@@ -1,16 +1,29 @@
 /* global Backbone, normalizeString, app */
 window.SettingsView = Backbone.View.extend({
-  inputchanged: false,
-  continue: false,
+  extensions :[
+  { 
+    text : "Imagens",
+    ext :["jpg", "gif", "jpe?g", "png", "ico", "cur", "woff"]
+  }, {
+    text : "Documentos",
+    ext : ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx", "ttf", "otf", "eot", "svg"]
+  }, { 
+    text : "Conteudos HTML",
+    ext : ["css", "js", "html", "xml", "htc"]
+  }
+  ],
+  textRegex : /^\w+$/,
+  portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
+  ipRegex : /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
   selectedOpts : "",
   events: {
     'keyup input': function () {
       this.checkImputs();
     },
-    "change #select-extensao" : function () {
+    "change #select-extensao.selectpicker" : function (evt) {
       var self = this;
       var opts = "";
-      $(".selectpicker option:selected").each(function(index,element){
+      $("#select-extensao.selectpicker option:selected").each(function(index,element){
        // console.log(index);
        // console.log(element.value);
        // console.log(element.text);
@@ -38,7 +51,6 @@ window.SettingsView = Backbone.View.extend({
       }, {});
    },
    "click #restart-nginx": function(){
-    console.log("SDFADFGAD");
     modem("POST",
       '/nginx/reload',
       function (data) {
@@ -57,72 +69,28 @@ window.SettingsView = Backbone.View.extend({
   },
   "change .btn-on-off" : function (evt){
     $(evt.target).parent().next().click();
+    this.checkImputs();
   }
 },
 initialize: function () {
-},
-checkImputs: function () {
-  var self = this;
-  $('.valid-input').each(function (i, obj) {
-    if ($(obj).val() && !$.isArray($(obj).val())) {
-      if ($(obj).val().trim().length <= 3) {
-        $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-      } else {
-        $(obj).parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-      }
-      switch ($(obj).data("typevalue")) {
-        case "host-destination":
-        var ipportRegex = "/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}\:[0-9]{1,3}$/.test(id)";
-        if ($(obj).val().trim().match(ipportRegex)) {
-          $(obj).parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "host-port":
-        if (($(obj).val().trim() * 1) >= 1 && ($(obj).val().trim() * 1) < 65536) {
-          $(obj).parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "host-name":
-        var hostRegex = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
-        if ($(obj).val().trim().match(hostRegex) && $(obj).val().trim().length >= 3) {
-          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-      }
-    }
-  });
-  if (self.selectedOpts.trim().length > 0) {
-    $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-  } else {
-    $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-  }
 },
 init: function () {
   var self = this;
   $("#server-ip:input").inputmask();
   $('body').on('input', function (e) {
-    self.inputchanged = true;
   });
   showInfoMsg(false, '.my-modal');
   $.AdminLTE.boxWidget.activate();
 
-  var options = "<optgroup label='Imagens'>";
-  var extensionsimg = ["jpg", "gif", "jpeg", "png", "ico"];
-  var extensionsdoc = ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx"];
-  for (var i in extensionsimg.sort()) {
-    options += "<option>" + extensionsimg[i] + "</option>";
+  var options = "";
+
+  for (var i in self.extensions) {
+    options += "<optgroup label='" + self.extensions[i].text + "'>";
+    for (var j in self.extensions[i].ext.sort()) {
+      options += "<option>" + self.extensions[i].ext[j] + "</option>";
+    }
+    options += "</optgroup>";
   }
-  options += "</optgroup><optgroup label='Documentos'>";
-  for (var i in extensionsdoc.sort()) {
-    options += "<option>" + extensionsdoc[i] + "</option>";
-  }
-  options += "</optgroup>";
 
   $("#select-extensao").html(options);    
   $('.selectpicker').selectpicker();
@@ -143,50 +111,99 @@ init: function () {
 
   self.checkImputs();
 },
-secondsTimeSpanToHMS: function (s) {
-    var h = Math.floor(s/3600); //Get whole hours
-    s -= h*3600;
-    var m = Math.floor(s/60); //Get remaining minutes
-    s -= m*60;
-    return h + "h " + (m < 10 ? '0'+ m : m) + "m " + (s < 10 ? '0'+ s : s) + "s"; //zero padding on minutes and seconds
-  },
-  savesettings: function () {
-    var self = this;
-    if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
-      self.inputchanged = false;
-      var params = {
+checkImputs: function () {
+  var self = this;
+  $('.valid-input').each(function (i, obj) {
+    if ($(obj).val() && !$.isArray($(obj).val())) {
+      $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+      switch ($(obj).data("typevalue")) {
+        case "host-name":
+        if ($(obj).val().trim().match(self.textRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+        case "host-port":
+        if ($(obj).val().trim().match(self.portRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+        case "host-destination":
+        var ipPort = $(obj).val().trim().split(":");
+        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+      }
+    }
+  });
+  if ($("#control-cache").prop('checked')) {
+    if (self.selectedOpts.trim().length > 0) {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+    } else {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+    }
+  } else {
+    $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  }
+},
+
+savesettings: function () {
+  var self = this;
+  if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
+    console.log("OK");
+    var params = {
+      'SERVERNAME': $('#host-name').val(),
+      'PORT': $('#host-port').val(),
+      'PROXY': $('#host-destination').val(),
+      'CACHE': $("#control-cache").prop('checked'),
+      'CACHEFILES': self.selectedOpts,
+      'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+    };
+
+    var paramsobj = {
+      proxy : {
         'SERVERNAME': $('#host-name').val(),
         'PORT': $('#host-port').val(),
-        'PROXY': $('#host-destination').val(),
+        'PROXY': "http://" + $('#host-destination').val()  
+      },
+      cache : {
         'CACHE': $("#control-cache").prop('checked'),
+        'PROXY': "http://" + $('#host-destination').val(),
         'CACHEFILES': self.selectedOpts,
-        'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $(".selectpicker option:selected").val()
-      };
-
-      modem("POST",
-        "/saveserver",
-        function (data) {
-          if (data.status === "created") {
-            $('#test-nginx').prop('disabled', false);
-            showmsg('.my-modal', "success", "Seved Settings!", true);
-          } else {
-            $('#test-nginx').prop('disabled', true);
-            showmsg('.my-modal', "error", "Error", true);
-          }
-        },
-        function (xhr, ajaxOptions, thrownError) {
-          var json = JSON.parse(xhr.responseText);
-          error_launch(json.message);
-        }, {
-          data: params
-        });
-    } else {
-      showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
+        'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+      }
     }
-  },
-  render: function () {
-    var self = this;
-    $(this.el).html(this.template());
-    return this;
+
+    modem("POST",
+      "/nginx/saveserver",
+      function (data) {
+        if (data.status === "created") {
+          $('#test-nginx').prop('disabled', false);
+          showmsg('.my-modal', "success", "Seved Settings!", true);
+        } else {
+          $('#test-nginx').prop('disabled', true);
+          showmsg('.my-modal', "error", "Error", true);
+        }
+      },
+      function (xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {
+        data: paramsobj
+      });
+  } else {
+    showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
   }
+},
+render: function () {
+  var self = this;
+  $(this.el).html(this.template());
+  return this;
+}
 });
