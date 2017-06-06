@@ -13,21 +13,16 @@ window.TerminalView = Backbone.View.extend({
             self.socketTerm.setcommand('echo "`whoami`@`hostname`: [`pwd`] $ "');
         }, {
             history: true,
-            greetings: 'Welcome to the web shell WiDetection',
-            prompt: 'WiDetection $ ',
+            greetings: 'Welcome to the web shell Nginx Config Tool',
+            // prompt: 'echo "`whoami`@`hostname`: [`pwd`] $ "',
             exit: false
         });
-        self.socketTerm.setcommand("cd /home/linaro/");
         self.socketTerm.setcommand('echo "`whoami`@`hostname`: [`pwd`] $ "');
-        self.terminal.active();
         $('#cmdterminalID').focus();
     },
     terminalstdout: function (data) {
-        if (data.toLowerCase().indexOf("linaro@") >= 0 || data.toLowerCase().indexOf("root@") >= 0) {
-            this.terminal.set_prompt(data);
-        } else {
-            this.terminal.echo(String(data));
-        }
+        this.terminal.echo(String(data));
+        this.terminal.set_prompt(data);
 
     },
     terminalstderr: function (data) {

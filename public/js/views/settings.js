@@ -1,9 +1,16 @@
 /* global Backbone, normalizeString, app */
 window.SettingsView = Backbone.View.extend({
-  extensions : [
-  ["jpg", "gif", "jpe?g", "png", "ico", "cur", "woff"],
-  ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx", "ttf", "otf", "eot", "svg"],
-  ["css", "js", "html", "xml", "htc"]
+  extensions :[
+  { 
+    text : "Imagens",
+    ext :["jpg", "gif", "jpe?g", "png", "ico", "cur", "woff"]
+  }, {
+    text : "Documentos",
+    ext : ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx", "ttf", "otf", "eot", "svg"]
+  }, { 
+    text : "Conteudos HTML",
+    ext : ["css", "js", "html", "xml", "htc"]
+  }
   ],
   textRegex : /^\w+$/,
   portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
@@ -75,20 +82,15 @@ init: function () {
   showInfoMsg(false, '.my-modal');
   $.AdminLTE.boxWidget.activate();
 
-  var options = "<optgroup label='Imagens'>";
+  var options = "";
 
-  for (var i in self.extensions[0].sort()) {
-    options += "<option>" + self.extensions[0][i] + "</option>";
+  for (var i in self.extensions) {
+    options += "<optgroup label='" + self.extensions[i].text + "'>";
+    for (var j in self.extensions[i].ext.sort()) {
+      options += "<option>" + self.extensions[i].ext[j] + "</option>";
+    }
+    options += "</optgroup>";
   }
-  options += "</optgroup><optgroup label='Documentos'>";
-  for (var i in self.extensions[1].sort()) {
-    options += "<option>" + self.extensions[1][i] + "</option>";
-  }
-  options += "</optgroup><optgroup label='Conteudos HTML'>";
-  for (var i in self.extensions[2].sort()) {
-    options += "<option>" + self.extensions[2][i] + "</option>";
-  }
-  options += "</optgroup>";
 
   $("#select-extensao").html(options);    
   $('.selectpicker').selectpicker();
