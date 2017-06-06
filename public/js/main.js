@@ -190,6 +190,7 @@ templateLoader.load([
     "SideBarView",
     "FooterView",
     "SettingsView",
+    "AdvancedSettingsView",
     "ContentNavView",
     "TerminalView",
     "AboutView"],
