@@ -1,0 +1,70 @@
+<!-- Info boxes -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+       <div  class="box-header with-border">
+          <h2 class="box-title">
+             Dashboard
+          </h2>
+       </div>
+       <div class="box-body">
+        <div class="col-md-12">
+            <div class="box">
+              <div class="box-header with-border">
+              <h4 class="box-title">Access Log</h4>
+              </div>
+              <div class="box-body">      
+                <div class="row">
+                  <div class="col-lg-12">     
+                    <div id="access-log" class="height200">
+
+                    </div>
+                  </div>
+                </div>
+              </div><!-- /.box-body -->
+              <div class="box-footer">
+              </div><!-- /.box-footer-->
+            </div><!-- /.box -->
+
+            <div class="box">
+            <div class="box-header with-border">
+            <h4 class="box-title">Error Log</h4>
+            </div>
+            <div class="box-body">      
+              <div class="row">
+                <div class="col-lg-12">   
+                    <div id="error-log" class="height200">
+
+                    </div>                  
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+            </div><!-- /.box-footer-->
+          </div><!-- /.box -->
+          </div>
+       </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<div class="modal modal-warning">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"> <!--  data-toggle="tooltip" title="Collapse" data-widget="collapse" -->
+        <button type="button" class="close btn-modal" data-event="close"  data-toggle="tooltip" title="Close Warning" data-dismiss="modal" aria-label="Close" data-widget="close"><span aria-hidden="true">×</span></button>
+        <h2 class="modal-title icon fa  fa-info-circle"> Warning</h2>
+      </div>
+      <div class="modal-body">
+        <p><b>Careful!</b><br>You have unsaved settings!!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline pull-left btn-modal" data-event="close" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline btn-modal" data-event="notsave" data-dismiss="modal">Dont save settings and continue</button>
+        <button type="button" data-event="save" class="btn btn-outline pull-right btn-modal">Save settings and continue</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>

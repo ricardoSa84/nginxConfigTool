@@ -1,325 +1,168 @@
 <!-- Info boxes -->
-<div class="row"><!-- Info boxes -->
-  <div class="col-md-12">
-    <div class="col-md-5">
+<div class="row">
+   <div class="col-md-12">
       <div class="box">
-        <div  class="box-header with-border">
-          <h3 class="box-title">
-            <i class="fa fa-server"></i> 
-            Config Host</h3>
-            <div class="box-tools pull-right">
-              <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-              </button>
-            </div>
-          </div><!-- /.box-header -->
-          <div class="box-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="box">
-                  <div class="box-body">
-                    <table class="table table-bordered">
-                      <tbody>                       
-                        <tr>
-                          <td><label>Hostname:</label></td>
-                          <td><input id="host" data-inputmask="'alias': 'Hostname'" data-mask="" class=" width100 valid-input" data-typevalue="hostname" type="text" value="" placeholder="hostname"></td>
-                          <td class="whith10p color-red" data-toggle="tooltip" title="Insert a valid host name."><i class="icon fa fa-close"></i></td>
-                        </tr>
-                        <tr>
-                          <td><label>Host Port</label></td>
-                          <td><input id="host-port" class=" width100 valid-input" data-typevalue="hostport" type="text" value="3000" placeholder="3000"><br></td>
-                          <td class="whith10p color-red" data-toggle="tooltip" title="Valid Port Access Server"><i class="icon fa fa-close"></i></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div><!-- /.box-body -->                
-                </div><!-- /.col -->              
-              </div><!-- /.row -->
-            </div><!-- ./box-body -->
-          </div><!-- /.box -->
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-
-      <div class="col-md-7">
-        <div class="box">
-          <div  class="box-header with-border">
-            <h3 class="box-title">
-              <!-- <i class="fa fa-sitemap"></i>  -->
-              Config Cache</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div><!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
+         <div  class="box-header with-border">
+            <h2 class="box-title">
+               <i class="fa fa-server"></i> Settings
+            </h2>
+         </div>
+         <div class="box-body">
+          <div class="col-md-12">
+            <div class="box">
+               <div  class="box-header with-border">
+                  <h4 class="box-title">
+                     <i class="fa fa-server"></i> 
+                     Config Host
+                  </h4>
+               </div>
+               <div class="box-body">
                 <div class="col-md-12">
-                  <div class="box">
-                    <div class="box-body">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" value="">
-                          <span class="cr">
-                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                          </span>
-                          jpg
-                        </label>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" value="">
-                          <span class="cr">
-                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                          </span>
-                          gif
-                        </label>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" value="">
-                          <span class="cr">
-                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                          </span>
-                          png
-                        </label>
-                      </div>
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" value="">
-                          <span class="cr">
-                            <i class="cr-icon glyphicon glyphicon-ok"></i>
-                          </span>
-                          tiff
-                        </label>
-                      </div>
-
-
-                    </div><!-- /.box-body -->                
-                  </div><!-- /.col -->              
-                </div><!-- /.row -->
-              </div><!-- ./box-body -->
-            </div><!-- /.box -->
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.row -->
-    </div><!-- /.row -->
-
-
-    <div class="row"><!-- Info boxes -->
-      <div class="col-md-12">
-        <div class="col-md-4">
-          <div class="box">
-            <div  class="box-header with-border">
-              <h3 class="box-title"><!-- <i class="fa fa-sitemap"></i>--> Config Server</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div><!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="box">
-                    <div class="box-body">
-                      <table class="table table-bordered">
-                        <tbody>
-                          <tr>
-                            <td><label>Sensor Name</label></td>
-                            <td><input id="sensor-name" class=" width100 valid-input" type="text" value="sensor" placeholder="sensor"></td>
-                            <td class="whith10p color-red" data-toggle="tooltip" title="Name sensor - Min length 3"><i class="icon fa fa-close"></i></td>
-                          </tr>                      
-                          <tr>
-                            <td></td>
-                            <td>
-                              <button id="Check-Position" type="button" class="btn btn-default width100" >Check Position</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><label>City</label></td>
-                            <td><input id="sensor-local" class=" width100 valid-input" type="text" value="Tomar" placeholder="Tomar"></td>
-                            <td class="whith10p color-red" data-toggle="tooltip" title="Local Sensor - Min length 3"><i class="icon fa fa-close"></i></td>
-                          </tr>
-                          <tr>
-                            <td><label>Latitude</label></td>
-                            <td><input id="sensor-latitude" class=" width100" type="text" value="0.0" readonly><br></td>
-                            <td class="whith10p"></td>
-                          </tr>
-                          <tr>
-                            <td><label>Longitude</label></td>
-                            <td><input id="sensor-longitude" class=" width100" type="text" value="0.0" readonly><br></td>
-                            <td class="whith10p"></td>
-                          </tr>  
-                          <tr>
-                            <td><label>PosX</label></td>
-                            <td><input id="sensor-posx" class=" width100" type="text" value="0.0" disabled="" readonly><br></td>
-                            <td class="whith10p"></td>
-                          </tr>
-                          <tr>
-                            <td><label>PosY</label></td>
-                            <td><input id="sensor-posy" class=" width100" type="text" value="0.0" disabled="" readonly><br></td>
-                            <td class="whith10p"></td>
-                          </tr> 
-                          <tr>
-                            <td id="addimagesensor">
-                              <div id="imgsensor"></div>
-                            </td>
-                            <td>
-                              <button id="add-plant" type="button" class="btn btn-default width100" disabled="disabled">Add Plant</button>
-                            </td>
-                          </tr>                   
-                        </tbody>
-                      </table>
-                    </div><!-- /.box-body -->                
-                  </div><!-- /.col -->              
-                </div><!-- /.row -->            
-              </div><!-- ./box-body -->
-            </div><!-- /.box -->
-          </div><!-- /.col -->
-
-          <div class="box">
-            <div  class="box-header with-border">
-              <!-- <h3 class="box-title"></h3> -->
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div><!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="box">
-                    <div class="box-body">
-                      <table class="table table-bordered">
-                        <tbody>
-                          <tr>
-                            <td><p class="text-center"><b>Local File Monitor</b></p></td>
-                            <td><input id="site-file-folder" class=" width100 valid-input" data-typevalue="systempath" type="text" value="./"  placeholder="./"></td>
-                            <td class="whith10p color-red" data-toggle="tooltip" title="Valid system path."><i class="icon fa fa-close"></i></td>
-                          </tr> 
-                          <tr>
-                            <td><p class="text-center"><b>SSH Port Connection</b></p></td>
-                            <td><input id="ssh-port" class=" width100 valid-input" data-typevalue="port" type="text" value="10000" placeholder="10000"><br></td>
-                            <td class="whith10p color-red" data-toggle="tooltip" title="Valid Port Access SSH Connection"><i class="icon fa fa-close"></i></td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <p class="text-center"><b>Auto start in next session</b></p>
-                            </td>
-                            <td>    
-                              <div class="onoffswitch col-centred">
-                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                                <label class="onoffswitch-label" for="myonoffswitch">
-                                  <span class="onoffswitch-inner"></span>
-                                  <span class="onoffswitch-switch"></span>
-                                </label>
-                              </div>
-                            </td>
-                            <td class="whith10p"></td>
-                          </tr>                       
-                        </tbody>
-                      </table>
-                    </div><!-- /.box-body -->                
-                  </div><!-- /.col -->              
-                </div><!-- /.row -->            
-              </div><!-- ./box-body -->
-            </div><!-- /.box -->
-          </div><!-- /.col -->
-
-        </div><!-- /.row -->
-
-        <div class="col-md-8">
-          <div class="box">
-            <div  class="box-header with-border">
-              <h3 class="box-title"><!-- <i class="fa fa-sitemap"></i>--> Local Sensor</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-              </div>
-            </div><!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="nav-tabs-custom">
-                    <!-- Tabs within a box -->
-                    <ul class="nav nav-tabs pull-right">
-                      <li class="select-source"><a href="tab2" data-toggle="tab"> Plant</a></li>
-                      <li class="select-source active"><a href="tab1" data-toggle="tab">Google Maps</a></li>
-                    </ul>
-                    <div id="posiSensor" class="tab-content no-padding">
-                      <div class="tab-pane active height600 tab1" id="map-google"></div>
-                      <div class="tab-pane height600 tab2" id="plantlocalsensor">
-                        <input type="file" id="selectplant" style="display: none">
-                      </div>
+                    <div class="col-md-1">
+                      <label class="vcenter">Hostname:</label>
                     </div>
-                  </div><!-- /.nav-tabs-custom -->
+                    <div class="col-md-2">
+                      <input id="host-name" class="width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
+                    </div>         
+                    <div class="col-md-1">
+                      <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+                    <div class="col-md-1">
+                      <label class="vcenter">Host Port:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input id="host-port" class="width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
+                    </div>
+                    <div class="col-md-1">
+                      <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+
+                    <div class="col-md-1">
+                      <label class="vcenter">Proxy:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input id="host-destination" class="width100 valid-input vcenter form-control" data-typevalue="host-destination" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
+                    </div><!-- /.box-body --> 
+                    <div class="col-md-1">
+                      <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber.">
+                        <i class="icon fa fa-close"></i>
+                      </span>
+                    </div>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="box">
+              <div  class="box-header with-border">
+                <h3 class="box-title display-start-elemet">
+                  Config Cache
+                </h3>
+                <div class="display-end-elemet">
+                  <input id="control-cache" class="btn-on-off" checked type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
+                  <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                  </button>
+                </div><!--  -->
+              </div><!-- /.box-header -->
+              <div class="box-body">
+                <div class="row with-border">
+                  <div class="col-md-1">
+                    <label>Cache Files:</label>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select id="select-extensao" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
+                      </select>
+                    </div>
+                  </div><!-- /.box-body --> 
+                  <div class="col-md-1">
+                    <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
+                      <i class="icon fa fa-close"></i>
+                    </span>
+                  </div><!-- /.box-body --> 
+                  <div class="col-md-1">
+                    <label>Cache Time:</label>
+                  </div>
+                  <div class="col-md-2"> 
+                    <input id="slider-cache" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
+                  </div>
+                  <div class="col-md-1"> 
+                    <label id="slider-cache-value" data-sliderValue="1">1</label>
+                  </div>
+                  <div class="col-md-2"> 
+                    <select id="select-cache-time" class="selectpicker form-control" data-actions-box="true">
+                      <option value="s">Segundos</option>
+                      <option value="m">Minutos</option>
+                      <option value="h">Horas</option>
+                      <option value="d">Dias</option>
+                      <option value="w">Semanas</option>
+                      <option value="M">Meses</option>
+                      <option value="y">Anos</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div><!-- /.box -->
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.row -->
-    </div><!-- /.row -->
-
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box">
-          <div class="box-header with-border">
-            <!-- <h3 class="box-title"></h3> -->
-            <div class="box-tools pull-right">
-              <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-              </button>
-            </div>
-          </div><!-- /.box-header -->
-          <div class="box-body">
-            <div class="col-md-2">
-              <button id="refresh-values" type="button" class="btn btn-default width100" ><label> Refresh Values <i class='fa  fa-refresh'></i></label></button>
-            </div><!-- /.col -->  
-            <div class="col-md-2">
-              <button id="save-settings" type="button" class="btn btn-default width100" ><label> Save Settings <i class="fa fa-save"></i></label></button>
-            </div><!-- /.col -->  
-            <div class="col-md-2">
-              <button id="start_monitor" type="button" class="btn btn-default width100" ><label> Start Monitor <i class="fa fa-power-off"></i></label></button>     
-            </div><!-- /.col -->  
-            <div class="col-md-2">
-              <button id="stop-monitor" type="button" class="btn btn-default width100" ><label> Stop Monitor <i class="fa fa-circle-o-notch"></i></label></button>
-            </div><!-- /.col -->  
-            <div class="col-md-2">
-              <button id="btn_restartSO" type="button" class="btn btn-default width100" ><label> Restart Sensor <i class="fa fa-refresh"></i></label></button>     
-            </div><!-- /.col -->  
-            <div class="col-md-2">
-              <button id="btn_poweroffSO" type="button" class="btn btn-default width100" ><label> PowerOff Sensor <i class="fa fa-circle-o-notch"></i></label></button>
-            </div><!-- /.col -->            
-          </div><!-- ./box-body -->
-        </div><!-- /.box -->
-      </div><!-- /.col --> 
+            </div> 
+          </div>
+      </div>
     </div>
+  </div>
+</div>
 
-
-    <div class="modal modal-warning">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header"> <!--  data-toggle="tooltip" title="Collapse" data-widget="collapse" -->
-            <button type="button" class="close btn-modal" data-event="close"  data-toggle="tooltip" title="Close Warning" data-dismiss="modal" aria-label="Close" data-widget="close"><span aria-hidden="true">×</span></button>
-            <h2 class="modal-title icon fa  fa-info-circle"> Warning</h2>
+<div class="row">
+   <div class="col-md-12">
+      <div class="box">
+        <div class="box-header with-border">
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
           </div>
-          <div class="modal-body">
-            <p><b>Careful!</b><br>You have unsaved settings!!</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline pull-left btn-modal" data-event="close" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-outline btn-modal" data-event="notsave" data-dismiss="modal">Dont save settings and continue</button>
-            <button type="button" data-event="save" class="btn btn-outline pull-right btn-modal">Save settings and continue</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+        </div>
+        <div class="box-body">
+          <div class="col-md-2">
+            <button id="save-settings" type="button" class="btn btn-default width100" ><label> Save Settings <i class="fa fa-save"></i></label></button>
+          </div>  
+          <div class="col-md-2">
+            <button id="test-nginx" type="button" disabled class="btn btn-default width100" >
+            <label> Test Nginx </label>
+            </button>
+          </div>  
+          <div class="col-md-2">
+            <button id="restart-nginx" type="button" disabled class="btn btn-default width100" >
+            <label> Restart Ngnix 
+            <i class="fa fa-refresh"></i></i>
+            </label>
+            </button>     
+          </div>        
+        </div>
+      </div>
     </div>
+  </div>
+  </div>
+</div>
 
-    <ul class='custom-menu'>
-      <li data-action="remove">Remove Sensor</li>
-      <li data-action="removeplant">Remove Plant</li>
-    </ul>
+
+
+<div class="modal modal-warning">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"> 
+        <button type="button" class="close btn-modal" data-event="close"  data-toggle="tooltip" title="Close Warning" data-dismiss="modal" aria-label="Close" data-widget="close"><span aria-hidden="true">×</span></button>
+        <h2 class="modal-title icon fa  fa-info-circle"> Warning</h2>
+      </div>
+      <div class="modal-body">
+        <p><b>Careful!</b><br>You have unsaved settings!!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline pull-left btn-modal" data-event="close" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline btn-modal" data-event="notsave" data-dismiss="modal">Dont save settings and continue</button>
+        <button type="button" data-event="save" class="btn btn-outline pull-right btn-modal">Save settings and continue</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>

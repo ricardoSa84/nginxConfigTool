@@ -1,164 +1,209 @@
 /* global Backbone, normalizeString, app */
 window.SettingsView = Backbone.View.extend({
-  validinifile: false,
-  inputchanged: false,
-  continue: false,
+  extensions :[
+  { 
+    text : "Imagens",
+    ext :["jpg", "gif", "jpe?g", "png", "ico", "cur", "woff"]
+  }, {
+    text : "Documentos",
+    ext : ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx", "ttf", "otf", "eot", "svg"]
+  }, { 
+    text : "Conteudos HTML",
+    ext : ["css", "js", "html", "xml", "htc"]
+  }
+  ],
+  textRegex : /^\w+$/,
+  portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
+  ipRegex : /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
+  selectedOpts : "",
   events: {
-    'keyup .table input': function () {
+    'keyup input': function () {
       this.checkImputs();
     },
-    "click #save-settings": "savesettings"
-  },
-  initialize: function () {
-  },
-  checkImputs: function () {
-    $('.valid-input').each(function (i, obj) {
-      if ($(obj).val().trim().length <= 2) {
-        $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-      } else {
-        $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-      }
-      switch ($(obj).data("typevalue")) {
-        case "ipaddress":
-        // var ipRegex = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$";
-        var ipRegex = '^([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5]).([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$';
-        if ($(obj).val().trim().match(ipRegex)) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "hostport":
-        if (($(obj).val().trim() * 1) >= 1 && ($(obj).val().trim() * 1) < 65536) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "systempath":
-        var val = $(obj).val().replace(/\//g, "§").replace(".", "£");
-        
-
-        break;
-        case "siteName":
-        $(obj).val($(obj).val().replace(/[^\w]/gi, ''));
-        break;
-        case "hostename":
-        var ipRegex = "^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
-        // var ipRegex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
-        if ($(obj).val().trim().match(ipRegex)) {
-          $(obj).parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-      }
-    });
-  },
-  init: function () {
-    var self = this;
-    $("#server-ip:input").inputmask();
-    $('body').on('input', function (e) {
-      self.inputchanged = true;
-    });
-    self.getiniconfigparams();
-    showInfoMsg(false, '.my-modal');
-    $.AdminLTE.boxWidget.activate();
-
-    self.checkImputs();
-  },
-  getiniconfigparams: function () {
-    var self = this;
-    modem("GET",
-      "/paramsinifile",
+    "change #select-extensao.selectpicker" : function (evt) {
+      var self = this;
+      var opts = "";
+      $("#select-extensao.selectpicker option:selected").each(function(index,element){
+       // console.log(index);
+       // console.log(element.value);
+       // console.log(element.text);
+       opts += element.text + "|";
+     });
+      self.selectedOpts = opts.slice(0,-1);
+      self.checkImputs();
+    },
+    "click #save-settings": "savesettings",
+    "click #test-nginx": function(){
+     modem("POST",
+      '/nginx/test',
       function (data) {
-        if (data.globalconfig != 0) {
-          $("#site-file-folder").val(data.filemonitor);
-          $("#ssh-port").val(data.sshport);
-          $("#site-name").val(data.databasesitename.replace(/[^\w]/gi, ''));
-          $("#site-pass").val(data.databasepass);
-          $("#server-ip").val(data.databasehost);
-          $("#server-port").val(data.databaseport);
-          $("#sensor-local").val(data.localsensormorada);
-          $("#sensor-name").val(data.localsensornomeSensor);
-          $("#sensor-latitude").val(data.localsensorlatitude);
-          $("#sensor-longitude").val(data.localsensorlongitude);
-          $("#sensor-posx").val(data.localsensorposx);
-          $("#sensor-posy").val(data.localsensorposy);
-          if (atob(data.localsensorplant) != "none") {
-            $('#plantlocalsensor').css({
-              'border': "2px solid black",
-              "-webkit-box-shadow": "none",
-              "-moz-box-shadow": "none",
-              "box-shadow": "none",
-              "background-image": atob(data.localsensorplant),
-              "background-size": "100% 100%",
-              "background-repeat": "no-repeat",
-              "background-position": "center center"
-            });
-          }
-          $("#myonoffswitch").attr("checked", data.autostart);
-          carregarmapa([["<h4>" + $("#sensor-name").val() + "</h4>", $("#sensor-latitude").val(), $("#sensor-longitude").val()]], $("#map-google")[0], self.selectnewposition);
-          self.validinifile = true;
+        if (data.status === "nginx test ok") {
+          $('#restart-nginx').prop('disabled', false);
+          showmsg('.my-modal', "success", "NGinx Test OK!", true);
         } else {
-          $("#Check-Position").click();
-          self.validinifile = false;
+          $('#restart-nginx').prop('disabled', true);
+          showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
         }
-        self.checkImputs();
       },
       function (xhr, ajaxOptions, thrownError) {
         var json = JSON.parse(xhr.responseText);
         error_launch(json.message);
-      }, {}
-      );
-  },
-  savesettings: function (callback) {
-    var self = this;
-    if (($(".valid-input").length == $(".fa-check").length) ? true : false) {
-      self.inputchanged = false;
-      var settings = {
-        filemonitor: $("#site-file-folder").val(),
-        sshport: $("#ssh-port").val(),
-        autostart: $("#myonoffswitch").is(":checked"),
-        sitename: $("#site-name").val().replace(/[^\w]/gi, ''),
-        host: $("#server-ip").val(),
-        port: $("#server-port").val() * 1,
-        password: $("#site-pass").val(),
-        morada: $("#sensor-local").val(),
-        nomeSensor: $("#sensor-name").val(),
-        latitude: $("#sensor-latitude").val() * 1,
-        longitude: $("#sensor-longitude").val() * 1,
-        posx: $("#sensor-posx").val() * 1,
-        posy: $("#sensor-posy").val() * 1,
-        plant: btoa($("#plantlocalsensor").css("background-image"))
-      };
-      modem("POST",
-        "/savesettings",
-        function (data) {
-          if (data == "save") {
-            showmsg('.my-modal', "success", "Seved Settings!");
-            self.validinifile = true;
-            if (typeof callback == "function") {
-              callback();
-            }
-          } else {
-            showmsg('.my-modal', "error", "Error");
-          }
-        },
-        function (xhr, ajaxOptions, thrownError) {
-          var json = JSON.parse(xhr.responseText);
-          error_launch(json.message);
-        }, {
-          data: settings
+      }, {});
+   },
+   "click #restart-nginx": function(){
+    modem("POST",
+      '/nginx/reload',
+      function (data) {
+        if (data.status === "nginx reload ok") {
+          $('#restart-nginx').prop('disabled', false);
+          showmsg('.my-modal', "success", "NGinx Test OK!", true);
+        } else {
+          $('#restart-nginx').prop('disabled', true);
+          showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
         }
-        );
-    } else {
-      showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.");
-    }
+      },
+      function (xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
   },
-  render: function () {
-    var self = this;
-    $(this.el).html(this.template());
-    return this;
+  "change .btn-on-off" : function (evt){
+    $(evt.target).parent().next().click();
+    this.checkImputs();
   }
+},
+initialize: function () {
+},
+init: function () {
+  var self = this;
+  $("#server-ip:input").inputmask();
+  $('body').on('input', function (e) {
+  });
+  showInfoMsg(false, '.my-modal');
+  $.AdminLTE.boxWidget.activate();
+
+  var options = "";
+
+  for (var i in self.extensions) {
+    options += "<optgroup label='" + self.extensions[i].text + "'>";
+    for (var j in self.extensions[i].ext.sort()) {
+      options += "<option>" + self.extensions[i].ext[j] + "</option>";
+    }
+    options += "</optgroup>";
+  }
+
+  $("#select-extensao").html(options);    
+  $('.selectpicker').selectpicker();
+
+  $('#slider-cache').slider().on('slide', function(ev){
+    $("#slider-cache-value").attr("data-sliderValue", this.value);
+    $("#slider-cache-value").text((this.value));
+  });
+
+  $(".slider").css({
+    width: "100%"
+  });
+  $("#slider-cache-value").parent().css({
+    "margin-top": 0
+  });
+
+  $('#control-cache').bootstrapToggle();
+
+  self.checkImputs();
+},
+checkImputs: function () {
+  var self = this;
+  $('.valid-input').each(function (i, obj) {
+    if ($(obj).val() && !$.isArray($(obj).val())) {
+      $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+      switch ($(obj).data("typevalue")) {
+        case "host-name":
+        if ($(obj).val().trim().match(self.textRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+        case "host-port":
+        if ($(obj).val().trim().match(self.portRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+        case "host-destination":
+        var ipPort = $(obj).val().trim().split(":");
+        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } else {
+          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        break;
+      }
+    }
+  });
+  if ($("#control-cache").prop('checked')) {
+    if (self.selectedOpts.trim().length > 0) {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+    } else {
+      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+    }
+  } else {
+    $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  }
+},
+
+savesettings: function () {
+  var self = this;
+  if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
+    console.log("OK");
+    var params = {
+      'SERVERNAME': $('#host-name').val(),
+      'PORT': $('#host-port').val(),
+      'PROXY': $('#host-destination').val(),
+      'CACHE': $("#control-cache").prop('checked'),
+      'CACHEFILES': self.selectedOpts,
+      'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+    };
+
+    var paramsobj = {
+      proxy : {
+        'SERVERNAME': $('#host-name').val(),
+        'PORT': $('#host-port').val(),
+        'PROXY': "http://" + $('#host-destination').val()  
+      },
+      cache : {
+        'CACHE': $("#control-cache").prop('checked'),
+        'PROXY': "http://" + $('#host-destination').val(),
+        'CACHEFILES': self.selectedOpts,
+        'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+      }
+    }
+
+    modem("POST",
+      "/nginx/saveserver",
+      function (data) {
+        if (data.status === "created") {
+          $('#test-nginx').prop('disabled', false);
+          showmsg('.my-modal', "success", "Seved Settings!", true);
+        } else {
+          $('#test-nginx').prop('disabled', true);
+          showmsg('.my-modal', "error", "Error", true);
+        }
+      },
+      function (xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {
+        data: paramsobj
+      });
+  } else {
+    showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
+  }
+},
+render: function () {
+  var self = this;
+  $(this.el).html(this.template());
+  return this;
+}
 });

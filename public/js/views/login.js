@@ -24,7 +24,7 @@ window.LoginView = Backbone.View.extend({
 
     modem('POST', "/login",
             function (data) {
-              if (data.length > 0) {
+              if (data.length > 4) {
                 self.loginuser(data);
               } else {
                 $('.my-modal').html($("#login-error").html());
@@ -38,7 +38,7 @@ window.LoginView = Backbone.View.extend({
                     "dispaly": "none"
                   });
                   $('.my-modal').html("");
-                }, 2000);
+                }, 5000);
               }
             },
             function (xhr, ajaxOptions, thrownError) {
