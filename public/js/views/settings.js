@@ -1,17 +1,5 @@
 /* global Backbone, normalizeString, app */
 window.SettingsView = Backbone.View.extend({
-  extensions :[
-  { 
-    text : "Imagens",
-    ext :["jpg", "gif", "jpe?g", "png", "ico", "cur", "woff"]
-  }, {
-    text : "Documentos",
-    ext : ["pdf", "doc", "docx", "xls", "xlxs", "ppt", "pptx", "ttf", "otf", "eot", "svg"]
-  }, { 
-    text : "Conteudos HTML",
-    ext : ["css", "js", "html", "xml", "htc"]
-  }
-  ],
   textRegex : /^\w+$/,
   portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
   ipRegex : /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
@@ -82,18 +70,24 @@ init: function () {
   showInfoMsg(false, '.my-modal');
   $.AdminLTE.boxWidget.activate();
 
-  var options = "";
-
-  for (var i in self.extensions) {
-    options += "<optgroup label='" + self.extensions[i].text + "'>";
-    for (var j in self.extensions[i].ext.sort()) {
-      options += "<option>" + self.extensions[i].ext[j] + "</option>";
-    }
-    options += "</optgroup>";
-  }
-
-  $("#select-extensao").html(options);    
-  $('.selectpicker').selectpicker();
+  modem("GET",
+    '/ext/all',
+    function (data) {
+      console.log(data);
+      for (var i in data) {
+        options += "<optgroup label='" + data[i].text + "'>";
+        for (var j in data[i].ext.sort()) {
+          options += "<option>" + data[i].ext[j] + "</option>";
+        }
+        options += "</optgroup>";
+      }
+      $("#select-extensao").html(options);    
+      $('.selectpicker').selectpicker();
+    },
+    function (xhr, ajaxOptions, thrownError) {
+      var json = JSON.parse(xhr.responseText);
+      error_launch(json.message);
+    }, {});
 
   $('#slider-cache').slider().on('slide', function(ev){
     $("#slider-cache-value").attr("data-sliderValue", this.value);
