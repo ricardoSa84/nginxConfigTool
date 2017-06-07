@@ -37,11 +37,11 @@ var socketClient = function (options) {
             self.vent.trigger('disable');
         });
 
-        // socket.on('logaccess', function (data) {
-        //     self.vent.trigger('logaccess', data);
-        // });
-        // socket.on('logerror', function (data) {
-        //     self.vent.trigger('logerror', data);
-        // });
+        socket.on('logaccess', function (data) {
+            self.vent.trigger('logaccess', data);
+        });
+        socket.on('logerror', function (data) {
+            self.vent.trigger('logerror', data);
+        });
     };
 };

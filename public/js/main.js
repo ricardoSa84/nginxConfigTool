@@ -15,6 +15,7 @@ var Router = Backbone.Router.extend({
     contentnav: undefined,
     content: undefined,
     footer: undefined,
+    dashboardform: undefined,
     settingsform: undefined,
     loginform: undefined,
     about: undefined,
@@ -25,29 +26,48 @@ var Router = Backbone.Router.extend({
         self.appEventBus = _.extend({}, Backbone.Events);
         self.socketclt = new socketClient({vent: self.appEventBus});
 
-        // update dos graficos em realtime
-        self.appEventBus.on("updateRealTimeChart", function (data, local, site) {
-            console.log("Event");
-        });
         self.appEventBus.on('stdout', function (data) {
-            self.terminalcmd.terminalstdout(data);
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminalstdout(data);
+            }
         });
         self.appEventBus.on('stderr', function (data) {
-            self.terminalcmd.terminalstderr(data);
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminalstderr(data);
+            }
         });
         self.appEventBus.on('disconnect', function () {
-            self.terminalcmd.terminaldisconnect();
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminaldisconnect();
+            }
         });
         self.appEventBus.on('enable', function () {
-            self.terminalcmd.terminalenable();
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminalenable();
+            }
         });
         self.appEventBus.on('disable', function () {
-            self.terminalcmd.terminaldisable();
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminaldisable();
+            }
         });
         self.appEventBus.on('prompt', function (data) {
-            self.terminalcmd.terminalsetprompt(data);
+            if (window.profile && window.profile.get("Page") === "Terminal") {
+                self.terminalcmd.terminalsetprompt(data);
+            }
         });
 
+        
+        self.appEventBus.on('logaccess', function (data) {
+            if (window.profile && window.profile.get("Page") === "Dashboard") {
+                self.dashboardform.dashboardstdaccess(data);
+            }
+        });
+        self.appEventBus.on('logerror', function (data) {
+            if (window.profile && window.profile.get("Page") === "Dashboard") {
+                self.dashboardform.dashboardstderror(data);
+            }
+        });
     },
     showView: function (view, elem, sub) {
         elem.show();
@@ -67,6 +87,7 @@ var Router = Backbone.Router.extend({
         "": "login",
         //Pagina Inicial
         "Inicio": "inicio",
+        "Dashboard": "dashboard",
         "Settings": "settings",
         "Terminal": "cmdterminal",
         "About": "aCercaDe",
@@ -81,19 +102,21 @@ var Router = Backbone.Router.extend({
         this.content = undefined;
         this.footer = undefined;
         this.loginform = undefined;
+        this.dashboardform = undefined;
+        this.settingsform = undefined;
         this.terminalcmd = undefined;
         if (this.socketclt) {
             this.socketclt.disconnect();
         }
 
-// linpa todo o conteudo das varias View da pagina web
+        // linpa todo o conteudo das varias View da pagina web
         $('header').html("");
         $('#content').html("");
         $('aside.main-sidebar').html("");
         $('footer').html("");
         $('contentnav').html("");
 
-//elimina o conteudo do profile
+        //elimina o conteudo do profile
         window.profile = null;
         window.sessionStorage.clear();
         window.logged = false;
@@ -109,7 +132,8 @@ var Router = Backbone.Router.extend({
             self.about = new AboutView();
             self.contentnav.setView("About");
             $('#content').html(self.about.render().el);
-            windowScrollTop();
+            window.profile.set("Page", undefined);
+            // windowScrollTop();
         });
     },
     inicio: function () {
@@ -136,13 +160,25 @@ var Router = Backbone.Router.extend({
             $('aside.main-sidebar').html(self.sidebar.render().el);
 
             $('footer').html(self.footer.render().el);
+            window.profile.set("Page", undefined);
             self.footer.init();
         });
+    },
+    dashboard: function () {
+        var self = this;
+        self.verificaLogin(function () {
+        self.dashboardform = new DashboardView({socket: self.socketclt});
+        $('#content').html(self.dashboardform.render().el);
+        self.dashboardform.init();
+        self.contentnav.setView("Dashboard");
+        window.profile.set("Page", "Dashboard");
+    });
     },
     // carrega as configuracoes do site
     settings: function () {
         var self = this;
         self.verificaLogin(function () {
+            window.profile.set("Page", undefined);
             self.settingsform = new SettingsView({});
             $('#content').html(self.settingsform.render().el);
             self.settingsform.init();
@@ -156,6 +192,7 @@ var Router = Backbone.Router.extend({
             $('#content').html(self.terminalcmd.render().el);
             self.terminalcmd.init();
             self.contentnav.setView("Terminal");
+            window.profile.set("Page", "Terminal");
         });
     },
     // verifica se o login e valido
@@ -183,19 +220,20 @@ var Router = Backbone.Router.extend({
  * @param {type} param1
  * @param {type} param2
  */
-templateLoader.load([
+ templateLoader.load([
     "LoginView",
     "HeaderView",
     "InicioView",
     "SideBarView",
     "FooterView",
+    "DashboardView",
     "SettingsView",
     "AdvancedSettingsView",
     "ContentNavView",
     "TerminalView",
     "AboutView"],
-        function () {
-            app = new Router();
-            Backbone.history.start();
-        }
-);
+    function () {
+        app = new Router();
+        Backbone.history.start();
+    }
+    );
