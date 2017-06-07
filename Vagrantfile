@@ -18,7 +18,7 @@ apt-get update -q
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
 apt-get update -q
-apt-get install -q -y nodejs python-software-properties python g++ make software-properties-common nginx
+apt-get install -q -y nodejs python-software-properties python g++ make software-properties-common nginx mongodb
 
 SCRIPT
 

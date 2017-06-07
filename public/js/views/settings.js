@@ -73,7 +73,7 @@ init: function () {
   modem("GET",
     '/ext/all',
     function (data) {
-      console.log(data);
+      var options = "";
       for (var i in data) {
         options += "<optgroup label='" + data[i].text + "'>";
         for (var j in data[i].ext.sort()) {
