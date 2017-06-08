@@ -4,21 +4,11 @@ window.SettingsView = Backbone.View.extend({
   portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
   ipRegex : /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
   selectedOpts : "",
+  countlocation : 1,
+  allLocations : [],
   events: {
     'keyup input': function () {
       this.checkImputs();
-    },
-    "change #select-extensao.selectpicker" : function (evt) {
-      var self = this;
-      var opts = "";
-      $("#select-extensao.selectpicker option:selected").each(function(index,element){
-       // console.log(index);
-       // console.log(element.value);
-       // console.log(element.text);
-       opts += element.text + "|";
-     });
-      self.selectedOpts = opts.slice(0,-1);
-      self.checkImputs();
     },
     "click #save-settings": "savesettings",
     "click #test-nginx": function(){
@@ -39,28 +29,41 @@ window.SettingsView = Backbone.View.extend({
       }, {});
    },
    "click #restart-nginx": function(){
-      modem("POST",
-        '/nginx/reload',
-        function (data) {
-          if (data.status === "nginx reload ok") {
-            $('#restart-nginx').prop('disabled', false);
-            showmsg('.my-modal', "success", "NGinx Test OK!", true);
-          } else {
-            $('#restart-nginx').prop('disabled', true);
-            showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-          }
-        },
-        function (xhr, ajaxOptions, thrownError) {
-          var json = JSON.parse(xhr.responseText);
-          error_launch(json.message);
-        }, {});
+    modem("POST",
+      '/nginx/reload',
+      function (data) {
+        if (data.status === "nginx reload ok") {
+          $('#restart-nginx').prop('disabled', false);
+          showmsg('.my-modal', "success", "NGinx Test OK!", true);
+        } else {
+          $('#restart-nginx').prop('disabled', true);
+          showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
+        }
+      },
+      function (xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
+  },
+    "click .remove-row" : function (evt){
+      var self = this;
+      var locname = $(self.el).find(evt.target).parent().parent().parent().parent().parent().parent().attr("data-location");
+      console.log(self.allLocations);
+      $(self.el).find('[data-location=' + locname +']').remove();
+      self.allLocations[locname] = null;
+      console.log(self.allLocations);
     },
-  "change .btn-on-off" : function (evt){
-    $(evt.target).parent().next().click();
-    this.checkImputs();
+  "click #add-new-location": function(){
+    var self = this;
+    this.locationView = new LocationView({model: this.model});
+    $(this.el).find("#server-locations").append(this.locationView.render().el);
+    this.locationView.init("location-" + self.countlocation);
+    self.allLocations["location-" + self.countlocation] = self.locationView;
+    self.countlocation++;
   }
 },
 initialize: function () {
+
 },
 init: function () {
   var self = this;
@@ -69,39 +72,6 @@ init: function () {
   });
   showInfoMsg(false, '.my-modal');
   $.AdminLTE.boxWidget.activate();
-
-  modem("GET",
-    '/ext/all',
-    function (data) {
-      var options = "";
-      for (var i in data) {
-        options += "<optgroup label='" + data[i].text + "'>";
-        for (var j in data[i].ext.sort()) {
-          options += "<option>" + data[i].ext[j] + "</option>";
-        }
-        options += "</optgroup>";
-      }
-      $("#select-extensao").html(options);    
-      $('.selectpicker').selectpicker();
-    },
-    function (xhr, ajaxOptions, thrownError) {
-      var json = JSON.parse(xhr.responseText);
-      error_launch(json.message);
-    }, {});
-
-  $('#slider-cache-ext, #slider-cache-path').slider().on('slide', function(ev){
-    $("#" + ev.target.id + "-value").attr("data-sliderValue", this.value);
-    $("#" + ev.target.id + "-value").text((this.value));
-  });
-
-  $(".slider").css({
-    width: "100%"
-  });
-  $("#slider-cache-ext-value, #slider-cache-path-value").parent().css({
-    "margin-top": 0
-  });
-
-  $('#control-cache-ext, #control-cache-path').bootstrapToggle();
 
   self.checkImputs();
 },

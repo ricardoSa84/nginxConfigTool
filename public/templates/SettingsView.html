@@ -8,7 +8,7 @@
          </div>
          <div class="box-body">
             <div class="col-md-12 thumbnail panel panel-default">
-               <div class="box">
+               <div id="server-locations" class="box">
                   <div  class="box-header with-border">
                      <h4 class="box-title">
                         <i class="fa fa-server"></i> 
@@ -54,181 +54,17 @@
                      </div>
                   </div>
                </div>
-               <div class="well well-sm">
-                  <div class="box">
-                     <div  class="box-header with-border">
-                        <h4 class="box-title">
-                         Location Settings
-                        </h4>
-                     </div>
-                     <div class="box-body">
-                        <div class="col-md-11 vcenter">
-                           <div class="box thumbnail no-margin-b collapsed-box">
-                              <div  class="box-header">
-                                 <div class=" display-start-elemet">
-                                    <input id="control-cache-ext" class="btn-on-off" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
-                                    <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                 </div>
-                                 <h5 class="box-title display-end-elemet">
-                                    Config Cache Static Files With Extensions
-                                 </h5>
-                                 <!--  -->
-                              </div>
-                              <!-- /.box-header -->
-                              <div class="box-body">
-                                 <div class="row with-border">
-                                    <div class="col-md-1">
-                                       <label>Cache Files:</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                       <div class="form-group">
-                                          <select id="select-extensao" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
-                                          </select>
-                                       </div>
-                                    </div>
-                                    <!-- /.box-body --> 
-                                    <div class="col-md-1">
-                                       <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
-                                       <i class="icon fa fa-close"></i>
-                                       </span>
-                                    </div>
-                                    <!-- /.box-body --> 
-                                    <div class="col-md-1">
-                                       <label>Cache Time:</label>
-                                    </div>
-                                    <div class="col-md-2"> 
-                                       <input id="slider-cache-ext" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
-                                    </div>
-                                    <div class="col-md-1"> 
-                                       <label id="slider-cache-ext-value" data-sliderValue="1">1</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                       <select id="select-cache-ext-time" class="selectpicker form-control" data-actions-box="true">
-                                          <option value="s">Segundos</option>
-                                          <option value="m">Minutos</option>
-                                          <option value="h">Horas</option>
-                                          <option value="d">Dias</option>
-                                          <option value="w">Semanas</option>
-                                          <option value="M">Meses</option>
-                                          <option value="y">Anos</option>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="box thumbnail no-margin-b collapsed-box">
-                              <div  class="box-header">
-                                 <div class=" display-start-elemet">
-                                    <input id="control-cache-path" class="btn-on-off" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
-                                    <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                 </div>
-                                 <h5 class="box-title display-end-elemet">
-                                    Config Cache Path
-                                 </h5>
-                              </div>
-                              <!-- /.box-header -->
-                              <div class="box-body">
-                                 <div class="row with-border">
-                                    <div class="col-md-1">
-                                       <label>Cache Files:</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                       <div class="form-group">
-                                          <select id="select-path" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
-                                          </select>
-                                       </div>
-                                    </div>
-                                    <!-- /.box-body --> 
-                                    <div class="col-md-1">
-                                       <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
-                                       <i class="icon fa fa-close"></i>
-                                       </span>
-                                    </div>
-                                    <!-- /.box-body --> 
-                                    <div class="col-md-1">
-                                       <label>Cache Time:</label>
-                                    </div>
-                                    <div class="col-md-2"> 
-                                       <input id="slider-cache-path" type="text" class="span2" value="1" data-slider-min="1" data-slider-max="60" data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="hide">
-                                    </div>
-                                    <div class="col-md-1"> 
-                                       <label id="slider-cache-path-value" data-sliderValue="1">1</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                       <select id="select-cache-path-time" class="selectpicker form-control" data-actions-box="true">
-                                          <option value="s">Segundos</option>
-                                          <option value="m">Minutos</option>
-                                          <option value="h">Horas</option>
-                                          <option value="d">Dias</option>
-                                          <option value="w">Semanas</option>
-                                          <option value="M">Meses</option>
-                                          <option value="y">Anos</option>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="box thumbnail no-margin-b">
-                              <div  class="box-header">
-                                 <h5 class="box-title display-start-elemet">
-                                    Add Options:
-                                 </h5>
-                              </div>
-                              <div class="box-body">
-                                 <div class="row with-border">
-                                    <div class="col-md-2">
-                                       <label>Select Option:</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                          <select id="select-opt-1" class="selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true">
-                                          </select>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                       <input id="text-opt-1" class="width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="" value="" data-mask="">
-                                    </div>
-                                    <div class="col-md-1">
-                                       <span class="whith10p color-red" data-toggle="tooltip" title="">
-                                       <i class="icon fa fa-close"></i>
-                                       </span>
-                                    </div>
-                                    <div class="col-md-1">
-                                       <h4>
-                                         <span class="whith10p" data-toggle="tooltip" title="Add new row.">
-                                          <i class="fa fa-plus-circle"></i>
-                                         </span>
-                                       </h4>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-1 width10pv2 vcenter">
-                           <h2>
-                             <span class="whith10p text-center" data-toggle="tooltip" title="Remove this location..">
-                              <i class="icon fa fa-times-circle"></i>
-                             </span>
-                           </h2>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="box-footer with-border">
-               <div class="col-md-2">
-                  <button id="save-settings" type="button" class="btn btn-default width100" >
-                     <label>
-                        <!-- <i class="fa fa-save"></i> --> Add New Location 
-                     </label>
-                  </button>
-               </div>
             </div>
          </div>
+        <div class="box-footer with-border">
+           <div class="col-md-2">
+              <button id="add-new-location" type="button" class="btn btn-default width100" >
+                 <label>
+                    <i class="fa fa-plus-circle"></i> Add New Location 
+                 </label>
+              </button>
+           </div>
+        </div>
       </div>
    </div>
 </div>
