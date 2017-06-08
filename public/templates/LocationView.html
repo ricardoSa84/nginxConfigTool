@@ -7,7 +7,7 @@
          </h4>
       </div>
       <div class="box-body">
-         <div class="col-md-11 vcenter">
+         <div class="col-md-11 vcenter">     
             <div class="box thumbnail no-margin-b collapsed-box">
                <div  class="box-header">
                   <div class=" display-start-elemet">
@@ -19,9 +19,7 @@
                   <h5 class="box-title display-end-elemet">
                      Config Cache Static Files With Extensions
                   </h5>
-                  <!--  -->
                </div>
-               <!-- /.box-header -->
                <div class="box-body">
                   <div class="row with-border">
                      <div class="col-md-1">
@@ -33,13 +31,11 @@
                            </select>
                         </div>
                      </div>
-                     <!-- /.box-body --> 
                      <div class="col-md-1">
                         <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
-                        <i class="icon fa fa-close"></i>
+                        <i class="icon fa fa-check color-green"></i>
                         </span>
                      </div>
-                     <!-- /.box-body --> 
                      <div class="col-md-1">
                         <label>Cache Time:</label>
                      </div>
@@ -90,7 +86,7 @@
                      <!-- /.box-body --> 
                      <div class="col-md-1">
                         <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
-                        <i class="icon fa fa-close"></i>
+                        <i class="icon fa fa-check color-green"></i>
                         </span>
                      </div>
                      <!-- /.box-body --> 
@@ -117,13 +113,28 @@
                   </div>
                </div>
             </div>
+
             <div class="box thumbnail no-margin-b">
                <div  class="box-header">
+               <div class="row with-border location-path">
+                  <div class="col-md-2">
+                     <label><h4>Insert Location Path:</h4></label>
+                  </div>
+                  <div class="col-md-9">                        
+                     <input class="location-input width100 vcenter valid-input form-control" data-typevalue="location-path" type="text" placeholder="/" value="" data-mask="/">
+                  </div>
+                  <div class="col-md-1">
+                     <span class="whith10p color-red" data-toggle="tooltip" title="Select one or more options.">
+                     <i class="icon fa fa-close color-red"></i>
+                     </span>
+                  </div>
+               </div>
                   <h5 class="box-title display-start-elemet">
                      Add Options:
                   </h5>
                </div>
-               <div class="box-body">
+               <div class="box-body">                     
+                  
                   <div class="row with-border">
                      <div class="col-md-2">
                         <label>Select Option:</label>
@@ -135,7 +146,7 @@
                         </div>
                      </div>
                      <div class="col-md-5">
-                        <input class="text-opt-1 width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="" value="" data-mask="">
+                        <input class="text-opt-1 width100 vcenter valid-input form-control" data-typevalue="location-option" type="text" placeholder="" value="" data-mask="">
                      </div>
                      <div class="col-md-1">
                         <span class="whith10p color-red" data-toggle="tooltip" title="">

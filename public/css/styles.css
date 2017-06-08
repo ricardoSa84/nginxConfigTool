@@ -66,6 +66,10 @@
   color: green;
 }
 
+.location-path {
+  overflow: hidden;
+}
+
 .col-centred {
   margin: 0 auto;
 }

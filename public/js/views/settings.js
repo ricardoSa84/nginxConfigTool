@@ -48,10 +48,8 @@ window.SettingsView = Backbone.View.extend({
     "click .remove-row" : function (evt){
       var self = this;
       var locname = $(self.el).find(evt.target).parent().parent().parent().parent().parent().parent().attr("data-location");
-      console.log(self.allLocations);
       $(self.el).find('[data-location=' + locname +']').remove();
       self.allLocations[locname] = null;
-      console.log(self.allLocations);
     },
   "click #add-new-location": function(){
     var self = this;
@@ -77,46 +75,46 @@ init: function () {
 },
 checkImputs: function () {
   var self = this;
-  $('.valid-input').each(function (i, obj) {
-    if ($(obj).val() && !$.isArray($(obj).val())) {
-      $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-      switch ($(obj).data("typevalue")) {
-        case "host-name":
-        if ($(obj).val().trim().match(self.textRegex)) {
-          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "host-port":
-        if ($(obj).val().trim().match(self.portRegex)) {
-          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-        case "host-destination":
-        var ipPort = $(obj).val().trim().split(":");
-        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-          $(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        } else {
-          $(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        }
-        break;
-      }
-    }
-  });
-  if ($("#control-cache").prop('checked')) {
-    if (self.selectedOpts.trim().length > 0) {
-      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-    } else {
-      $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-    }
-  } else {
-    $("#select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-  }
+  // $(self.el).find('.valid-input').each(function (i, obj) {
+  //   if ($(self.el).find(obj).val() && !$.isArray($(obj).val())) {
+  //   console.log($(self.el).find(obj).data("typevalue"));
+  //     $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+  //     switch ($(self.el).find(obj).data("typevalue")) {
+  //       case "host-name":
+  //       if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  //       } else {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+  //       }
+  //       break;
+  //       case "host-port":
+  //       if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  //       } else {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+  //       }
+  //       break;
+  //       case "host-destination":
+  //       var ipPort = $(self.el).find(obj).val().trim().split(":");
+  //       if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  //       } else {
+  //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+  //       }
+  //       break;
+  //     }
+  //   }
+  // });
+  // if ($(self.el).find(".control-cache-ext").prop('checked')) {
+  //   if (self.selectedOpts.trim().length > 0) {
+  //     $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  //   } else {
+  //     $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+  //   }
+  // } else {
+  //   $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+  // }
 },
-
 savesettings: function () {
   var self = this;
   if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
