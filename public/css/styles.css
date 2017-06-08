@@ -75,6 +75,15 @@
     float: none;
 }
 
+.width10pv2 {
+    width: 10px !important;
+    margin: 0 auto;
+}
+
+.no-margin-b {
+  margin-bottom: 0;
+}
+
 @media (min-width: 500px) {
   /* STYLES HERE */
   #chart1LineActives {

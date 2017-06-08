@@ -39,22 +39,22 @@ window.SettingsView = Backbone.View.extend({
       }, {});
    },
    "click #restart-nginx": function(){
-    modem("POST",
-      '/nginx/reload',
-      function (data) {
-        if (data.status === "nginx reload ok") {
-          $('#restart-nginx').prop('disabled', false);
-          showmsg('.my-modal', "success", "NGinx Test OK!", true);
-        } else {
-          $('#restart-nginx').prop('disabled', true);
-          showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-        }
-      },
-      function (xhr, ajaxOptions, thrownError) {
-        var json = JSON.parse(xhr.responseText);
-        error_launch(json.message);
-      }, {});
-  },
+      modem("POST",
+        '/nginx/reload',
+        function (data) {
+          if (data.status === "nginx reload ok") {
+            $('#restart-nginx').prop('disabled', false);
+            showmsg('.my-modal', "success", "NGinx Test OK!", true);
+          } else {
+            $('#restart-nginx').prop('disabled', true);
+            showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
+          }
+        },
+        function (xhr, ajaxOptions, thrownError) {
+          var json = JSON.parse(xhr.responseText);
+          error_launch(json.message);
+        }, {});
+    },
   "change .btn-on-off" : function (evt){
     $(evt.target).parent().next().click();
     this.checkImputs();
@@ -89,19 +89,19 @@ init: function () {
       error_launch(json.message);
     }, {});
 
-  $('#slider-cache').slider().on('slide', function(ev){
-    $("#slider-cache-value").attr("data-sliderValue", this.value);
-    $("#slider-cache-value").text((this.value));
+  $('#slider-cache-ext, #slider-cache-path').slider().on('slide', function(ev){
+    $("#" + ev.target.id + "-value").attr("data-sliderValue", this.value);
+    $("#" + ev.target.id + "-value").text((this.value));
   });
 
   $(".slider").css({
     width: "100%"
   });
-  $("#slider-cache-value").parent().css({
+  $("#slider-cache-ext-value, #slider-cache-path-value").parent().css({
     "margin-top": 0
   });
 
-  $('#control-cache').bootstrapToggle();
+  $('#control-cache-ext, #control-cache-path').bootstrapToggle();
 
   self.checkImputs();
 },
