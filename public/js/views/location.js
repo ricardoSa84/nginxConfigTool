@@ -1,4 +1,5 @@
 window.LocationView = Backbone.View.extend({
+  newrowhtml : '<div class="row with-border"><div class="col-md-2"><label>Select Option:</label></div><div class="col-md-3"><div class="form-group"><select class="select-opt-1 selectpicker form-control valid-input" multiple data-live-search="true" title="Select extensions to Cache."  data-actions-box="true"></select></div></div><div class="col-md-5"><input class="text-opt-1 width100 vcenter valid-input form-control" data-typevalue="location-option" type="text" placeholder="" value="" data-mask=""></div><div class="col-md-1"><span class="whith10p color-red" data-toggle="tooltip" title=""> <i class="icon fa fa-close"></i></span></div><div class="col-md-1"><h4><span class="option-add whith10p" data-toggle="tooltip" title="Add new row."><i class="fa fa-plus-circle"></i></span></h4></div></div>',
   textRegex : /^\w+$/,
   portRegex : /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
   ipRegex : /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
@@ -9,6 +10,17 @@ window.LocationView = Backbone.View.extend({
   events: {
     'keyup input': function () {
       this.checkImputs();
+    },
+    "click .option-add" : function (e){
+      var self = this;
+      $(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
+      $(e.target).parent().removeClass("option-add").addClass("option-remove");
+      $(e.target).parent().attr('data-original-title', "Remove row.");
+      $(self.el).find(".option-list").append(self.newrowhtml); 
+      $(self.el).find('.selectpicker').selectpicker();
+    },
+    "click .option-remove" : function(e){
+      $(e.target).parent().parent().parent().parent().remove();
     },
     "change .btn-on-off" : function (evt){   
       var self = this;
@@ -35,7 +47,7 @@ window.LocationView = Backbone.View.extend({
           }, 500);
           $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         }
-        
+
         if ($(self.el).find(".control-cache-ext").prop('checked')) {
           $(self.el).find(".control-cache-path").bootstrapToggle('disable');
 
@@ -65,7 +77,7 @@ window.LocationView = Backbone.View.extend({
   },
   initialize: function () {    
     var self = this;
-
+    
     modem("GET",
       '/ext/all',
       function (data) {
@@ -127,6 +139,12 @@ window.LocationView = Backbone.View.extend({
       $(self.el).find(".select-path").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
     }
   },
+  getLocationJson : function (){
+    var self = this;
+
+    var objJson = "Teste -> " + self.locationname;
+    return objJson;
+  },
   init : function (name){
     var self = this;
     self.locationname = name;
@@ -151,3 +169,4 @@ window.LocationView = Backbone.View.extend({
     return self;
   }
 });
+

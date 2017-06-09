@@ -45,17 +45,18 @@ window.SettingsView = Backbone.View.extend({
         error_launch(json.message);
       }, {});
   },
-    "click .remove-row" : function (evt){
-      var self = this;
-      var locname = $(self.el).find(evt.target).parent().parent().parent().parent().parent().parent().attr("data-location");
-      $(self.el).find('[data-location=' + locname +']').remove();
-      self.allLocations[locname] = null;
-    },
+  "click .remove-row" : function (evt){
+    var self = this;
+    var locname = $(self.el).find(evt.target).parent().parent().parent().parent().parent().parent().attr("data-location");
+    $(self.el).find('[data-location=' + locname +']').remove();
+    self.allLocations[locname] = null;
+  },
   "click #add-new-location": function(){
     var self = this;
     this.locationView = new LocationView({model: this.model});
     $(this.el).find("#server-locations").append(this.locationView.render().el);
     this.locationView.init("location-" + self.countlocation);
+
     self.allLocations["location-" + self.countlocation] = self.locationView;
     self.countlocation++;
   }
@@ -117,6 +118,7 @@ checkImputs: function () {
 },
 savesettings: function () {
   var self = this;
+
   if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
     console.log("OK");
     var params = {
