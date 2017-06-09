@@ -12,24 +12,45 @@ window.LocationView = Backbone.View.extend({
     },
     "change .btn-on-off" : function (evt){   
       var self = this;
-      $(self.el).find(evt.target).parent().next().click();
+      if ((!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked')) || (!$(self.el).find(".control-cache-ext").prop('checked') && $(self.el).find(".control-cache-path").prop('checked')) || ($(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked'))) {
 
-      if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) {
-        if (self.lastHeight !== 0) {
-          self.lastHeight = $(self.el).find(".location-path").height();
+        if ($(self.el).find(evt.target).prop('checked') && $(self.el).find(evt.target).parent().parent().parent().parent().hasClass( "collapsed-box" )){
+          $(self.el).find(evt.target).parent().next().click();
         }
-        $(self.el).find(".location-path").animate({
-          "height" : 0
-        }, 500);
-        $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-      } 
-      if (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked')) {
-        $(self.el).find(".location-path").animate({
-          "height" : self.lastHeight
-        }, 500);
-        $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-      }
+        if (!$(self.el).find(evt.target).prop('checked') && !$(self.el).find(evt.target).parent().parent().parent().parent().hasClass( "collapsed-box" )){
+          $(self.el).find(evt.target).parent().next().click();
+        }
+        if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) {
+          if (self.lastHeight !== 0) {
+            self.lastHeight = $(self.el).find(".location-path").height();
+          }
+          $(self.el).find(".location-path").animate({
+            "height" : 0
+          }, 500);
+          $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+        } 
+        if (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked')) {
+          $(self.el).find(".location-path").animate({
+            "height" : self.lastHeight
+          }, 500);
+          $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        }
+        
+        if ($(self.el).find(".control-cache-ext").prop('checked')) {
+          $(self.el).find(".control-cache-path").bootstrapToggle('disable');
 
+        } else if (!$(self.el).find(".control-cache-ext").prop('checked')) {
+          $(self.el).find(".control-cache-path").bootstrapToggle('enable');
+        }
+
+        if ($(self.el).find(".control-cache-path").prop('checked')) {
+          $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+
+        } else if (!$(self.el).find(".control-cache-path").prop('checked')) {
+          $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
+        }
+
+      }
       this.checkImputs();
     },
     "change .select-extensao.selectpicker" : function (evt) {
