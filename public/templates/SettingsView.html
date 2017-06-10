@@ -2,18 +2,13 @@
     <div class="col-md-12">
         <div class="box">
             <div class="box-header with-border">
-                <h2 class="box-title">
-         <i class="fa fa-server"></i> Settings
-       </h2>
+                <h2 class="box-title"><i class="fa fa-server"></i> Settings</h2>
             </div>
             <div class="box-body">
                 <div class="col-md-12 thumbnail panel panel-default">
                     <div id="server-locations" class="box">
                         <div class="box-header with-border">
-                            <h4 class="box-title">
-              <i class="fa fa-server"></i> 
-              Config Server
-            </h4>
+                            <h4 class="box-title"><i class="fa fa-server"></i> Config Server</h4>
                         </div>
                         <div class="box-body">
                             <div class="row">
@@ -22,35 +17,28 @@
                                         <label class="vcenter">Hostname:</label>
                                     </div>
                                     <div class="col-md-2">
-                                        <input id="host-name" class="width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
+                                        <input class="host-name width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
                                     </div>
                                     <div class="col-md-1">
-                                        <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server.">
-                   <i class="icon fa fa-close"></i>
-                 </span>
+                                        <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server."><i class="icon fa fa-close"></i></span>
                                     </div>
                                     <div class="col-md-1">
                                         <label class="vcenter">Host Port:</label>
                                     </div>
                                     <div class="col-md-2">
-                                        <input id="host-port" class="width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
+                                        <input class="host-port width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
                                     </div>
                                     <div class="col-md-1">
-                                        <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber.">
-                 <i class="icon fa fa-close"></i>
-               </span>
+                                        <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber."><i class="icon fa fa-close"></i></span>
                                     </div>
                                     <div class="col-md-1">
                                         <label class="vcenter">Proxy:</label>
                                     </div>
                                     <div class="col-md-2">
-                                        <input id="host-destination" class="width100 valid-input vcenter form-control" data-typevalue="host-destination" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
+                                        <input class="host-proxy width100 valid-input vcenter form-control" data-typevalue="host-proxy" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
                                     </div>
-                                    <!-- /.box-body -->
                                     <div class="col-md-1">
-                                        <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber.">
-               <i class="icon fa fa-close"></i>
-             </span>
+                                        <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber."> <i class="icon fa fa-close"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -67,13 +55,57 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4 class="isplay-start-elemet">
-             Add Options:
-           </h4>
+                                    <h4 class="isplay-start-elemet">Add Options:</h4>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 option-list-server">
+                                </div>
+                            </div>
+                            <div class="box thumbnail no-margin-b collapsed-box">
+                                <div class="box-header">
+                                    <div class=" display-start-elemet">
+                                        <input class="control-upstram btn-on-off" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
+                                        <button class="btn btn-box-tool" style="display: none" data-toggle="tooltip" title="Collapse" data-widget="collapse" data-class="quick">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <h5 class="box-title display-end-elemet">Config Upstream</h5>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row with-border">
+                                        <div class="col-md-2">
+                                            <label>
+                                                <h4>Upstream Name:</h4>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input class="server-upstream-nane width100 vcenter valid-input form-control" data-typevalue="server-upstream-name" type="text" placeholder="hostname" value="" data-mask="">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid upstream name."><i class="icon fa fa-close color-red"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="row with-border">
+                                        <div class="col-md-12 server-upstream-list">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label>Server Upstream:</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <input class="server-upstream-server width100 vcenter valid-input form-control" data-typevalue="server-upstream-server" type="text" placeholder="hostname" value="" data-mask="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid upstream server."><i class="icon fa fa-close color-red"></i></span>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <h4><span class="option-add-upstream whith10p" data-toggle="tooltip" title="Add new row."><i class="fa fa-plus-circle"></i></span></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

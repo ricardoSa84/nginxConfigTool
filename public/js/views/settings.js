@@ -1,9 +1,11 @@
 /* global Backbone, normalizeString, app */
 window.SettingsView = Backbone.View.extend({
+    htmlnewupstream: '<div class="row"><div class="col-md-2"><label>Server Upstream:</label></div><div class="col-md-4"><div class="form-group"><input class="server-upstream-server width100 vcenter valid-input form-control" data-typevalue="server-upstream-server" type="text" placeholder="hostname" value="" data-mask=""></div></div><div class="col-md-1"><span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid upstream server."><i class="icon fa fa-close color-red"></i></span></div><div class="col-md-1"><h4><span class="option-add-upstream whith10p" data-toggle="tooltip" title="Add new row."><i class="fa fa-plus-circle"></i></span></h4></div></div>',
     textRegex: /^\w+$/,
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
     selectedOpts: "",
+    servercontinue: false,
     countlocation: 0,
     allLocations: [],
     optionsList: [],
@@ -11,6 +13,22 @@ window.SettingsView = Backbone.View.extend({
     events: {
         'keyup input': function() {
             this.checkImputs();
+        },
+        "change .btn-on-off": function(evt) {
+            var self = this;
+            $(self.el).find(evt.target).parent().next().click();
+        },
+        "click .option-add-upstream": function(e) {
+            var self = this;
+            $(self.el).find(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
+            $(self.el).find(e.target).parent().removeClass("option-add-upstream").addClass("option-remove-upstream");
+            $(self.el).find(e.target).parent().attr('data-original-title', "Remove row.");
+            $(self.el).find('.server-upstream-list').append(self.htmlnewupstream);
+        },
+        "click .option-remove-upstream": function(evt) {
+            var self = this;
+            console.log($(self.el).find(evt.target).parent().parent().parent().parent());
+            $(self.el).find(evt.target).parent().parent().parent().parent().remove();
         },
         "click .option-add": "addnewoptionserver",
         "click .option-remove-server": function(e) {
@@ -99,58 +117,86 @@ window.SettingsView = Backbone.View.extend({
         self.optionsList["option-" + self.optscount] = self.optionView;
         self.optscount++;
 
+        $(self.el).find('.btn-on-off').bootstrapToggle();
 
         self.checkImputs();
     },
     checkImputs: function() {
         var self = this;
-        // $(self.el).find('.valid-input').each(function (i, obj) {
-        //   if ($(self.el).find(obj).val() && !$.isArray($(obj).val())) {
-        //   console.log($(self.el).find(obj).data("typevalue"));
-        //     $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        //     switch ($(self.el).find(obj).data("typevalue")) {
-        //       case "host-name":
-        //       if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        //       } else {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        //       }
-        //       break;
-        //       case "host-port":
-        //       if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        //       } else {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        //       }
-        //       break;
-        //       case "host-destination":
-        //       var ipPort = $(self.el).find(obj).val().trim().split(":");
-        //       if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        //       } else {
-        //         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        //       }
-        //       break;
-        //     }
-        //   }
-        // });
-        // if ($(self.el).find(".control-cache-ext").prop('checked')) {
-        //   if (self.selectedOpts.trim().length > 0) {
-        //     $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        //   } else {
-        //     $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-        //   }
-        // } else {
-        //   $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-        // }
+        $(self.el).find('.valid-input').each(function(i, obj) {
+            if ($(self.el).find(obj)) {
+                $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                switch ($(self.el).find(obj).data("typevalue")) {
+                    case "host-name":
+                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        } else {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        }
+                        break;
+                    case "host-port":
+                        if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        } else {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        }
+                        break;
+                    case "host-proxy":
+                        var ipPort = $(self.el).find(obj).val().trim().split(":");
+                        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        } else {
+                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        }
+                        break;
+                }
+            }
+        });
     },
     savesettings: function() {
         var self = this;
+        var serverconfig = {};
 
-        for (var i in self.allLocations) {
-            console.log(self.allLocations[i].getLocationJson());
+
+        // if (self.servercontinue) {
+
+        serverconfig = {
+            servername: $(self.el).find('.host-name').val().trim(),
+            port: $(self.el).find('.host-port').val().trim(),
+            proxy: $(self.el).find('.host-proxy').val().trim(),
+            upstream: $(self.el).find(".control-upstram").prop('checked'),
+            upstreamall: {
+                name: $(self.el).find('.server-upstream-nane').val().trim(),
+                upstreams: []
+            },
+            serveropts: [],
+            locations: []
         }
 
+        for (var i in self.optionsList) {
+            if (self.optionsList[i]) {
+                var opt = self.optionsList[i].getValidOption();
+                // if (opt.valid) {
+                serverconfig.serveropts.push(opt);
+                //     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                //     return;
+                // }
+            }
+        }
+
+        for (var i in self.allLocations) {
+            if (self.allLocations[i]) {
+                serverconfig.locations.push(self.allLocations[i].getLocationJson());
+            }
+        }
+
+        console.log(serverconfig);
+
+
+
+        // } else {
+        //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+        // }
         // if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
         //     console.log("OK");
         //     var params = {

@@ -6,6 +6,7 @@ window.LocationView = Backbone.View.extend({
     selectedOpts: "",
     optionsToDropdown: "",
     lastHeight: -1,
+    locationcontinue: false,
     countoption: 0,
     allOption: [],
     allListOptions: "",
@@ -118,47 +119,53 @@ window.LocationView = Backbone.View.extend({
     checkImputs: function() {
         var self = this;
         $(self.el).find('.valid-input').each(function(i, obj) {
-
-            if (!$.isArray($(self.el).find(obj).val())) {
+            if ($(self.el).find(obj)) {
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
 
                 switch ($(self.el).find(obj).data("typevalue")) {
-                    case "location-option":
-                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                    case "location-path":
+                        if ($(self.el).find(obj).val().trim().length >= 1) {
                             $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.locationcontinue = true;
                         } else {
                             $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.locationcontinue = false;
                         }
                         break;
                 }
             }
         });
+
         if ($(self.el).find(".control-cache-ext").prop('checked')) {
             if (self.selectedOpts.trim().length > 0) {
                 $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                self.locationcontinue = true;
             } else {
                 $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                self.locationcontinue = false;
             }
         } else {
-            $(self.el).find(".select-extensao").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+            $(self.el).find(".select-extensao").selectpicker('deselectAll');
         }
 
         if ($(self.el).find(".control-cache-path").prop('checked')) {
             if (self.selectedOpts.trim().length > 0) {
                 $(self.el).find(".select-path").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                self.locationcontinue = true;
             } else {
                 $(self.el).find(".select-path").parent().parent().parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                self.locationcontinue = false;
             }
         } else {
-            $(self.el).find(".select-path").parent().parent().parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+            $(self.el).find(".select-path").selectpicker('deselectAll');
         }
     },
     addnewoption: function(e) {
         var self = this;
         if (e) {
-            $(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
-            $(e.target).parent().removeClass("option-add").addClass("option-remove");
-            $(e.target).parent().attr('data-original-title', "Remove row.");
+            $(self.el).find(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
+            $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-remove");
+            $(self.el).find(e.target).parent().attr('data-original-title', "Remove row.");
         }
         this.optionView = new OptionView({ model: this.model });
         $(this.el).find(".option-list").append(this.optionView.render().el);
@@ -168,22 +175,34 @@ window.LocationView = Backbone.View.extend({
     },
     getLocationJson: function() {
         var self = this;
-        
-        // Validação das opções selecionadas
-        // for (var i in self.allOption) {
-        //     if (self.allOption[i]) {
-        //         var obj = self.allOption[i].getValidOption();
-        //         if (obj.valid) {
-        //             console.log(obj);
-        //         } else {
-        //             showmsg('.my-modal', "warning", "Existe erros campos nas opções por completar!", false);
-        //             return;
-        //         }
-        //     }
-        // }
+        var locJson = {};
+        if (self.locationcontinue) {
+            locJson = {
+                lovname: self.locationname,
+                extension: $(self.el).find(".control-cache-ext").prop('checked'),
+                path: $(self.el).find(".control-cache-path").prop('checked'),
+                locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOpts.trim() : $(self.el).find(".location-input").val().trim(),
+                timecache: $(self.el).find(".control-cache-ext").prop('checked') ? $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val() : $(self.el).find(".control-cache-path").prop('checked') ? $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val() : "",
+                options: []
+            }
 
-        var objJson = "Teste -> " + self.locationname;
-        return objJson;
+            // Validação das opções selecionadas
+            for (var i in self.allOption) {
+                if (self.allOption[i]) {
+                    var obj = self.allOption[i].getValidOption();
+                    if (obj.valid) {
+                        locJson.options.push(obj);
+                    } else {
+                        showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                        return;
+                    }
+                }
+            }
+        } else {
+            showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+            return;
+        }
+        return locJson;
     },
     init: function(name) {
         var self = this;
