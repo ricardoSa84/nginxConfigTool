@@ -227,6 +227,7 @@ var Router = Backbone.Router.extend({
     "SideBarView",
     "FooterView",
     "LocationView",
+    "OptionView",
     "DashboardView",
     "SettingsView",
     "AdvancedSettingsView",
