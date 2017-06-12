@@ -7,9 +7,7 @@ window.SettingsView = Backbone.View.extend({
     selectedOpts: "",
     servercontinue: false,
     countlocation: 0,
-    countUpstreams: 0,
     allLocations: [],
-    allUpstreams: [],
     optionsList: [],
     optscount: 0,
     events: {
@@ -88,15 +86,6 @@ window.SettingsView = Backbone.View.extend({
 
             self.allLocations["location-" + self.countlocation] = self.locationView;
             self.countlocation++;
-        },
-        "click #add-new-upstream": function() {
-            var self = this;
-            this.upstreamView = new UpstreamView({ model: this.model });
-            $(this.el).find("#upstreams-location").append(this.upstreamView.render().el);
-            this.upstreamView.init("upstream-" + self.countUpstreams);
-
-            self.allUpstreams["upstream-" + self.countUpstreams] = self.upstreamView;
-            self.countUpstreams++;
         }
     },
     initialize: function() {
