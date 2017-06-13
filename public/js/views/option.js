@@ -1,3 +1,4 @@
+'use strict';
 window.OptionView = Backbone.View.extend({
     optName: "",
     selectedOpt: "",

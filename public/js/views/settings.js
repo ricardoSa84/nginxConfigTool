@@ -1,4 +1,5 @@
 /* global Backbone, normalizeString, app */
+'use strict';
 window.SettingsView = Backbone.View.extend({
     htmlnewupstream: '<div class="row"><div class="col-md-2"><label>Server Upstream:</label></div><div class="col-md-4"><div class="form-group"><input class="server-upstream-server width100 vcenter valid-input form-control" data-typevalue="server-upstream-server" type="text" placeholder="hostname" value="" data-mask=""></div></div><div class="col-md-1"><span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid upstream server."><i class="icon fa fa-close color-red"></i></span></div><div class="col-md-1"><h4><span class="option-add-upstream whith10p" data-toggle="tooltip" title="Add new row."><i class="fa fa-plus-circle"></i></span></h4></div></div>',
     textRegex: /^\w+$/,
