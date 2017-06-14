@@ -9,7 +9,7 @@ window.OptionView = Backbone.View.extend({
         },
         "change .select-opts-location": function() {
             var self = this;
-            var opts = "";
+            var opt = "";
             $(self.el).find(".select-opts-location option:selected").each(function(index, element) {
                 opt = element.text;
             });
