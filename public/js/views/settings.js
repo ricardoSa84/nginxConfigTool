@@ -177,11 +177,11 @@ window.SettingsView = Backbone.View.extend({
         for (var i in self.optionsList) {
             if (self.optionsList[i]) {
                 var opt = self.optionsList[i].getValidOption();
-                // if (opt.valid) {
-                serverconfig.serveropts.push(opt);
-                //     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-                //     return;
-                // }
+                 if (opt != null && opt.valid) {
+                     serverconfig.serveropts.push(opt);
+                     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                     return;
+                 }
             }
         }
 
