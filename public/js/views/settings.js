@@ -9,8 +9,10 @@ window.SettingsView = Backbone.View.extend({
     servercontinue: false,
     countlocation: 0,
     allLocations: [],
-    optionsList: [],
-    optscount: 0,
+    optionsListserver: [],
+    optionsListdefault: [],
+    optscountserver: 0,
+    optscountdefault: 0,
     events: {
         'keyup input': function() {
             this.checkImputs();
@@ -36,7 +38,7 @@ window.SettingsView = Backbone.View.extend({
             var self = this;
             var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
             $(e.target).parent().parent().parent().parent().parent().remove();
-            self.optionsList[optName] = null;
+            self.optionsListserver[optName] = null;
         },
         "click #save-settings": "savesettings",
         "click #test-nginx": function() {
@@ -98,11 +100,22 @@ window.SettingsView = Backbone.View.extend({
         $(e.target).parent().removeClass("option-add").addClass("option-remove-server");
         $(e.target).parent().attr('data-original-title', "Remove row.");
 
-        this.optionView = new OptionView({ model: this.model });
-        $(this.el).find(".option-list-server").append(this.optionView.render().el);
-        this.optionView.init("option-" + self.optscount, /*self.allListOptions*/ );
-        self.optionsList["option-" + self.optscount] = self.optionView;
-        self.optscount++;
+
+        var classname = $(self.el).find(e.target).parent().parent().parent().parent().parent().parent().attr("data-container");
+
+        self.optionView = new OptionView({ model: self.model });
+        if (classname === "server") {
+            $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
+            self.optionView.init("option-" + self.optscountserver, /*self.allListOptions*/ );
+            self.optionsListserver["option-" + self.optscountserver] = self.optionView;
+            self.optscountserver++;
+        }
+        if (classname === "default-location") {
+            $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
+            self.optionView.init("option-" + self.optscountdefault, /*self.allListOptions*/ );
+            self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
+            self.optscountdefault++;
+        }
     },
     init: function() {
         var self = this;
@@ -114,9 +127,15 @@ window.SettingsView = Backbone.View.extend({
 
         this.optionView = new OptionView({ model: this.model });
         $(this.el).find(".option-list-server").append(this.optionView.render().el);
-        this.optionView.init("option-" + self.optscount, /*self.allListOptions*/ );
-        self.optionsList["option-" + self.optscount] = self.optionView;
-        self.optscount++;
+        this.optionView.init("option-" + self.optscountserver, /*self.allListOptions*/ );
+        self.optionsListserver["option-" + self.optscountserver] = self.optionView;
+        self.optscountserver++;
+
+        this.optionView = new OptionView({ model: this.model });
+        $(this.el).find(".option-list-default-location").append(this.optionView.render().el);
+        this.optionView.init("option-" + self.optscountdefault, /*self.allListOptions*/ );
+        self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
+        self.optscountdefault++;
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -174,9 +193,9 @@ window.SettingsView = Backbone.View.extend({
             locations: []
         }
 
-        for (var i in self.optionsList) {
-            if (self.optionsList[i]) {
-                var opt = self.optionsList[i].getValidOption();
+        for (var i in self.optionsListserver) {
+            if (self.optionsListserver[i]) {
+                var opt = self.optionsListserver[i].getValidOption();
                 // if (opt.valid) {
                 serverconfig.serveropts.push(opt);
                 //     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
