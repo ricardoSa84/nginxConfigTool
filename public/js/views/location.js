@@ -34,7 +34,10 @@ window.LocationView = Backbone.View.extend({
         if (!$(self.el).find(evt.target).prop('checked') && !$(self.el).find(evt.target).parent().parent().parent().parent().hasClass("collapsed-box")) {
           $(self.el).find(evt.target).parent().next().click();
         }
-        if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(evt.target).hasClass('control-upstram')) {
+
+
+        if ($(self.el).find(".control-cache-ext").prop('checked') ||
+        $(self.el).find(".control-cache-path").prop('checked') || $(self.el).find(".control-upstram").prop('checked')) {
           if (self.lastHeight !== 0) {
             self.lastHeight = $(self.el).find(".location-path").height();
           }
@@ -43,7 +46,11 @@ window.LocationView = Backbone.View.extend({
           }, 500);
           $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
         }
-        if (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(evt.target).hasClass('control-upstram')) {
+
+
+        if (!$(self.el).find(".control-cache-ext").prop('checked') &&
+        !$(self.el).find(".control-cache-path").prop('checked') &&
+        !$(self.el).find(".control-upstram").prop('checked')) {
           $(self.el).find(".location-path").animate({
             "height": self.lastHeight
           }, 500);
@@ -52,17 +59,22 @@ window.LocationView = Backbone.View.extend({
 
         if ($(self.el).find(".control-cache-ext").prop('checked')) {
           $(self.el).find(".control-cache-path").bootstrapToggle('disable');
-
-        } else if (!$(self.el).find(".control-cache-ext").prop('checked')) {
-          $(self.el).find(".control-cache-path").bootstrapToggle('enable');
-        }
-
-        if ($(self.el).find(".control-cache-path").prop('checked')) {
+          $(self.el).find(".control-upstram").bootstrapToggle('disable');
+        } else if ($(self.el).find(".control-cache-path").prop('checked')) {
           $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+          $(self.el).find(".control-upstram").bootstrapToggle('disable');
+        } else if ($(self.el).find(".control-upstram").prop('checked')) {
+          $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+          $(self.el).find(".control-cache-path").bootstrapToggle('disable');
+        }else if(!$(self.el).find(".control-cache-ext").prop('checked') &&
+                !$(self.el).find(".control-cache-path").prop('checked') &&
+                !$(self.el).find(".control-upstram").prop('checked')){
+                  $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
+                  $(self.el).find(".control-cache-path").bootstrapToggle('enable');
+                  $(self.el).find(".control-upstram").bootstrapToggle('enable');
+                }
 
-        } else if (!$(self.el).find(".control-cache-path").prop('checked')) {
-          $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
-        }
+
 
       }
       this.checkImputs();
