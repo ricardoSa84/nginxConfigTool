@@ -39,7 +39,9 @@ window.LocationView = Backbone.View.extend({
 
 
                 if ($(self.el).find(".control-cache-ext").prop('checked') ||
-                    $(self.el).find(".control-cache-path").prop('checked') || $(self.el).find(".control-upstram").prop('checked')) {
+                $(self.el).find(".control-cache-path").prop('checked') &&
+                !$(self.el).find(evt.target).hasClass('control-upstram')) {
+
                     if (self.lastHeight !== 0) {
                         self.lastHeight = $(self.el).find(".location-path").height();
                     }
@@ -51,8 +53,9 @@ window.LocationView = Backbone.View.extend({
 
 
                 if (!$(self.el).find(".control-cache-ext").prop('checked') &&
-                    !$(self.el).find(".control-cache-path").prop('checked') &&
-                    !$(self.el).find(".control-upstram").prop('checked')) {
+                !$(self.el).find(".control-cache-path").prop('checked') &&
+                !$(self.el).find(evt.target).hasClass('control-upstram')) {
+
                     $(self.el).find(".location-path").animate({
                         "height": self.lastHeight
                     }, 500);
@@ -61,19 +64,19 @@ window.LocationView = Backbone.View.extend({
 
                 if ($(self.el).find(".control-cache-ext").prop('checked')) {
                     $(self.el).find(".control-cache-path").bootstrapToggle('disable');
-                    $(self.el).find(".control-upstram").bootstrapToggle('disable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
                 } else if ($(self.el).find(".control-cache-path").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
-                    $(self.el).find(".control-upstram").bootstrapToggle('disable');
-                } else if ($(self.el).find(".control-upstram").prop('checked')) {
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
+                } else if ($(self.el).find(".control-upstream").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
                     $(self.el).find(".control-cache-path").bootstrapToggle('disable');
                 } else if (!$(self.el).find(".control-cache-ext").prop('checked') &&
                     !$(self.el).find(".control-cache-path").prop('checked') &&
-                    !$(self.el).find(".control-upstram").prop('checked')) {
+                    !$(self.el).find(".control-upstream").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
                     $(self.el).find(".control-cache-path").bootstrapToggle('enable');
-                    $(self.el).find(".control-upstram").bootstrapToggle('enable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('enable');
                 }
 
 
@@ -220,7 +223,11 @@ window.LocationView = Backbone.View.extend({
                 path: $(self.el).find(".control-cache-path").prop('checked'),
                 locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOpts.trim() : $(self.el).find(".location-input").val().trim(),
                 timecache: $(self.el).find(".control-cache-ext").prop('checked') ? $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val() : $(self.el).find(".control-cache-path").prop('checked') ? $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val() : "",
-                options: []
+                options: [],
+                upstream:{
+                  name: $(self.el).find('.server-upstream-nane').val().trim(),
+                  options:[]
+                }
             }
 
             // Validação das opções selecionadas
@@ -229,6 +236,19 @@ window.LocationView = Backbone.View.extend({
                     var obj = self.allOptionlocation[i].getValidOption();
                     if (obj.valid) {
                         locJson.options.push(obj);
+                    } else {
+                        showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                        return;
+                    }
+                }
+            }
+
+            // Validação das opções selecionadas
+            for (var i in self.allOptionupstream) {
+                if (self.allOptionupstream[i]) {
+                    var obj = self.allOptionupstream[i].getValidOption();
+                    if (obj.valid) {
+                        locJson.upstream.options.push(obj);
                     } else {
                         showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
                         return;
