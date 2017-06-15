@@ -22,21 +22,21 @@ window.OptionView = Backbone.View.extend({
     },
     checkImput: function() {
         var self = this;
-        $(self.el).find(".text-opt").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+        $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         if (self.selectedOpt.trim().length !== 0) {
             if ($(self.el).find(".text-opt").val().trim().length >= 1) {
-                $(self.el).find(".text-opt").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                $(self.el).find(".text-opt").next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                 self.continue = true;
             } else {
-                $(self.el).find(".text-opt").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.continue = false;
             }
         } else if (self.selectedOpt.trim().length === 0) {
             if ($(self.el).find(".text-opt").val().trim().length === 0) {
-                $(self.el).find(".text-opt").parent().next().children().children().removeClass("fa-close color-red").removeClass("fa-check color-green");
+                $(self.el).find(".text-opt").next().children().removeClass("fa-close color-red").removeClass("fa-check color-green");
                 self.continue = true;
             } else {
-                $(self.el).find(".text-opt").parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.continue = false;
             }
         }

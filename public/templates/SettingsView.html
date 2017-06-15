@@ -13,23 +13,19 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="col-md-1">
-                                        <label class="vcenter">Hostname:</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <label class="input-group-addon">Hostname:</label>
+                                            <input class="host-name valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
+                                            <span class="input-group-addon color-red" data-toggle="tooltip" title="Inseert a valid name server."><i class="icon fa fa-close"></i></span>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <input class="host-name width100 vcenter valid-input form-control" data-typevalue="host-name" type="text" placeholder="hostname" value="localhost" data-inputmask="'alias': 'Hostname'" data-mask="">
-                                    </div>
-                                    <div class="col-md-1">
-                                        <span class="whith10p vcenter color-red" data-toggle="tooltip" title="Inseert a valid name server."><i class="icon fa fa-close"></i></span>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <label class="vcenter">Host Port:</label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input class="host-port width100 valid-input vcenter form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
-                                    </div>
-                                    <div class="col-md-1">
-                                        <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid port namber."><i class="icon fa fa-close"></i></span>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <label class="input-group-addon">Host Port:</label>
+                                            <input class="host-port valid-input form-control" data-typevalue="host-port" type="text" placeholder="80" value="80">
+                                            <span class="input-group-addon color-red" data-toggle="tooltip" title="Insert a valid port namber."><i class="icon fa fa-close"></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -46,28 +42,26 @@
                             <div class="row">&nbsp;</div>
                             <div class="box thumbnail no-margin-b">
                                 <div class="box-header">
+                                    <h5 class="box-title">Default Location Settings:</h5>
+                                </div>
+                                <div class="box-body">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <label>
-                                                <h4>Default Location Path:</h4>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input class="location-input width100 vcenter valid-input form-control" disabled type="text" placeholder="/" value="/" data-mask="/">
-                                        </div>
                                         <div class="col-md-3">
+                                            <div class="input-group">
+                                                <label class="input-group-addon">Default Location Path:</label>
+                                                <input class="location-input alid-input form-control" disabled type="text" placeholder="/" value="/" data-mask="/">
+                                            </div>
                                         </div>
-                                        <div class="col-md-1">
-                                            <label class="vcenter">Proxy pass:</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input class="host-proxy width100 valid-input vcenter form-control" data-typevalue="host-proxy" type="text" placeholder="127.0.0.1:3000" value="127.0.0.1:3000">
-                                        </div>
-                                        <div class="col-md-1">
-                                            <span class="whith10p color-red vcenter" data-toggle="tooltip" title="Insert a valid ip and port namber."> <i class="icon fa fa-close"></i></span>
+                                        <div class="col-md-5">
+                                            <div class="input-group">
+                                                <label class="input-group-addon">Proxy pass:</label>
+                                                <input class="host-proxy valid-input form-control" data-typevalue="host-proxy" type="text " placeholder="127.0.0.1:3000 " value="127.0.0.1:3000">
+                                                <span class="input-group-addon color-red" data-toggle="tooltip" title="Insert a valid ip and port namber. "> <i class="icon fa fa-close "></i></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h5 class="box-title display-start-elemet">Add Options:</h5>
+                                    <div class="row">&nbsp;</div>
+                                    <h5 class="box-title display-start-elemet ">Add Options:</h5>
                                 </div>
                                 <div class="option-list-default-location box-body" data-container="default-location">
                                 </div>
@@ -76,11 +70,11 @@
                     </div>
                 </div>
             </div>
-            <div class="box-footer with-border">
-                <div class="col-md-2">
-                    <button id="add-new-location" type="button" class="btn btn-default width100">
+            <div class="box-footer with-border ">
+                <div class="col-md-2 ">
+                    <button id="add-new-location" type="button " class="btn btn-default width100 ">
                         <label>
-                            <i class="fa fa-plus-circle"></i> Add New Location
+                            <i class="fa fa-plus-circle "></i> Add New Location
                         </label>
                     </button>
                 </div>
@@ -88,31 +82,31 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-toggle="tooltip" title="Collapse" data-widget="collapse">
-                        <i class="fa fa-minus"></i>
+<div class="row ">
+    <div class="col-md-12 ">
+        <div class="box ">
+            <div class="box-header with-border ">
+                <div class="box-tools pull-right ">
+                    <button class="btn btn-box-tool " data-toggle="tooltip " title="Collapse " data-widget="collapse ">
+                        <i class="fa fa-minus "></i>
                     </button>
                 </div>
             </div>
-            <div class="box-body">
-                <div class="col-md-2">
-                    <button id="save-settings" type="button" class="btn btn-default width100">
-                        <label> Save Settings <i class="fa fa-save"></i></label>
+            <div class="box-body ">
+                <div class="col-md-2 ">
+                    <button id="save-settings " type="button " class="btn btn-default width100 ">
+                        <label> Save Settings <i class="fa fa-save "></i></label>
                     </button>
                 </div>
-                <div class="col-md-2">
-                    <button id="test-nginx" type="button" disabled class="btn btn-default width100">
+                <div class="col-md-2 ">
+                    <button id="test-nginx " type="button " disabled class="btn btn-default width100 ">
                         <label> Test Nginx </label>
                     </button>
                 </div>
-                <div class="col-md-2">
-                    <button id="restart-nginx" type="button" disabled class="btn btn-default width100">
+                <div class="col-md-2 ">
+                    <button id="restart-nginx " type="button " disabled class="btn btn-default width100 ">
                         <label> Restart Ngnix
-                            <i class="fa fa-refresh"></i></i>
+                            <i class="fa fa-refresh "></i></i>
                         </label>
                     </button>
                 </div>
@@ -120,21 +114,21 @@
         </div>
     </div>
 </div>
-<div class="modal modal-warning">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close btn-modal" data-event="close" data-toggle="tooltip" title="Close Warning" data-dismiss="modal" aria-label="Close" data-widget="close"><span aria-hidden="true">×</span></button>
-                <h2 class="modal-title icon fa  fa-info-circle"> Warning</h2>
+<div class="modal modal-warning ">
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close btn-modal " data-event="close " data-toggle="tooltip " title="Close Warning " data-dismiss="modal " aria-label="Close " data-widget="close "><span aria-hidden="true ">×</span></button>
+                <h2 class="modal-title icon fa fa-info-circle "> Warning</h2>
             </div>
-            <div class="modal-body">
+            <div class="modal-body ">
                 <p><b>Careful!</b>
                     <br>You have unsaved settings!!</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left btn-modal" data-event="close" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline btn-modal" data-event="notsave" data-dismiss="modal">Dont save settings and continue</button>
-                <button type="button" data-event="save" class="btn btn-outline pull-right btn-modal">Save settings and continue</button>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-outline pull-left btn-modal " data-event="close " data-dismiss="modal ">Close</button>
+                <button type="button " class="btn btn-outline btn-modal " data-event="notsave " data-dismiss="modal ">Dont save settings and continue</button>
+                <button type="button " data-event="save " class="btn btn-outline pull-right btn-modal ">Save settings and continue</button>
             </div>
         </div>
     </div>

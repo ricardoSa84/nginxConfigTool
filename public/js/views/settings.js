@@ -83,9 +83,9 @@ window.SettingsView = Backbone.View.extend({
         },
         "click #add-new-location": function() {
             var self = this;
-            this.locationView = new LocationView({ model: this.model });
-            $(this.el).find("#server-locations").append(this.locationView.render().el);
-            this.locationView.init("location-" + self.countlocation);
+            self.locationView = new LocationView({ model: self.model });
+            $(self.el).find("#server-locations").append(self.locationView.render().el);
+            self.locationView.init("location-" + self.countlocation);
 
             self.allLocations["location-" + self.countlocation] = self.locationView;
             self.countlocation++;
@@ -102,7 +102,7 @@ window.SettingsView = Backbone.View.extend({
 
 
         var classname = $(self.el).find(e.target).parent().parent().parent().parent().parent().parent().attr("data-container");
-
+console.log(classname);
         self.optionView = new OptionView({ model: self.model });
         if (classname === "server") {
             $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
@@ -149,24 +149,24 @@ window.SettingsView = Backbone.View.extend({
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "host-name":
                         if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                         } else {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                         }
                         break;
                     case "host-port":
                         if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                         } else {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                         }
                         break;
                     case "host-proxy":
                         var ipPort = $(self.el).find(obj).val().trim().split(":");
                         if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                         } else {
-                            $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                         }
                         break;
                 }
