@@ -106,10 +106,14 @@ window.LocationView = Backbone.View.extend({
             error_launch(json.message);
         }, {});
 
-        modem("GET", '/options/Location', function(data) {
+        //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
+        //E RETORNAR O ARRAY
+        modem("GET", '/options/location', function(data) {
             var options = "<option></option>";
-            for (var i in data[0].options.sort()) {
-                options += "<option>" + data[0].options[i] + "</option>";
+            if(data.length>0){
+                for (var i =0; i < data.length; i++) {
+                    options += "<option>" + data[i].directive + "</option>";
+                }
             }
             self.allListOptions = options;
 
