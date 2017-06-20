@@ -26,9 +26,10 @@ window.LocationView = Backbone.View.extend({
         },
         "change .btn-on-off": function(evt) {
             var self = this;
-            if ((!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked')) ||
-                (!$(self.el).find(".control-cache-ext").prop('checked') && $(self.el).find(".control-cache-path").prop('checked')) ||
-                ($(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked'))) {
+            if ((!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) || // nenhum selecionado
+                (!$(self.el).find(".control-cache-ext").prop('checked') && $(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) ||  // selecionado path
+                ($(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) ||  // selecionado ext
+                (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && $(self.el).find(".control-upstream").prop('checked'))) {  // selecionado upstream
 
                 if ($(self.el).find(evt.target).prop('checked') && $(self.el).find(evt.target).parent().parent().parent().parent().hasClass("collapsed-box")) {
                     $(self.el).find(evt.target).parent().next().click();
@@ -61,12 +62,22 @@ window.LocationView = Backbone.View.extend({
                 }
                 if ($(self.el).find(".control-cache-ext").prop('checked')) {
                     $(self.el).find(".control-cache-path").bootstrapToggle('disable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
+
                 } else if ($(self.el).find(".control-cache-path").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
+
+                }else if ($(self.el).find(".control-upstream").prop('checked')) {
+                    $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+                    $(self.el).find(".control-cache-path").bootstrapToggle('disable');
+                    
                 } else if (!$(self.el).find(".control-cache-ext").prop('checked') &&
-                    !$(self.el).find(".control-cache-path").prop('checked')) {
+                    !$(self.el).find(".control-cache-path").prop('checked') &&
+                    !$(self.el).find(".control-upstream").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
                     $(self.el).find(".control-cache-path").bootstrapToggle('enable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('enable');
                 }
 
 
