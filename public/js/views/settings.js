@@ -125,8 +125,8 @@ window.SettingsView = Backbone.View.extend({
 
     //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
     //E RETORNAR O ARRAY
-    modem("GET", 
-      '/options/server', 
+    modem("GET",
+      '/options/server',
       function(data) {
         var options = "<option></option>";
         if (data.length > 0) {
@@ -147,8 +147,8 @@ window.SettingsView = Backbone.View.extend({
         error_launch(json.message);
       }, {});
 
-    modem("GET", 
-      '/options/location', 
+    modem("GET",
+      '/options/location',
       function(data) {
         var options = "<option></option>";
         if (data.length > 0) {
@@ -169,8 +169,8 @@ window.SettingsView = Backbone.View.extend({
         error_launch(json.message);
       }, {});
 
-    modem("GET", 
-      '/options/upstream', 
+    modem("GET",
+      '/options/upstream',
       function(data) {
         var options = "<option></option>";
         if(data.length>0){
@@ -185,7 +185,7 @@ window.SettingsView = Backbone.View.extend({
       }, {});
 
     modem("GET",
-      '/ext/all', 
+      '/ext/all',
       function(data) {
         var options = "";
         for (var i in data) {
@@ -246,11 +246,6 @@ window.SettingsView = Backbone.View.extend({
         servername: $(self.el).find('.host-name').val().trim(),
         port: $(self.el).find('.host-port').val().trim(),
         proxy: $(self.el).find('.host-proxy').val().trim(),
-        upstream: $(self.el).find(".control-upstram").prop('checked'),
-        upstreamall: {
-          name: $(self.el).find('.server-upstream-nane').val().trim(),
-          upstreams: []
-        },
         serveropts: [],
         locations: []
       }
@@ -265,9 +260,11 @@ window.SettingsView = Backbone.View.extend({
           }
         }
       }
-
+      console.log('antes locations');
       for (var i in self.allLocations) {
+        console.log('dentro do for');
         if (self.allLocations[i]) {
+          console.log('dentro do if');
           serverconfig.locations.push(self.allLocations[i].getLocationJson());
         }
       }

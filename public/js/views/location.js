@@ -101,7 +101,7 @@ window.LocationView = Backbone.View.extend({
         var self = this;
 
         // modem("GET",
-        //     '/ext/all', 
+        //     '/ext/all',
         //     function(data) {
         //         var options = "";
         //         for (var i in data) {
@@ -254,9 +254,24 @@ window.LocationView = Backbone.View.extend({
                 locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOpts.trim() : $(self.el).find(".location-input").val().trim(),
                 timecache: $(self.el).find(".control-cache-ext").prop('checked') ? $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val() : $(self.el).find(".control-cache-path").prop('checked') ? $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val() : "",
                 options: [],
-                upstream: {
-                    name: $(self.el).find('.server-upstream-name').val().trim(),
-                    options: []
+                upstreams: {}
+            }
+            console.log('valor:',$(self.el).find('.server-upstream-name').val());
+            if($(self.el).find('.server-upstream-name').val() != undefined){
+                locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
+                locJson.upstreams.options = [];
+                console.log('locJson:',locJson);
+                // Validação das opções selecionadas
+                for (var i in self.allOptionupstream) {
+                    if (self.allOptionupstream[i]) {
+                        var obj = self.allOptionupstream[i].getValidOption();
+                        if (obj != null && obj.valid) {
+                            locJson.upstreams.options.push(obj);
+                        } else {
+                            showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                            return;
+                        }
+                    }
                 }
             }
 
@@ -273,18 +288,6 @@ window.LocationView = Backbone.View.extend({
                 }
             }
 
-            // Validação das opções selecionadas
-            for (var i in self.allOptionupstream) {
-                if (self.allOptionupstream[i]) {
-                    var obj = self.allOptionupstream[i].getValidOption();
-                    if (obj != null && obj.valid) {
-                        locJson.upstream.options.push(obj);
-                    } else {
-                        showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-                        return;
-                    }
-                }
-            }
         } else {
             showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
             return;
