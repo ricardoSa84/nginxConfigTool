@@ -57,7 +57,7 @@ var Router = Backbone.Router.extend({
             }
         });
 
-        
+
         self.appEventBus.on('logaccess', function (data) {
             if (window.profile && window.profile.get("Page") === "Dashboard") {
                 self.dashboardform.dashboardstdaccess(data);
@@ -230,7 +230,6 @@ var Router = Backbone.Router.extend({
     "OptionView",
     "DashboardView",
     "SettingsView",
-    "AdvancedSettingsView",
     "ContentNavView",
     "TerminalView",
     "AboutView"],
