@@ -256,11 +256,9 @@ window.LocationView = Backbone.View.extend({
                 options: [],
                 upstreams: {}
             }
-            console.log('valor:',$(self.el).find('.server-upstream-name').val());
             if($(self.el).find('.server-upstream-name').val() != undefined){
                 locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
                 locJson.upstreams.options = [];
-                console.log('locJson:',locJson);
                 // Validação das opções selecionadas
                 for (var i in self.allOptionupstream) {
                     if (self.allOptionupstream[i]) {
@@ -268,7 +266,7 @@ window.LocationView = Backbone.View.extend({
                         if (obj != null && obj.valid) {
                             locJson.upstreams.options.push(obj);
                         } else {
-                            showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                            showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
                             return;
                         }
                     }
@@ -279,10 +277,12 @@ window.LocationView = Backbone.View.extend({
             for (var i in self.allOptionlocation) {
                 if (self.allOptionlocation[i]) {
                     var obj = self.allOptionlocation[i].getValidOption();
-                    if (obj != null && obj.valid) {
-                        locJson.options.push(obj);
+                    if (obj.valid) {
+                        if(obj.text != ''){
+                            locJson.options.push(obj);
+                        }
                     } else {
-                        showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                        showmsg('.my-modal', "warning", "Bad Values on location options to Save, check the <i class='icon fa fa-close'>.", false);
                         return;
                     }
                 }
@@ -292,9 +292,10 @@ window.LocationView = Backbone.View.extend({
             showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
             return;
         }
+
         return locJson;
     },
-    init: function(name, optlocation, optUpstream, optExt) {
+    init: function(name, optlocation, optUpstream, optExt,callback) {
         var self = this;
         self.locationname = name;
         self.allListOptionsLocation = optlocation;
@@ -328,7 +329,7 @@ window.LocationView = Backbone.View.extend({
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
         $.AdminLTE.boxWidget.activate();
-
+        callback();
     },
     render: function() {
         var self = this;
