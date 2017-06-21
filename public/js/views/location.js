@@ -4,7 +4,8 @@ window.LocationView = Backbone.View.extend({
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
     locationname: null,
-    selectedOpts: "",
+    selectedOptsExt: "",
+    selectedOptsPath: "",
     optionsToDropdownExt: "",
     optionsToDropdownPath: "",
     lastHeight: -1,
@@ -92,66 +93,20 @@ window.LocationView = Backbone.View.extend({
             $(self.el).find(".select-extensao.selectpicker option:selected").each(function(index, element) {
                 opts += element.text + "|";
             });
-            self.selectedOpts = opts.slice(0, -1);
-            console.log(self.selectedOpts);
+            self.selectedOptsExt = opts.slice(0, -1);
             self.checkImputs();
-        }
+        },
+        "change .select-path.selectpicker":  function(evt) {
+            var self = this;
+            var opts = "";
+            $(self.el).find(".select-path.selectpicker option:selected").each(function(index, element) {
+                opts += element.text + "|";
+            });
+            self.selectedOptsPath = opts.slice(0, -1);
+            self.checkImputs();
+        },
     },
-    initialize: function() {
-        var self = this;
-
-        // modem("GET",
-        //     '/ext/all',
-        //     function(data) {
-        //         var options = "";
-        //         for (var i in data) {
-        //             options += "<optgroup label='" + data[i].text + "'>";
-        //             for (var j in data[i].ext.sort()) {
-        //                 options += "<option>" + data[i].ext[j] + "</option>";
-        //             }
-        //             options += "</optgroup>";
-        //         }
-        //         self.optionsToDropdownExt = options;
-        //         $(self.el).find(".select-extensao").html(self.optionsToDropdownExt);
-        //         $(self.el).find('.selectpicker').selectpicker();
-
-        //         $(self.el).find('.btn-on-off').bootstrapToggle();
-        //     }, function(xhr, ajaxOptions, thrownError) {
-        //         var json = JSON.parse(xhr.responseText);
-        //         error_launch(json.message);
-        //     }, {});
-
-        //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
-        //E RETORNAR O ARRAY
-        // modem("GET", '/options/location', function(data) {
-        //     var options = "<option></option>";
-        //     if(data.length>0){
-        //         for (var i =0; i < data.length; i++) {
-        //             options += "<option>" + data[i].directive + "</option>";
-        //         }
-        //     }
-        //     self.allListOptionsLocation = options;
-
-        //     self.optionView = new OptionView({ model: self.model });
-        //     $(self.el).find(".option-list-location").append(self.optionView.render().el);
-        //     self.optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
-        //     self.allOptionlocation["option-" + self.countoptionlocation] = self.optionView;
-        //     self.countoptionlocation++;
-
-        //     self.optionView = new OptionView({ model: self.model });
-        //     $(self.el).find(".option-list-upstream").append(self.optionView.render().el);
-        //     self.optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
-        //     self.allOptionupstream["option-" + self.countoptionupstream] = self.optionView;
-        //     self.countoptionupstream++;
-
-
-
-        // }, function(xhr, ajaxOptions, thrownError) {
-        //     var json = JSON.parse(xhr.responseText);
-        //     error_launch(json.message);
-        // }, {});
-
-    },
+    initialize: function() {},
     checkImputs: function() {
         var self = this;
         $(self.el).find('.valid-input').each(function(i, obj) {
@@ -195,7 +150,7 @@ window.LocationView = Backbone.View.extend({
         });
 
         if ($(self.el).find(".control-cache-ext").prop('checked')) {
-            if (self.selectedOpts.trim().length > 0) {
+            if (self.selectedOptsExt.trim().length > 0) {
                 $(self.el).find(".select-extensao").parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                 self.locationcontinue = true;
             } else {
@@ -207,7 +162,7 @@ window.LocationView = Backbone.View.extend({
         }
 
         if ($(self.el).find(".control-cache-path").prop('checked')) {
-            if (self.selectedOpts.trim().length > 0) {
+            if (self.selectedOptsPath.trim().length > 0) {
                 $(self.el).find(".select-path").parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                 self.locationcontinue = true;
             } else {
@@ -251,16 +206,16 @@ window.LocationView = Backbone.View.extend({
                 extension: $(self.el).find(".control-cache-ext").prop('checked'),
                 path: $(self.el).find(".control-cache-path").prop('checked'),
                 initLocPath: $(self.el).find(".initPathText").text(),
-                locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOpts.trim() : $(self.el).find(".location-input").val().trim(),
+                locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOptsExt.trim() : $(self.el).find(".location-input").val().trim(),
                 timecache: $(self.el).find(".control-cache-ext").prop('checked') ? $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val() : $(self.el).find(".control-cache-path").prop('checked') ? $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val() : "",
                 options: [],
                 upstreams: {}
             }
-            console.log('valor:',$(self.el).find('.server-upstream-name').val());
-            if($(self.el).find('.server-upstream-name').val() != undefined){
+            console.log('valor:', $(self.el).find('.server-upstream-name').val());
+            if ($(self.el).find('.server-upstream-name').val() != undefined) {
                 locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
                 locJson.upstreams.options = [];
-                console.log('locJson:',locJson);
+                console.log('locJson:', locJson);
                 // Validação das opções selecionadas
                 for (var i in self.allOptionupstream) {
                     if (self.allOptionupstream[i]) {
@@ -294,12 +249,14 @@ window.LocationView = Backbone.View.extend({
         }
         return locJson;
     },
-    init: function(name, optlocation, optUpstream, optExt) {
+    init: function(name, optlocation, optUpstream, optExt, optPath) {
         var self = this;
         self.locationname = name;
         self.allListOptionsLocation = optlocation;
         self.allListOptionsUpstream = optUpstream;
         self.optionsToDropdownExt = optExt;
+        self.optionsToDropdownPath = optPath;
+        console.log(optPath);
         $(self.el).find(".well").attr("data-location", self.locationname);
 
         $(self.el).find('.slider-cache-ext, .slider-cache-path').slider().on('slide', function(ev) {
@@ -323,6 +280,9 @@ window.LocationView = Backbone.View.extend({
         self.countoptionupstream++;
 
         $('<select class="select-extensao selectpicker show-menu-arrow form-control" multiple data-live-search="true" title="Select extensions to Cache." data-actions-box="true">' + self.optionsToDropdownExt + '</select>').insertAfter($(self.el).find(".add-select-extensao"));
+
+        $('<select class="select-path selectpicker show-menu-arrow form-control" multiple data-live-search="true" title="Select extensions to Cache." data-actions-box="true">' + self.optionsToDropdownPath + '</select>').insertAfter($(self.el).find(".add-select-path"));
+
         $(self.el).find('.selectpicker').selectpicker('refresh');
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
