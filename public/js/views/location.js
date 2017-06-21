@@ -13,11 +13,7 @@ window.LocationView = Backbone.View.extend({
     allOptionlocation: [],
     countoptionupstream: 0,
     allOptionupstream: [],
-<<<<<<< HEAD
     allListOptionsLocation: "",
-=======
-    allListOptions: "",
->>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
     allListOptionsUpstream: "",
     events: {
         'keyup input': function() {
@@ -32,10 +28,11 @@ window.LocationView = Backbone.View.extend({
         },
         "change .btn-on-off": function(evt) {
             var self = this;
+
             if ((!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) || // nenhum selecionado
-                (!$(self.el).find(".control-cache-ext").prop('checked') && $(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) ||  // selecionado path
-                ($(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) ||  // selecionado ext
-                (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && $(self.el).find(".control-upstream").prop('checked'))) {  // selecionado upstream
+                (!$(self.el).find(".control-cache-ext").prop('checked') && $(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) || // selecionado path
+                ($(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-upstream").prop('checked')) || // selecionado ext
+                (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && $(self.el).find(".control-upstream").prop('checked'))) { // selecionado upstream
 
                 if ($(self.el).find(evt.target).prop('checked') && $(self.el).find(evt.target).parent().parent().parent().parent().hasClass("collapsed-box")) {
                     $(self.el).find(evt.target).parent().next().click();
@@ -44,24 +41,9 @@ window.LocationView = Backbone.View.extend({
                     $(self.el).find(evt.target).parent().next().click();
                 }
 
-<<<<<<< HEAD
-                if (!$(evt.target).hasClass("control-upstream")) {
-                    if ($(self.el).find(".control-cache-ext").prop('checked') ||
-                        $(self.el).find(".control-cache-path").prop('checked')) {
-
-                        // if (self.lastHeight !== 0) {
-                            self.lastHeight = $(self.el).find(".location-path").height();
-                        // }
-                        $(self.el).find(".location-path").animate({
-                            "height": 0
-                        }, 500);
-                        $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                    }
-=======
                 if ($(self.el).find(".control-cache-ext").prop('checked') ||
                     $(self.el).find(".control-upstream").prop('checked') ||
                     $(self.el).find(".control-cache-path").prop('checked')) {
->>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
 
                     // if (self.lastHeight !== 0) {
                     self.lastHeight = $(self.el).find(".location-path").height();
@@ -73,13 +55,8 @@ window.LocationView = Backbone.View.extend({
                 }
 
 
-<<<<<<< HEAD
-                        $(self.el).find(".location-path").animate({
-                            "height": self.lastHeight
-                        }, 500);
-=======
                 if (!$(self.el).find(".control-cache-ext").prop('checked') &&
-                    !$(self.el).find(".control-cache-path").prop('checked')&&
+                    !$(self.el).find(".control-cache-path").prop('checked') &&
                     !$(self.el).find(".control-upstream").prop('checked')) {
 
                     $(self.el).find(".location-path").animate({
@@ -95,7 +72,7 @@ window.LocationView = Backbone.View.extend({
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
                     $(self.el).find(".control-upstream").bootstrapToggle('disable');
 
-                }else if ($(self.el).find(".control-upstream").prop('checked')) {
+                } else if ($(self.el).find(".control-upstream").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
                     $(self.el).find(".control-cache-path").bootstrapToggle('disable');
 
@@ -105,65 +82,44 @@ window.LocationView = Backbone.View.extend({
                     $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
                     $(self.el).find(".control-cache-path").bootstrapToggle('enable');
                     $(self.el).find(".control-upstream").bootstrapToggle('enable');
->>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
                 }
             }
-            if ($(self.el).find(".control-cache-ext").prop('checked')) {
-                $(self.el).find(".control-cache-path").bootstrapToggle('disable');
-                $(self.el).find(".control-upstream").bootstrapToggle('disable');
-
-            } else if ($(self.el).find(".control-cache-path").prop('checked')) {
-                $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
-                $(self.el).find(".control-upstream").bootstrapToggle('disable');
-
-            }else if ($(self.el).find(".control-upstream").prop('checked')) {
-                $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
-                $(self.el).find(".control-cache-path").bootstrapToggle('disable');
-
-            } else if (!$(self.el).find(".control-cache-ext").prop('checked') &&
-                !$(self.el).find(".control-cache-path").prop('checked') &&
-                !$(self.el).find(".control-upstream").prop('checked')) {
-                $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
-                $(self.el).find(".control-cache-path").bootstrapToggle('enable');
-                $(self.el).find(".control-upstream").bootstrapToggle('enable');
-            }
+            this.checkImputs();
+        },
+        "change .select-extensao.selectpicker": function(evt) {
+            var self = this;
+            var opts = "";
+            $(self.el).find(".select-extensao.selectpicker option:selected").each(function(index, element) {
+                opts += element.text + "|";
+            });
+            self.selectedOpts = opts.slice(0, -1);
+            console.log(self.selectedOpts);
+            self.checkImputs();
         }
-        this.checkImputs();
     },
-    "change .select-extensao.selectpicker": function(evt) {
+    initialize: function() {
         var self = this;
-        var opts = "";
-        $(self.el).find(".select-extensao.selectpicker option:selected").each(function(index, element) {
-            opts += element.text + "|";
-        });
-        self.selectedOpts = opts.slice(0, -1);
-        console.log(self.selectedOpts);
-        self.checkImputs();
-    }
-},
-initialize: function() {
-    var self = this;
 
-    // modem("GET",
-    //     '/ext/all', 
-    //     function(data) {
-    //         var options = "";
-    //         for (var i in data) {
-    //             options += "<optgroup label='" + data[i].text + "'>";
-    //             for (var j in data[i].ext.sort()) {
-    //                 options += "<option>" + data[i].ext[j] + "</option>";
-    //             }
-    //             options += "</optgroup>";
-    //         }
-    //         self.optionsToDropdownExt = options;
-    //         $(self.el).find(".select-extensao").html(self.optionsToDropdownExt);
-    //         $(self.el).find('.selectpicker').selectpicker();
+        // modem("GET",
+        //     '/ext/all', 
+        //     function(data) {
+        //         var options = "";
+        //         for (var i in data) {
+        //             options += "<optgroup label='" + data[i].text + "'>";
+        //             for (var j in data[i].ext.sort()) {
+        //                 options += "<option>" + data[i].ext[j] + "</option>";
+        //             }
+        //             options += "</optgroup>";
+        //         }
+        //         self.optionsToDropdownExt = options;
+        //         $(self.el).find(".select-extensao").html(self.optionsToDropdownExt);
+        //         $(self.el).find('.selectpicker').selectpicker();
 
-    //         $(self.el).find('.btn-on-off').bootstrapToggle();
-    //     }, function(xhr, ajaxOptions, thrownError) {
-    //         var json = JSON.parse(xhr.responseText);
-    //         error_launch(json.message);
-    //     }, {});
+        //         $(self.el).find('.btn-on-off').bootstrapToggle();
+        //     }, function(xhr, ajaxOptions, thrownError) {
+        //         var json = JSON.parse(xhr.responseText);
+        //         error_launch(json.message);
+        //     }, {});
 
         //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
         //E RETORNAR O ARRAY
@@ -204,36 +160,36 @@ initialize: function() {
 
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "location-path":
-                    if ($(self.el).find(obj).val().trim().length >= 1) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.locationcontinue = true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.locationcontinue = false;
-                    }
-                    break;
+                        if ($(self.el).find(obj).val().trim().length >= 1) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.locationcontinue = true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.locationcontinue = false;
+                        }
+                        break;
                     case "server-upstream-name":
-                    if ($(self.el).find(".control-upstream").prop('checked')) {
-                        if ($(self.el).find(obj).val().trim().length >= 1) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.locationcontinue = true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.locationcontinue = false;
+                        if ($(self.el).find(".control-upstream").prop('checked')) {
+                            if ($(self.el).find(obj).val().trim().length >= 1) {
+                                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                                self.locationcontinue = true;
+                            } else {
+                                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                                self.locationcontinue = false;
+                            }
                         }
-                    }
-                    break;
+                        break;
                     case "location-path-files":
-                    if ($(self.el).find(".control-cache-path").prop('checked')) {
-                        if ($(self.el).find(obj).val().trim().length >= 1) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.locationcontinue = true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.locationcontinue = false;
+                        if ($(self.el).find(".control-cache-path").prop('checked')) {
+                            if ($(self.el).find(obj).val().trim().length >= 1) {
+                                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                                self.locationcontinue = true;
+                            } else {
+                                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                                self.locationcontinue = false;
+                            }
                         }
-                    }
-                    break;
+                        break;
                 }
             }
         });
@@ -349,7 +305,7 @@ initialize: function() {
 
         $(self.el).find(".slider").css({ width: "100%" });
         $(self.el).find(".slider-cache-ext-value, .slider-cache-path-value").parent().css({ "margin-top": 0 });
-        
+
 
         self.optionView = new OptionView({ model: self.model });
         $(self.el).find(".option-list-location").append(self.optionView.render().el);
@@ -363,7 +319,7 @@ initialize: function() {
         self.allOptionupstream["option-" + self.countoptionupstream] = self.optionView;
         self.countoptionupstream++;
 
-        $('<select class="select-extensao selectpicker show-menu-arrow form-control" multiple data-live-search="true" title="Select extensions to Cache." data-actions-box="true">' + self.optionsToDropdownExt + '</select>').insertAfter( $(self.el).find(".add-select-extensao"));
+        $('<select class="select-extensao selectpicker show-menu-arrow form-control" multiple data-live-search="true" title="Select extensions to Cache." data-actions-box="true">' + self.optionsToDropdownExt + '</select>').insertAfter($(self.el).find(".add-select-extensao"));
         $(self.el).find('.selectpicker').selectpicker('refresh');
 
         $(self.el).find('.btn-on-off').bootstrapToggle();

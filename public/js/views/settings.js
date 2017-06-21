@@ -44,7 +44,7 @@ window.SettingsView = Backbone.View.extend({
       $(e.target).parent().parent().parent().parent().parent().remove();
       self.optionsListserver[optName] = null;
     },
-    "click #save-setting": "savesettings",
+    "click #save-settings": "savesettings",
     "click #test-nginx": function() {
       console.log('deu certo');
       modem("POST", '/nginx/test', function(data) {
@@ -240,7 +240,6 @@ window.SettingsView = Backbone.View.extend({
   savesettings: function() {
     var self = this;
     var serverconfig = {};
-
     // if (self.servercontinue) {
 
       serverconfig = {

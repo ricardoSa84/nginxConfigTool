@@ -1,6 +1,6 @@
 /* global Backbone, _, templateLoader, app */
 
-Backbone.View.prototype.close = function () {
+Backbone.View.prototype.close = function() {
     this.remove();
     this.unbind();
     this.undelegateEvents();
@@ -21,55 +21,55 @@ var Router = Backbone.Router.extend({
     about: undefined,
     socketclt: null,
     terminalcmd: undefined,
-    initialize: function () {
+    initialize: function() {
         var self = this;
         self.appEventBus = _.extend({}, Backbone.Events);
-        self.socketclt = new socketClient({vent: self.appEventBus});
+        self.socketclt = new socketClient({ vent: self.appEventBus });
 
-        self.appEventBus.on('stdout', function (data) {
+        self.appEventBus.on('stdout', function(data) {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminalstdout(data);
             }
         });
-        self.appEventBus.on('stderr', function (data) {
+        self.appEventBus.on('stderr', function(data) {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminalstderr(data);
             }
         });
-        self.appEventBus.on('disconnect', function () {
+        self.appEventBus.on('disconnect', function() {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminaldisconnect();
             }
         });
-        self.appEventBus.on('enable', function () {
+        self.appEventBus.on('enable', function() {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminalenable();
             }
         });
-        self.appEventBus.on('disable', function () {
+        self.appEventBus.on('disable', function() {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminaldisable();
             }
         });
-        self.appEventBus.on('prompt', function (data) {
+        self.appEventBus.on('prompt', function(data) {
             if (window.profile && window.profile.get("Page") === "Terminal") {
                 self.terminalcmd.terminalsetprompt(data);
             }
         });
 
 
-        self.appEventBus.on('logaccess', function (data) {
+        self.appEventBus.on('logaccess', function(data) {
             if (window.profile && window.profile.get("Page") === "Dashboard") {
                 self.dashboardform.dashboardstdaccess(data);
             }
         });
-        self.appEventBus.on('logerror', function (data) {
+        self.appEventBus.on('logerror', function(data) {
             if (window.profile && window.profile.get("Page") === "Dashboard") {
                 self.dashboardform.dashboardstderror(data);
             }
         });
     },
-    showView: function (view, elem, sub) {
+    showView: function(view, elem, sub) {
         elem.show();
         if (sub == false) {
             if (this.currentView) {
@@ -93,7 +93,7 @@ var Router = Backbone.Router.extend({
         "About": "aCercaDe",
         '*notFound': 'login'
     },
-    login: function () {
+    login: function() {
         this.currentView = undefined;
         this.header = undefined;
         this.sidebar = undefined;
@@ -126,9 +126,9 @@ var Router = Backbone.Router.extend({
         $('#content').html(self.loginform.render().el);
         self.loginform.checkloginstored();
     },
-    aCercaDe: function () {
+    aCercaDe: function() {
         var self = this;
-        self.verificaLogin(function () {
+        self.verificaLogin(function() {
             self.about = new AboutView();
             self.contentnav.setView("About");
             $('#content').html(self.about.render().el);
@@ -136,9 +136,9 @@ var Router = Backbone.Router.extend({
             // windowScrollTop();
         });
     },
-    inicio: function () {
+    inicio: function() {
         var self = this;
-        self.verificaLogin(function () {
+        self.verificaLogin(function() {
             self.socketclt.connect();
             self.header = new HeaderView({
                 logo: (window.profile.logo == "") ? "./img/user.png" : window.profile.logo
@@ -164,20 +164,20 @@ var Router = Backbone.Router.extend({
             self.footer.init();
         });
     },
-    dashboard: function () {
+    dashboard: function() {
         var self = this;
-        self.verificaLogin(function () {
-        self.dashboardform = new DashboardView({socket: self.socketclt});
-        $('#content').html(self.dashboardform.render().el);
-        self.dashboardform.init();
-        self.contentnav.setView("Dashboard");
-        window.profile.set("Page", "Dashboard");
-    });
+        self.verificaLogin(function() {
+            self.dashboardform = new DashboardView({ socket: self.socketclt });
+            $('#content').html(self.dashboardform.render().el);
+            self.dashboardform.init();
+            self.contentnav.setView("Dashboard");
+            window.profile.set("Page", "Dashboard");
+        });
     },
     // carrega as configuracoes do site
-    settings: function () {
+    settings: function() {
         var self = this;
-        self.verificaLogin(function () {
+        self.verificaLogin(function() {
             window.profile.set("Page", undefined);
             self.settingsform = new SettingsView({});
             $('#content').html(self.settingsform.render().el);
@@ -185,10 +185,10 @@ var Router = Backbone.Router.extend({
             self.contentnav.setView("Settings");
         });
     },
-    cmdterminal: function () {
+    cmdterminal: function() {
         var self = this;
-        self.verificaLogin(function () {
-            self.terminalcmd = new TerminalView({socket: self.socketclt});
+        self.verificaLogin(function() {
+            self.terminalcmd = new TerminalView({ socket: self.socketclt });
             $('#content').html(self.terminalcmd.render().el);
             self.terminalcmd.init();
             self.contentnav.setView("Terminal");
@@ -196,7 +196,7 @@ var Router = Backbone.Router.extend({
         });
     },
     // verifica se o login e valido
-    verificaLogin: function (loggedFunction) {
+    verificaLogin: function(loggedFunction) {
         var self = this;
         if (window.profile == undefined) {
             app.navigate('', {
@@ -220,21 +220,22 @@ var Router = Backbone.Router.extend({
  * @param {type} param1
  * @param {type} param2
  */
- templateLoader.load([
-    "LoginView",
-    "HeaderView",
-    "InicioView",
-    "SideBarView",
-    "FooterView",
-    "LocationView",
-    "OptionView",
-    "DashboardView",
-    "SettingsView",
-    "ContentNavView",
-    "TerminalView",
-    "AboutView"],
-    function () {
+templateLoader.load([
+        "LoginView",
+        "HeaderView",
+        "InicioView",
+        "SideBarView",
+        "FooterView",
+        "LocationView",
+        "OptionView",
+        "DashboardView",
+        "SettingsView",
+        "ContentNavView",
+        "TerminalView",
+        "AboutView"
+    ],
+    function() {
         app = new Router();
         Backbone.history.start();
     }
-    );
+);
