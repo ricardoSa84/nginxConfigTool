@@ -1,7 +1,6 @@
 /* global Backbone, normalizeString, app */
 'use strict';
 window.SettingsView = Backbone.View.extend({
-    htmlnewupstream: '<div class="row"><div class="col-md-2"><label>Server Upstream:</label></div><div class="col-md-4"><div class="form-group"><input class="server-upstream-server width100 vcenter valid-input form-control" data-typevalue="server-upstream-server" type="text" placeholder="hostname" value="" data-mask=""></div></div><div class="col-md-1"><span class="whith10p color-red" data-toggle="tooltip" title="Insert a valid upstream server."><i class="icon fa fa-close color-red"></i></span></div><div class="col-md-1"><h4><span class="option-add-upstream whith10p" data-toggle="tooltip" title="Add new row."><i class="fa fa-plus-circle"></i></span></h4></div></div>',
     textRegex: /^\w+$/,
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
@@ -26,13 +25,6 @@ window.SettingsView = Backbone.View.extend({
             var self = this;
             $(self.el).find(evt.target).parent().next().click();
         },
-        "click .option-add-upstream": function(e) {
-            var self = this;
-            $(self.el).find(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
-            $(self.el).find(e.target).parent().removeClass("option-add-upstream").addClass("option-remove-upstream");
-            $(self.el).find(e.target).parent().attr('data-original-title', "Remove row.");
-            $(self.el).find('.server-upstream-list').append(self.htmlnewupstream);
-        },
         "click .option-remove-upstream": function(evt) {
             var self = this;
             console.log($(self.el).find(evt.target).parent().parent().parent().parent());
@@ -46,6 +38,7 @@ window.SettingsView = Backbone.View.extend({
             self.optionsListserver[optName] = null;
         },
         "click .save-settings": "savesettings",
+
         "click .test-nginx": function() {
             console.log('deu certo');
             modem("POST", '/nginx/test', function(data) {
@@ -137,12 +130,10 @@ window.SettingsView = Backbone.View.extend({
             self.optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
             self.optionsListserver["option-" + self.optscountserver] = self.optionView;
             self.optscountserver++;
-
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
         }, {});
-
         modem("GET", '/options/location', function(data) {
             var options = "<option></option>";
             if (data.length > 0) {
@@ -245,11 +236,6 @@ window.SettingsView = Backbone.View.extend({
             servername: $(self.el).find('.host-name').val().trim(),
             port: $(self.el).find('.host-port').val().trim(),
             proxy: $(self.el).find('.host-proxy').val().trim(),
-            upstream: $(self.el).find(".control-upstram").prop('checked'),
-            upstreamall: {
-                name: $(self.el).find('.server-upstream-nane').val().trim(),
-                upstreams: []
-            },
             serveropts: [],
             locations: []
         }
@@ -257,16 +243,37 @@ window.SettingsView = Backbone.View.extend({
         serverconfig = {
             servername: $(self.el).find('.host-name').val().trim(),
             port: $(self.el).find('.host-port').val().trim(),
-            proxy: $(self.el).find('.host-proxy').val().trim(),
             serveropts: [],
+            defaultLocation: {
+                path: $(self.el).find('.location-input').val().trim(),
+                proxy: $(self.el).find('.host-proxy').val().trim(),
+                options: []
+            },
             locations: []
         }
 
-        for (var i in self.optionsList) {
-            if (self.optionsList[i]) {
-                var opt = self.optionsList[i].getValidOption();
-                if (opt != null && opt.valid) {
-                    serverconfig.serveropts.push(opt);
+        for (var i in self.optionsListserver) {
+            if (self.optionsListserver[i]) {
+                var obj = self.optionsListserver[i].getValidOption();
+                if (obj.valid) {
+                    if (obj.text != '') {
+                        serverconfig.serveropts.push(obj);
+                    }
+                } else {
+                    showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                    return;
+                }
+            }
+        }
+
+        for (var i in self.optionsListdefault) {
+            if (self.optionsListdefault[i]) {
+                var obj = self.optionsListdefault[i].getValidOption();
+                if (obj.valid) {
+                    if (obj.text != '') {
+                        serverconfig.defaultLocation.options.push(obj);
+                    }
+                } else {
                     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
                     return;
                 }
@@ -279,7 +286,7 @@ window.SettingsView = Backbone.View.extend({
             }
         }
 
-        console.log('server config: ', serverconfig);
+        console.log('obj: ', serverconfig);
 
         // } else {
         //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
