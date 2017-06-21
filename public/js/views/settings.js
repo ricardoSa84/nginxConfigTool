@@ -44,8 +44,9 @@ window.SettingsView = Backbone.View.extend({
       $(e.target).parent().parent().parent().parent().parent().remove();
       self.optionsListserver[optName] = null;
     },
-    "click #save-settings": "savesettings",
+    "click #save-setting": "savesettings",
     "click #test-nginx": function() {
+      console.log('deu certo');
       modem("POST", '/nginx/test', function(data) {
         if (data.status === "nginx test ok") {
           $('#restart-nginx').prop('disabled', false);
@@ -101,6 +102,7 @@ window.SettingsView = Backbone.View.extend({
     var classname = $(self.el).find(e.target).parent().parent().parent().parent().parent().parent().attr("data-container");
     console.log(classname);
     self.optionView = new OptionView({model: self.model});
+    //os pedaços dentro do if tb da para fazer função para chamar evitando repetir código
     if (classname === "server") {
       $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
       self.optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
@@ -271,7 +273,7 @@ window.SettingsView = Backbone.View.extend({
         }
       }
 
-      console.log(serverconfig);
+    console.log('server config: ', serverconfig);
 
     // } else {
     //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);

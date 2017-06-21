@@ -13,7 +13,11 @@ window.LocationView = Backbone.View.extend({
     allOptionlocation: [],
     countoptionupstream: 0,
     allOptionupstream: [],
+<<<<<<< HEAD
     allListOptionsLocation: "",
+=======
+    allListOptions: "",
+>>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
     allListOptionsUpstream: "",
     events: {
         'keyup input': function() {
@@ -40,6 +44,7 @@ window.LocationView = Backbone.View.extend({
                     $(self.el).find(evt.target).parent().next().click();
                 }
 
+<<<<<<< HEAD
                 if (!$(evt.target).hasClass("control-upstream")) {
                     if ($(self.el).find(".control-cache-ext").prop('checked') ||
                         $(self.el).find(".control-cache-path").prop('checked')) {
@@ -52,14 +57,55 @@ window.LocationView = Backbone.View.extend({
                         }, 500);
                         $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                     }
+=======
+                if ($(self.el).find(".control-cache-ext").prop('checked') ||
+                    $(self.el).find(".control-upstream").prop('checked') ||
+                    $(self.el).find(".control-cache-path").prop('checked')) {
+>>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
+
+                    // if (self.lastHeight !== 0) {
+                    self.lastHeight = $(self.el).find(".location-path").height();
+                    // }
+                    $(self.el).find(".location-path").animate({
+                        "height": 0
+                    }, 500);
+                    $(self.el).find(".location-input").parent().next().children().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                }
 
 
-                    if (!$(self.el).find(".control-cache-ext").prop('checked') &&
-                        !$(self.el).find(".control-cache-path").prop('checked')) {
-
+<<<<<<< HEAD
                         $(self.el).find(".location-path").animate({
                             "height": self.lastHeight
                         }, 500);
+=======
+                if (!$(self.el).find(".control-cache-ext").prop('checked') &&
+                    !$(self.el).find(".control-cache-path").prop('checked')&&
+                    !$(self.el).find(".control-upstream").prop('checked')) {
+
+                    $(self.el).find(".location-path").animate({
+                        "height": self.lastHeight
+                    }, 500);
+                }
+
+                if ($(self.el).find(".control-cache-ext").prop('checked')) {
+                    $(self.el).find(".control-cache-path").bootstrapToggle('disable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
+
+                } else if ($(self.el).find(".control-cache-path").prop('checked')) {
+                    $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('disable');
+
+                }else if ($(self.el).find(".control-upstream").prop('checked')) {
+                    $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
+                    $(self.el).find(".control-cache-path").bootstrapToggle('disable');
+
+                } else if (!$(self.el).find(".control-cache-ext").prop('checked') &&
+                    !$(self.el).find(".control-cache-path").prop('checked') &&
+                    !$(self.el).find(".control-upstream").prop('checked')) {
+                    $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
+                    $(self.el).find(".control-cache-path").bootstrapToggle('enable');
+                    $(self.el).find(".control-upstream").bootstrapToggle('enable');
+>>>>>>> ed2b6d3c135753a243d999fef9041c3ef9975522
                 }
             }
             if ($(self.el).find(".control-cache-ext").prop('checked')) {
