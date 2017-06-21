@@ -13,6 +13,8 @@ window.SettingsView = Backbone.View.extend({
   allListOptionsServer: "",
   optionsListdefault: [],
   allListOptionsDefault: "",
+  allListOptionsUpstream: "",
+  optionsToDropdownExt : "",
   optscountserver: 0,
   optscountdefault: 0,
   events: {
@@ -81,13 +83,15 @@ window.SettingsView = Backbone.View.extend({
       var self = this;
       self.locationView = new LocationView({model: self.model});
       $(self.el).find("#server-locations").append(self.locationView.render().el);
-      self.locationView.init("location-" + self.countlocation);
+      self.locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt);
 
       self.allLocations["location-" + self.countlocation] = self.locationView;
       self.countlocation++;
     }
   },
-  initialize: function() {},
+  initialize: function() {
+
+  },
   addnewoptionserver: function(e) {
     var self = this;
     $(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
@@ -99,15 +103,13 @@ window.SettingsView = Backbone.View.extend({
     self.optionView = new OptionView({model: self.model});
     if (classname === "server") {
       $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
-      self.optionView.init("option-" + self.optscountserver,
-      /*self.allListOptions*/);
+      self.optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
       self.optionsListserver["option-" + self.optscountserver] = self.optionView;
       self.optscountserver++;
     }
     if (classname === "default-location") {
       $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
-      self.optionView.init("option-" + self.optscountdefault,
-      /*self.allListOptions*/);
+      self.optionView.init("option-" + self.optscountdefault,  self.allListOptionsDefault);
       self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
       self.optscountdefault++;
     }
@@ -121,32 +123,81 @@ window.SettingsView = Backbone.View.extend({
 
     //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
     //E RETORNAR O ARRAY
-    modem("GET", '/options/server', function(data) {
-      var options = "<option></option>";
-      if (data.length > 0) {
-        for (var i = 0; i < data.length; i++) {
-          options += "<option>" + data[i].directive + "</option>";
+    modem("GET", 
+      '/options/server', 
+      function(data) {
+        var options = "<option></option>";
+        if (data.length > 0) {
+          for (var i = 0; i < data.length; i++) {
+            options += "<option>" + data[i].directive + "</option>";
+          }
         }
-      }
-      self.allListOptionsServer = options;
-      self.allListOptionsDefault = options;
+        self.allListOptionsServer = options;
 
-      self.optionView = new OptionView({model: self.model});
-      $(self.el).find(".option-list-server").append(self.optionView.render().el);
-      self.optionView.init("option-" + self.optscountserver,self.allListOptionsServer);
-      self.optionsListserver["option-" + self.optscountserver] = self.optionView;
-      self.optscountserver++;
+        self.optionView = new OptionView({model: self.model});
+        $(self.el).find(".option-list-server").append(self.optionView.render().el);
+        self.optionView.init("option-" + self.optscountserver,self.allListOptionsServer);
+        self.optionsListserver["option-" + self.optscountserver] = self.optionView;
+        self.optscountserver++;
 
-      self.optionView = new OptionView({model: self.model});
-      $(self.el).find(".option-list-default-location").append(self.optionView.render().el);
-      self.optionView.init("option-" + self.optscountdefault,self.allListOptionsDefault);
-      self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
-      self.optscountdefault++;
+      }, function(xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
 
-    }, function(xhr, ajaxOptions, thrownError) {
-      var json = JSON.parse(xhr.responseText);
-      error_launch(json.message);
-    }, {});
+    modem("GET", 
+      '/options/location', 
+      function(data) {
+        var options = "<option></option>";
+        if (data.length > 0) {
+          for (var i = 0; i < data.length; i++) {
+            options += "<option>" + data[i].directive + "</option>";
+          }
+        }
+        self.allListOptionsDefault = options;
+
+        self.optionView = new OptionView({model: self.model});
+        $(self.el).find(".option-list-default-location").append(self.optionView.render().el);
+        self.optionView.init("option-" + self.optscountdefault,self.allListOptionsDefault);
+        self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
+        self.optscountdefault++;
+
+      }, function(xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
+
+    modem("GET", 
+      '/options/upstream', 
+      function(data) {
+        var options = "<option></option>";
+        if(data.length>0){
+          for (var i =0; i < data.length; i++) {
+            options += "<option>" + data[i].directive + "</option>";
+          }
+        }
+        self.allListOptionsUpstream = options;
+      }, function(xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
+
+    modem("GET",
+      '/ext/all', 
+      function(data) {
+        var options = "";
+        for (var i in data) {
+          options += "<optgroup label='" + data[i].text + "'>";
+          for (var j in data[i].ext.sort()) {
+            options += "<option>" + data[i].ext[j] + "</option>";
+          }
+          options += "</optgroup>";
+        }
+        self.optionsToDropdownExt = options;
+      }, function(xhr, ajaxOptions, thrownError) {
+        var json = JSON.parse(xhr.responseText);
+        error_launch(json.message);
+      }, {});
 
     $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -159,27 +210,27 @@ window.SettingsView = Backbone.View.extend({
         $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         switch ($(self.el).find(obj).data("typevalue")) {
           case "host-name":
-            if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-            } else {
-              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-            }
-            break;
+          if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+          } else {
+            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          }
+          break;
           case "host-port":
-            if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-            } else {
-              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-            }
-            break;
+          if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+          } else {
+            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          }
+          break;
           case "host-proxy":
-            var ipPort = $(self.el).find(obj).val().trim().split(":");
-            if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-            } else {
-              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-            }
-            break;
+          var ipPort = $(self.el).find(obj).val().trim().split(":");
+          if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+          } else {
+            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+          }
+          break;
         }
       }
     });
@@ -190,37 +241,37 @@ window.SettingsView = Backbone.View.extend({
 
     // if (self.servercontinue) {
 
-    serverconfig = {
-      servername: $(self.el).find('.host-name').val().trim(),
-      port: $(self.el).find('.host-port').val().trim(),
-      proxy: $(self.el).find('.host-proxy').val().trim(),
-      upstream: $(self.el).find(".control-upstram").prop('checked'),
-      upstreamall: {
-        name: $(self.el).find('.server-upstream-nane').val().trim(),
-        upstreams: []
-      },
-      serveropts: [],
-      locations: []
-    }
+      serverconfig = {
+        servername: $(self.el).find('.host-name').val().trim(),
+        port: $(self.el).find('.host-port').val().trim(),
+        proxy: $(self.el).find('.host-proxy').val().trim(),
+        upstream: $(self.el).find(".control-upstram").prop('checked'),
+        upstreamall: {
+          name: $(self.el).find('.server-upstream-nane').val().trim(),
+          upstreams: []
+        },
+        serveropts: [],
+        locations: []
+      }
 
-    for (var i in self.optionsList) {
-      if (self.optionsList[i]) {
-        var opt = self.optionsList[i].getValidOption();
-        if (opt != null && opt.valid) {
-          serverconfig.serveropts.push(opt);
-          showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-          return;
+      for (var i in self.optionsList) {
+        if (self.optionsList[i]) {
+          var opt = self.optionsList[i].getValidOption();
+          if (opt != null && opt.valid) {
+            serverconfig.serveropts.push(opt);
+            showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+            return;
+          }
         }
       }
-    }
 
-    for (var i in self.allLocations) {
-      if (self.allLocations[i]) {
-        serverconfig.locations.push(self.allLocations[i].getLocationJson());
+      for (var i in self.allLocations) {
+        if (self.allLocations[i]) {
+          serverconfig.locations.push(self.allLocations[i].getLocationJson());
+        }
       }
-    }
 
-    console.log(serverconfig);
+      console.log(serverconfig);
 
     // } else {
     //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
