@@ -25,17 +25,18 @@ window.SettingsView = Backbone.View.extend({
             var self = this;
             $(self.el).find(evt.target).parent().next().click();
         },
-        "click .option-remove-upstream": function(evt) {
-            var self = this;
-            console.log($(self.el).find(evt.target).parent().parent().parent().parent());
-            $(self.el).find(evt.target).parent().parent().parent().parent().remove();
-        },
         "click .option-add": "addnewoptionserver",
         "click .option-remove-server": function(e) {
             var self = this;
             var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
             $(e.target).parent().parent().parent().parent().parent().remove();
             self.optionsListserver[optName] = null;
+        },
+        "click .option-remove-default-location": function(e) {
+            var self = this;
+            var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
+            $(e.target).parent().parent().parent().parent().parent().remove();
+            self.optionsListdefault[optName] = null;
         },
         "click .save-settings": "savesettings",
 
@@ -76,11 +77,10 @@ window.SettingsView = Backbone.View.extend({
         },
         "click .add-new-location": function() {
             var self = this;
-            self.locationView = new LocationView({ model: self.model });
-            $(self.el).find(".server-locations").append(self.locationView.render().el);
-            self.locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath);
-
-            self.allLocations["location-" + self.countlocation] = self.locationView;
+            var locationView = new LocationView({});
+            $(self.el).find(".server-locations").append(locationView.render().el);
+            locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath);
+            self.allLocations["location-" + self.countlocation] = locationView;
             self.countlocation++;
         }
     },
@@ -88,23 +88,24 @@ window.SettingsView = Backbone.View.extend({
     addnewoptionserver: function(e) {
         var self = this;
         $(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
-        $(e.target).parent().removeClass("option-add").addClass("option-remove-server");
         $(e.target).parent().attr('data-original-title', "Remove row.");
 
         var classname = $(self.el).find(e.target).parent().parent().parent().parent().parent().parent().attr("data-container");
-        console.log(classname);
-        self.optionView = new OptionView({ model: self.model });
+
+        var optionView = new OptionView({});
         //os pedaços dentro do if tb da para fazer função para chamar evitando repetir código
         if (classname === "server") {
-            $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
-            self.optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
-            self.optionsListserver["option-" + self.optscountserver] = self.optionView;
+        $(e.target).parent().removeClass("option-add").addClass("option-remove-server");
+            $(self.el).find(".option-list-" + classname).append(optionView.render().el);
+            optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
+            self.optionsListserver["option-" + self.optscountserver] = optionView;
             self.optscountserver++;
         }
         if (classname === "default-location") {
-            $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
-            self.optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
-            self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
+        $(e.target).parent().removeClass("option-add").addClass("option-remove-default-location");
+            $(self.el).find(".option-list-" + classname).append(optionView.render().el);
+            optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
+            self.optionsListdefault["option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
         }
     },
@@ -125,10 +126,10 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
             self.allListOptionsServer = options;
-            self.optionView = new OptionView({ model: self.model });
-            $(self.el).find(".option-list-server").append(self.optionView.render().el);
-            self.optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
-            self.optionsListserver["option-" + self.optscountserver] = self.optionView;
+            var optionView = new OptionView({});
+            $(self.el).find(".option-list-server").append(optionView.render().el);
+            optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
+            self.optionsListserver["option-" + self.optscountserver] = optionView;
             self.optscountserver++;
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -142,10 +143,10 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
             self.allListOptionsDefault = options;
-            self.optionView = new OptionView({ model: self.model });
-            $(self.el).find(".option-list-default-location").append(self.optionView.render().el);
-            self.optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
-            self.optionsListdefault["option-" + self.optscountdefault] = self.optionView;
+            var optionView = new OptionView({});
+            $(self.el).find(".option-list-default-location").append(optionView.render().el);
+            optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
+            self.optionsListdefault["option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
 
         }, function(xhr, ajaxOptions, thrownError) {
@@ -235,14 +236,6 @@ window.SettingsView = Backbone.View.extend({
         serverconfig = {
             servername: $(self.el).find('.host-name').val().trim(),
             port: $(self.el).find('.host-port').val().trim(),
-            proxy: $(self.el).find('.host-proxy').val().trim(),
-            serveropts: [],
-            locations: []
-        }
-
-        serverconfig = {
-            servername: $(self.el).find('.host-name').val().trim(),
-            port: $(self.el).find('.host-port').val().trim(),
             serveropts: [],
             defaultLocation: {
                 path: $(self.el).find('.location-input').val().trim(),
@@ -279,7 +272,6 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         }
-
         for (var i in self.allLocations) {
             if (self.allLocations[i]) {
                 serverconfig.locations.push(self.allLocations[i].getLocationJson());

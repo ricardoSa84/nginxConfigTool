@@ -21,11 +21,17 @@ window.LocationView = Backbone.View.extend({
             this.checkImputs();
         },
         "click .option-add": "addnewoption",
-        "click .option-remove": function(e) {
+        "click .option-location-remove": function(e) {
             var self = this;
             var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
             $(e.target).parent().parent().parent().parent().parent().remove();
-            self.allOptionlocation[optName] = null;
+            self.allOptionlocation[self.locationname + "-loc-" + optName] = null;
+        },
+        "click .option-upstream-remove": function(e) {
+            var self = this;
+            var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
+            $(e.target).parent().parent().parent().parent().parent().remove();
+            self.allOptionupstream[self.locationname + "-upst-" + optName] = null;
         },
         "change .btn-on-off": function(evt) {
             var self = this;
@@ -177,22 +183,23 @@ window.LocationView = Backbone.View.extend({
         var self = this;
         if (e) {
             $(self.el).find(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
-            $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-remove");
             $(self.el).find(e.target).parent().attr('data-original-title', "Remove row.");
         }
 
         var classname = $(self.el).find(e.target).parent().parent().parent().parent().parent().parent().attr("data-container");
 
-        self.optionView = new OptionView({ model: self.model });
-        $(self.el).find(".option-list-" + classname).append(self.optionView.render().el);
+        var optionView = new OptionView({});
+        $(self.el).find(".option-list-" + classname).append(optionView.render().el);
         if (classname === "location") {
-            self.optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
-            self.allOptionlocation["option-" + self.countoptionlocation] = self.optionView;
-            self.countoptionlocationlocation++;
+            $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-location-remove");
+            optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
+            self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
+            self.countoptionlocation++;
         }
         if (classname === "upstream") {
-            self.optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
-            self.allOptionupstream["option-" + self.countoptionupstream] = self.optionView;
+            $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-upstream-remove");
+            optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
+            self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
             self.countoptionupstream++;
         }
 
@@ -200,7 +207,7 @@ window.LocationView = Backbone.View.extend({
     getLocationJson: function() {
         var self = this;
         var locJson = {};
-        if (self.locationcontinue) {
+        // if (self.locationcontinue) {
             locJson = {
                 locname: self.locationname,
                 extension: $(self.el).find(".control-cache-ext").prop('checked'),
@@ -214,15 +221,19 @@ window.LocationView = Backbone.View.extend({
             if($(self.el).find('.server-upstream-name').val() != undefined){
                 locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
                 locJson.upstreams.options = [];
+
                 // Validação das opções selecionadas
                 for (var i in self.allOptionupstream) {
-                    if (self.allOptionupstream[i]) {
-                        var obj = self.allOptionupstream[i].getValidOption();
-                        if (obj != null && obj.valid) {
-                            locJson.upstreams.options.push(obj);
-                        } else {
-                            showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
-                            return;
+                    // console.log(self.allOptionupstream[i]);
+                    if (i.indexOf(self.locationname + "-upst") != -1) {
+                        if (self.allOptionupstream[i]) {
+                            var obj = self.allOptionupstream[i].getValidOption();
+                            if (obj != null && obj.valid) {
+                                locJson.upstreams.options.push(obj);
+                            } else {
+                                showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
+                                return;
+                            }
                         }
                     }
                 }
@@ -230,23 +241,26 @@ window.LocationView = Backbone.View.extend({
 
             // Validação das opções selecionadas
             for (var i in self.allOptionlocation) {
-                if (self.allOptionlocation[i]) {
-                    var obj = self.allOptionlocation[i].getValidOption();
-                    if (obj.valid) {
-                        if(obj.text != ''){
-                            locJson.options.push(obj);
+                // console.log(self.allOptionlocation[i]);
+                if (i.indexOf(self.locationname + "-loc") != -1) {
+                    if (self.allOptionlocation[i]) {
+                        var obj = self.allOptionlocation[i].getValidOption();
+                        if (obj.valid) {
+                            if(obj.text != ''){
+                                locJson.options.push(obj);
+                            }
+                        } else {
+                            showmsg('.my-modal', "warning", "Bad Values on location options to Save, check the <i class='icon fa fa-close'>.", false);
+                            return;
                         }
-                    } else {
-                        showmsg('.my-modal', "warning", "Bad Values on location options to Save, check the <i class='icon fa fa-close'>.", false);
-                        return;
                     }
                 }
             }
 
-        } else {
-            showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-            return;
-        }
+        // } else {
+        //     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+        //     return;
+        // }
 
         return locJson;
     },
@@ -257,7 +271,7 @@ window.LocationView = Backbone.View.extend({
         self.allListOptionsUpstream = optUpstream;
         self.optionsToDropdownExt = optExt;
         self.optionsToDropdownPath = optPath;
-        console.log(optPath);
+
         $(self.el).find(".well").attr("data-location", self.locationname);
 
         $(self.el).find('.slider-cache-ext, .slider-cache-path').slider().on('slide', function(ev) {
@@ -268,16 +282,16 @@ window.LocationView = Backbone.View.extend({
         $(self.el).find(".slider-cache-ext-value, .slider-cache-path-value").parent().css({ "margin-top": 0 });
 
 
-        self.optionView = new OptionView({ model: self.model });
-        $(self.el).find(".option-list-location").append(self.optionView.render().el);
-        self.optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
-        self.allOptionlocation["option-" + self.countoptionlocation] = self.optionView;
+        var optionView = new OptionView({});
+        $(self.el).find(".option-list-location").append(optionView.render().el);
+        optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
+        self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
         self.countoptionlocation++;
 
-        self.optionView = new OptionView({ model: self.model });
-        $(self.el).find(".option-list-upstream").append(self.optionView.render().el);
-        self.optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
-        self.allOptionupstream["option-" + self.countoptionupstream] = self.optionView;
+        var optionView = new OptionView({});
+        $(self.el).find(".option-list-upstream").append(optionView.render().el);
+        optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
+        self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
         self.countoptionupstream++;
 
         $('<select class="select-extensao selectpicker show-menu-arrow form-control" multiple data-live-search="true" title="Select extensions to Cache." data-actions-box="true">' + self.optionsToDropdownExt + '</select>').insertAfter($(self.el).find(".add-select-extensao"));
