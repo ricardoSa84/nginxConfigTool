@@ -76,11 +76,10 @@ window.SettingsView = Backbone.View.extend({
         },
         "click .add-new-location": function() {
             var self = this;
-            self.locationView = new LocationView({ model: self.model });
-            $(self.el).find(".server-locations").append(self.locationView.render().el);
-            self.locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath);
-
-            self.allLocations["location-" + self.countlocation] = self.locationView;
+            var locationView = new LocationView({ model: self.model });
+            $(self.el).find(".server-locations").append(locationView.render().el);
+            locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath);
+            self.allLocations["location-" + self.countlocation] = locationView;
             self.countlocation++;
         }
     },

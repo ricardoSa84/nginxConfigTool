@@ -203,22 +203,31 @@ window.LocationView = Backbone.View.extend({
         if (self.locationcontinue) {
             locJson = {
                 locname: self.locationname,
-                extension: $(self.el).find(".control-cache-ext").prop('checked'),
-                path: $(self.el).find(".control-cache-path").prop('checked'),
-                initLocPath: $(self.el).find(".initPathText").text(),
-                locpath: ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) ? self.selectedOptsExt.trim() : $(self.el).find(".location-input").val().trim(),
-                timecache: $(self.el).find(".control-cache-ext").prop('checked') ? $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val() : $(self.el).find(".control-cache-path").prop('checked') ? $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val() : "",
+                staicCacheExtentions:{},
+                staicCachePath:{},
                 options: [],
                 upstreams: {}
+            };
+
+            if($(self.el).find(".control-cache-path").prop('checked')){
+              locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").text();
+              locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
+              locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val();
             }
-            if($(self.el).find('.server-upstream-name').val() != undefined){
+
+            if($(self.el).find(".control-cache-ext").prop('checked')){
+              locJson.staicCacheExtentions.locpath = self.selectedOptsExt.trim();
+              locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
+            }
+
+            if($(self.el).find(".control-upstream").prop('checked')){
                 locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
                 locJson.upstreams.options = [];
                 // Validação das opções selecionadas
                 for (var i in self.allOptionupstream) {
                     if (self.allOptionupstream[i]) {
                         var obj = self.allOptionupstream[i].getValidOption();
-                        if (obj != null && obj.valid) {
+                        if (obj.valid) {
                             locJson.upstreams.options.push(obj);
                         } else {
                             showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
