@@ -44,7 +44,6 @@ window.OptionView = Backbone.View.extend({
     getValidOption: function() {
         var self = this;
         self.checkImput();
-        console.log(self.optName, self.continue, self.selectedOpt.trim().length, $(self.el).find(".text-opt").val().trim().length);
         return {
             optname: self.optName,
             valid: self.continue,

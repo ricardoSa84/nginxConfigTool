@@ -76,6 +76,15 @@ var capitalizeFirstAndReplaceArrow = function(str){
   return str.replace(/-/g, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/ /g, ' <i class="fa fa-arrow-right" aria-hidden="true"></i> ');
 };
 
+var checkIfArrayIsUnique = function(arr) {
+  arr.sort();    
+  for ( var i = 1; i < arr.length; i++ ){
+    if(arr[i-1] === arr[i])
+      return true;
+  }
+  return false;
+}
+
 /**
  * Fecha a mensagem de Alert
  * @param {type} local

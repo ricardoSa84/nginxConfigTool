@@ -239,6 +239,7 @@ window.SettingsView = Backbone.View.extend({
         var self = this;
         self.checkImputs();
         var serverconfig = {};
+        var arrayUpstreamName = [];
 
         serverconfig = {
             servername: $(self.el).find('.host-name').val().trim(),
@@ -287,6 +288,9 @@ window.SettingsView = Backbone.View.extend({
             if (self.allLocations[i]) {
                 var loc = self.allLocations[i].getLocationJson();
                 if (loc.locValid) {
+                  // if (loc.upstreams) {
+                      arrayUpstreamName.push(loc.upstreams.name)
+                  // }
                     serverconfig.locations.push(loc);
                     self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
@@ -295,36 +299,12 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         }
+        console.log("upstreams", arrayUpstreamName, checkIfArrayIsUnique(arrayUpstreamName));
 
+        if (checkIfArrayIsUnique(arrayUpstreamName)) {
+          alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.")
+        }
         if (self.servercontinue) {
-
-            // } else {
-            //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-            // }
-            // if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
-            //     console.log("OK");
-            //     var params = {
-            //         'SERVERNAME': $('#host-name').val(),
-            //         'PORT': $('#host-port').val(),
-            //         'PROXY': $('#host-destination').val(),
-            //         'CACHE': $("#control-cache").prop('checked'),
-            //         'CACHEFILES': self.selectedOpts,
-            //         'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
-            //     };
-
-            //     var paramsobj = {
-            //         proxy: {
-            //             'SERVERNAME': $('#host-name').val(),
-            //             'PORT': $('#host-port').val(),
-            //             'PROXY': "http://" + $('#host-destination').val()
-            //         },
-            //         cache: {
-            //             'CACHE': $("#control-cache").prop('checked'),
-            //             'PROXY': "http://" + $('#host-destination').val(),
-            //             'CACHEFILES': self.selectedOpts,
-            //             'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
-            //         }
-            //     }
 
             //     modem("POST",
             //         "/nginx/saveserver",
@@ -341,7 +321,7 @@ window.SettingsView = Backbone.View.extend({
             //             var json = JSON.parse(xhr.responseText);
             //             error_launch(json.message);
             //         }, {
-            //             data: paramsobj
+            //             data: serverconfig
             //         });
         } else {
             showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);

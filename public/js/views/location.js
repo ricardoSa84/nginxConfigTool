@@ -208,7 +208,7 @@ window.LocationView = Backbone.View.extend({
     },
     getLocationJson: function() {
         var self = this;
-        var auxOptionName = capitalizeFirstAndReplaceArrow(self.locationname);
+        var auxOptionName = self.locationname;
         var locJson = {};
         locJson = {
             locValid: false,
@@ -244,7 +244,7 @@ window.LocationView = Backbone.View.extend({
                                 locJson.upstreams.options.push(obj);
                             }
                         } else {
-                            auxOptionName = capitalizeFirstAndReplaceArrow(obj.optname);
+                            auxOptionName = obj.optname;
                             self.locationcontinue = false;
                         }
                     }
@@ -262,7 +262,7 @@ window.LocationView = Backbone.View.extend({
                             locJson.options.push(obj);
                         }
                     } else {
-                         auxOptionName = capitalizeFirstAndReplaceArrow(obj.optname);
+                         auxOptionName = obj.optname;
                         self.locationcontinue = false;
                     }
                 }
@@ -272,7 +272,7 @@ window.LocationView = Backbone.View.extend({
         if (self.locationcontinue) {
             return locJson;
         } else {
-            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>. " + auxOptionName, false);
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(auxOptionName), false);
         }
         return locJson;
     },
