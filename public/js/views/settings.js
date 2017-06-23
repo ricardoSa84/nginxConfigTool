@@ -280,6 +280,23 @@ window.SettingsView = Backbone.View.extend({
 
         console.log('obj: ', serverconfig);
 
+        modem("POST", "/nginx/saveserver",
+                 function(data) {
+                     if (data.status === "created") {
+                         $('#test-nginx').prop('disabled', false);
+                         showmsg('.my-modal', "success", "Seved Settings!", true);
+                     } else {
+                         $('#test-nginx').prop('disabled', true);
+                         showmsg('.my-modal', "error", "Error", true);
+                     }
+                 },
+                 function(xhr, ajaxOptions, thrownError) {
+                     var json = JSON.parse(xhr.responseText);
+                     error_launch(json.message);
+                 }, {
+                     data: serverconfig
+                 });
+
         // } else {
         //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
         // }

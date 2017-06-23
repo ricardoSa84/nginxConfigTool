@@ -210,6 +210,7 @@ window.LocationView = Backbone.View.extend({
         // if (self.locationcontinue) {
             locJson = {
                 locname: self.locationname,
+                locationPath:$(self.el).find(".location-input").text().trim(),
                 staicCacheExtentions:{},
                 staicCachePath:{},
                 options: [],
@@ -227,7 +228,7 @@ window.LocationView = Backbone.View.extend({
               locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
             }
 
-            if($(self.el).find(".control-upstream").prop('checked')){
+            if($(self.el).find(".control-upstream").prop('checked') && $(self.el).find('.server-upstream-name').val().trim() != ''){
                 locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
                 locJson.upstreams.options = [];
 
@@ -237,7 +238,7 @@ window.LocationView = Backbone.View.extend({
                     if (i.indexOf(self.locationname + "-upst") != -1) {
                         if (self.allOptionupstream[i]) {
                             var obj = self.allOptionupstream[i].getValidOption();
-                            if (obj != null && obj.valid) {
+                            if (obj.valid) {
                                 locJson.upstreams.options.push(obj);
                             } else {
                                 showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
