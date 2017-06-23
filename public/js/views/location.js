@@ -10,9 +10,9 @@ window.LocationView = Backbone.View.extend({
     optionsToDropdownPath: "",
     lastHeight: -1,
     locationcontinue: false,
-    countoptionlocation: 0,
+    countoptionlocation: 1,
     allOptionlocation: [],
-    countoptionupstream: 0,
+    countoptionupstream: 1,
     allOptionupstream: [],
     allListOptionsLocation: "",
     allListOptionsUpstream: "",
@@ -102,7 +102,7 @@ window.LocationView = Backbone.View.extend({
             self.selectedOptsExt = opts.slice(0, -1);
             self.checkImputs();
         },
-        "change .select-path.selectpicker":  function(evt) {
+        "change .select-path.selectpicker": function(evt) {
             var self = this;
             var opts = "";
             $(self.el).find(".select-path.selectpicker option:selected").each(function(index, element) {
@@ -110,7 +110,7 @@ window.LocationView = Backbone.View.extend({
             });
             self.selectedOptsPath = opts.slice(0, -1);
             self.checkImputs();
-        },
+        }
     },
     initialize: function() {},
     checkImputs: function() {
@@ -121,12 +121,14 @@ window.LocationView = Backbone.View.extend({
 
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "location-path":
-                        if ($(self.el).find(obj).val().trim().length >= 1) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.locationcontinue = true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.locationcontinue = false;
+                        if (!$(self.el).find(".control-upstream").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
+                            if ($(self.el).find(obj).val().trim().length >= 1) {
+                                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                                self.locationcontinue = true;
+                            } else {
+                                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                                self.locationcontinue = false;
+                            }
                         }
                         break;
                     case "server-upstream-name":
@@ -192,13 +194,13 @@ window.LocationView = Backbone.View.extend({
         $(self.el).find(".option-list-" + classname).append(optionView.render().el);
         if (classname === "location") {
             $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-location-remove");
-            optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
+            optionView.init(self.locationname + "-option-" + self.countoptionlocation, self.allListOptionsLocation);
             self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
             self.countoptionlocation++;
         }
         if (classname === "upstream") {
             $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-upstream-remove");
-            optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
+            optionView.init(self.locationname + "-upsteam-option-" + self.countoptionupstream, self.allListOptionsUpstream);
             self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
             self.countoptionupstream++;
         }
@@ -206,71 +208,72 @@ window.LocationView = Backbone.View.extend({
     },
     getLocationJson: function() {
         var self = this;
+        var auxOptionName = capitalizeFirstAndReplaceArrow(self.locationname);
         var locJson = {};
-        // if (self.locationcontinue) {
-            locJson = {
-                locname: self.locationname,
-                staicCacheExtentions:{},
-                staicCachePath:{},
-                options: [],
-                upstreams: {}
-            };
+        locJson = {
+            locValid: false,
+            locname: self.locationname,
+            staicCacheExtentions: {},
+            staicCachePath: {},
+            options: [],
+            upstreams: {}
+        };
 
-            if($(self.el).find(".control-cache-path").prop('checked')){
-              locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").text();
-              locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
-              locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val();
-            }
+        if ($(self.el).find(".control-cache-path").prop('checked')) {
+            locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").text();
+            locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
+            locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val();
+        }
 
-            if($(self.el).find(".control-cache-ext").prop('checked')){
-              locJson.staicCacheExtentions.locpath = self.selectedOptsExt.trim();
-              locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
-            }
+        if ($(self.el).find(".control-cache-ext").prop('checked')) {
+            locJson.staicCacheExtentions.locpath = self.selectedOptsExt.trim();
+            locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
+        }
 
-            if($(self.el).find(".control-upstream").prop('checked')){
-                locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
-                locJson.upstreams.options = [];
-
-                // Validação das opções selecionadas
-                for (var i in self.allOptionupstream) {
-                    // console.log(self.allOptionupstream[i]);
-                    if (i.indexOf(self.locationname + "-upst") != -1) {
-                        if (self.allOptionupstream[i]) {
-                            var obj = self.allOptionupstream[i].getValidOption();
-                            if (obj != null && obj.valid) {
-                                locJson.upstreams.options.push(obj);
-                            } else {
-                                showmsg('.my-modal', "warning", "Bad Values on location to Save, check the <i class='icon fa fa-close'>.", false);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
+        if ($(self.el).find(".control-upstream").prop('checked')) {
+            locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
+            locJson.upstreams.options = [];
 
             // Validação das opções selecionadas
-            for (var i in self.allOptionlocation) {
-                // console.log(self.allOptionlocation[i]);
-                if (i.indexOf(self.locationname + "-loc") != -1) {
-                    if (self.allOptionlocation[i]) {
-                        var obj = self.allOptionlocation[i].getValidOption();
+            for (var i in self.allOptionupstream) {
+                if (i.indexOf(self.locationname + "-upst") != -1) {
+                    if (self.allOptionupstream[i]) {
+                        var obj = self.allOptionupstream[i].getValidOption();
                         if (obj.valid) {
-                            if(obj.text != ''){
-                                locJson.options.push(obj);
+                            if (obj.text != '') {
+                                locJson.upstreams.options.push(obj);
                             }
                         } else {
-                            showmsg('.my-modal', "warning", "Bad Values on location options to Save, check the <i class='icon fa fa-close'>.", false);
-                            return;
+                            auxOptionName = capitalizeFirstAndReplaceArrow(obj.optname);
+                            self.locationcontinue = false;
                         }
                     }
                 }
             }
+        }
 
-        // } else {
-        //     showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-        //     return;
-        // }
-
+        // Validação das opções selecionadas
+        for (var i in self.allOptionlocation) {
+            if (i.indexOf(self.locationname + "-loc") != -1) {
+                if (self.allOptionlocation[i]) {
+                    var obj = self.allOptionlocation[i].getValidOption();
+                    if (obj.valid) {
+                        if (obj.text != '') {
+                            locJson.options.push(obj);
+                        }
+                    } else {
+                         auxOptionName = capitalizeFirstAndReplaceArrow(obj.optname);
+                        self.locationcontinue = false;
+                    }
+                }
+            }
+        }
+        locJson.locValid = self.locationcontinue;
+        if (self.locationcontinue) {
+            return locJson;
+        } else {
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>. " + auxOptionName, false);
+        }
         return locJson;
     },
     init: function(name, optlocation, optUpstream, optExt, optPath) {
@@ -283,23 +286,29 @@ window.LocationView = Backbone.View.extend({
 
         $(self.el).find(".well").attr("data-location", self.locationname);
 
+        $(self.el).find(".num-location").html("Location " + '<span class="badge">' + self.locationname.split("-")[1] + '</span>'  + " Settings");
+
         $(self.el).find('.slider-cache-ext, .slider-cache-path').slider().on('slide', function(ev) {
             $(self.el).find("." + $(ev.target).data("extid") + "-value").text(this.value);
         });
 
-        $(self.el).find(".slider").css({ width: "100%" });
-        $(self.el).find(".slider-cache-ext-value, .slider-cache-path-value").parent().css({ "margin-top": 0 });
+        $(self.el).find(".slider").css({
+            width: "100%"
+        });
+        $(self.el).find(".slider-cache-ext-value, .slider-cache-path-value").parent().css({
+            "margin-top": 0
+        });
 
 
         var optionView = new OptionView({});
         $(self.el).find(".option-list-location").append(optionView.render().el);
-        optionView.init("option-" + self.countoptionlocation, self.allListOptionsLocation);
+        optionView.init(self.locationname + "-option-" + self.countoptionlocation, self.allListOptionsLocation);
         self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
         self.countoptionlocation++;
 
         var optionView = new OptionView({});
         $(self.el).find(".option-list-upstream").append(optionView.render().el);
-        optionView.init("option-" + self.countoptionupstream, self.allListOptionsUpstream);
+        optionView.init(self.locationname + "-upsteam-option-" + self.countoptionupstream, self.allListOptionsUpstream);
         self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
         self.countoptionupstream++;
 

@@ -72,6 +72,10 @@
   }
 };
 
+var capitalizeFirstAndReplaceArrow = function(str){
+  return str.replace(/-/g, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/ /g, ' <i class="fa fa-arrow-right" aria-hidden="true"></i> ');
+};
+
 /**
  * Fecha a mensagem de Alert
  * @param {type} local

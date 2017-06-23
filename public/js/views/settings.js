@@ -6,7 +6,7 @@ window.SettingsView = Backbone.View.extend({
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
     selectedOpts: "",
     servercontinue: false,
-    countlocation: 0,
+    countlocation: 1,
     allLocations: [],
     optionsListserver: [],
     allListOptionsServer: "",
@@ -15,8 +15,8 @@ window.SettingsView = Backbone.View.extend({
     allListOptionsUpstream: "",
     optionsToDropdownExt: "",
     optionsToDropdownPath: "",
-    optscountserver: 0,
-    optscountdefault: 0,
+    optscountserver: 1,
+    optscountdefault: 1,
     events: {
         'keyup input': function() {
             this.checkImputs();
@@ -95,17 +95,17 @@ window.SettingsView = Backbone.View.extend({
         var optionView = new OptionView({});
         //os pedaços dentro do if tb da para fazer função para chamar evitando repetir código
         if (classname === "server") {
-        $(e.target).parent().removeClass("option-add").addClass("option-remove-server");
+            $(e.target).parent().removeClass("option-add").addClass("option-remove-server");
             $(self.el).find(".option-list-" + classname).append(optionView.render().el);
-            optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
-            self.optionsListserver["option-" + self.optscountserver] = optionView;
+            optionView.init("server-option-" + self.optscountserver, self.allListOptionsServer);
+            self.optionsListserver["server-option-" + self.optscountserver] = optionView;
             self.optscountserver++;
         }
         if (classname === "default-location") {
-        $(e.target).parent().removeClass("option-add").addClass("option-remove-default-location");
+            $(e.target).parent().removeClass("option-add").addClass("option-remove-default-location");
             $(self.el).find(".option-list-" + classname).append(optionView.render().el);
-            optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
-            self.optionsListdefault["option-" + self.optscountdefault] = optionView;
+            optionView.init("default-location-option-" + self.optscountdefault, self.allListOptionsDefault);
+            self.optionsListdefault["default-location-option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
         }
     },
@@ -128,8 +128,8 @@ window.SettingsView = Backbone.View.extend({
             self.allListOptionsServer = options;
             var optionView = new OptionView({});
             $(self.el).find(".option-list-server").append(optionView.render().el);
-            optionView.init("option-" + self.optscountserver, self.allListOptionsServer);
-            self.optionsListserver["option-" + self.optscountserver] = optionView;
+            optionView.init("server-option-" + self.optscountserver, self.allListOptionsServer);
+            self.optionsListserver["server-option-" + self.optscountserver] = optionView;
             self.optscountserver++;
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -145,8 +145,8 @@ window.SettingsView = Backbone.View.extend({
             self.allListOptionsDefault = options;
             var optionView = new OptionView({});
             $(self.el).find(".option-list-default-location").append(optionView.render().el);
-            optionView.init("option-" + self.optscountdefault, self.allListOptionsDefault);
-            self.optionsListdefault["option-" + self.optscountdefault] = optionView;
+            optionView.init("default-location-option-" + self.optscountdefault, self.allListOptionsDefault);
+            self.optionsListdefault["default-location-option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
 
         }, function(xhr, ajaxOptions, thrownError) {
@@ -198,6 +198,7 @@ window.SettingsView = Backbone.View.extend({
     },
     checkImputs: function() {
         var self = this;
+        self.servercontinue = true;
         $(self.el).find('.valid-input').each(function(i, obj) {
             if ($(self.el).find(obj)) {
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
@@ -205,23 +206,29 @@ window.SettingsView = Backbone.View.extend({
                     case "host-name":
                         if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
                             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
                         } else {
                             $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
                         }
                         break;
                     case "host-port":
                         if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
                             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
                         } else {
                             $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
                         }
                         break;
                     case "host-proxy":
                         var ipPort = $(self.el).find(obj).val().trim().split(":");
                         if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
                             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
                         } else {
                             $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
                         }
                         break;
                 }
@@ -230,8 +237,8 @@ window.SettingsView = Backbone.View.extend({
     },
     savesettings: function() {
         var self = this;
+        self.checkImputs();
         var serverconfig = {};
-        // if (self.servercontinue) {
 
         serverconfig = {
             servername: $(self.el).find('.host-name').val().trim(),
@@ -252,8 +259,10 @@ window.SettingsView = Backbone.View.extend({
                     if (obj.text != '') {
                         serverconfig.serveropts.push(obj);
                     }
+                    self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
-                    showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                    showmsg('.my-modal', "error", "Bad Values to Save, check the Server options <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
+                    self.servercontinue = false;
                     return;
                 }
             }
@@ -266,68 +275,78 @@ window.SettingsView = Backbone.View.extend({
                     if (obj.text != '') {
                         serverconfig.defaultLocation.options.push(obj);
                     }
+                    self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
-                    showmsg('.my-modal', "warning", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+                    showmsg('.my-modal', "error", "Bad Values to Save, check the default location options <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
+                    self.servercontinue = false;
                     return;
                 }
             }
         }
         for (var i in self.allLocations) {
             if (self.allLocations[i]) {
-                serverconfig.locations.push(self.allLocations[i].getLocationJson());
+                var loc = self.allLocations[i].getLocationJson();
+                if (loc.locValid) {
+                    serverconfig.locations.push(loc);
+                    self.servercontinue = self.servercontinue === false ? false : true;
+                } else {
+                    self.servercontinue = false;
+                    return;
+                }
             }
         }
 
-        console.log('obj: ', serverconfig);
+        if (self.servercontinue) {
 
-        // } else {
-        //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
-        // }
-        // if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
-        //     console.log("OK");
-        //     var params = {
-        //         'SERVERNAME': $('#host-name').val(),
-        //         'PORT': $('#host-port').val(),
-        //         'PROXY': $('#host-destination').val(),
-        //         'CACHE': $("#control-cache").prop('checked'),
-        //         'CACHEFILES': self.selectedOpts,
-        //         'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
-        //     };
+            // } else {
+            //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", false);
+            // }
+            // if ((($(".valid-input").length - 1) == $(".fa-check").length) ? true : false) {
+            //     console.log("OK");
+            //     var params = {
+            //         'SERVERNAME': $('#host-name').val(),
+            //         'PORT': $('#host-port').val(),
+            //         'PROXY': $('#host-destination').val(),
+            //         'CACHE': $("#control-cache").prop('checked'),
+            //         'CACHEFILES': self.selectedOpts,
+            //         'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+            //     };
 
-        //     var paramsobj = {
-        //         proxy: {
-        //             'SERVERNAME': $('#host-name').val(),
-        //             'PORT': $('#host-port').val(),
-        //             'PROXY': "http://" + $('#host-destination').val()
-        //         },
-        //         cache: {
-        //             'CACHE': $("#control-cache").prop('checked'),
-        //             'PROXY': "http://" + $('#host-destination').val(),
-        //             'CACHEFILES': self.selectedOpts,
-        //             'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
-        //         }
-        //     }
+            //     var paramsobj = {
+            //         proxy: {
+            //             'SERVERNAME': $('#host-name').val(),
+            //             'PORT': $('#host-port').val(),
+            //             'PROXY': "http://" + $('#host-destination').val()
+            //         },
+            //         cache: {
+            //             'CACHE': $("#control-cache").prop('checked'),
+            //             'PROXY': "http://" + $('#host-destination').val(),
+            //             'CACHEFILES': self.selectedOpts,
+            //             'TIMECACHE': $("#slider-cache-value").attr("data-sliderValue") + $("#select-cache-time.selectpicker option:selected").val()
+            //         }
+            //     }
 
-        //     modem("POST",
-        //         "/nginx/saveserver",
-        //         function(data) {
-        //             if (data.status === "created") {
-        //                 $('#test-nginx').prop('disabled', false);
-        //                 showmsg('.my-modal', "success", "Seved Settings!", true);
-        //             } else {
-        //                 $('#test-nginx').prop('disabled', true);
-        //                 showmsg('.my-modal', "error", "Error", true);
-        //             }
-        //         },
-        //         function(xhr, ajaxOptions, thrownError) {
-        //             var json = JSON.parse(xhr.responseText);
-        //             error_launch(json.message);
-        //         }, {
-        //             data: paramsobj
-        //         });
-        // } else {
-        //     showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
-        // }
+            //     modem("POST",
+            //         "/nginx/saveserver",
+            //         function(data) {
+            //             if (data.status === "created") {
+            //                 $('#test-nginx').prop('disabled', false);
+            //                 showmsg('.my-modal', "success", "Seved Settings!", true);
+            //             } else {
+            //                 $('#test-nginx').prop('disabled', true);
+            //                 showmsg('.my-modal', "error", "Error", true);
+            //             }
+            //         },
+            //         function(xhr, ajaxOptions, thrownError) {
+            //             var json = JSON.parse(xhr.responseText);
+            //             error_launch(json.message);
+            //         }, {
+            //             data: paramsobj
+            //         });
+        } else {
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
+        }
+        console.log("----------------------------------------");
     },
     render: function() {
         var self = this;

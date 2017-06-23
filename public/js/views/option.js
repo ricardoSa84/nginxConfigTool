@@ -44,6 +44,7 @@ window.OptionView = Backbone.View.extend({
     getValidOption: function() {
         var self = this;
         self.checkImput();
+        console.log(self.optName, self.continue, self.selectedOpt.trim().length, $(self.el).find(".text-opt").val().trim().length);
         return {
             optname: self.optName,
             valid: self.continue,
@@ -54,6 +55,8 @@ window.OptionView = Backbone.View.extend({
     init: function(opt, optselct) {
         var self = this;
         self.optName = opt;
+        var numopt = self.optName.split("-");
+        $(self.el).find(".num-option").html('<label><span class="badge">' + numopt[numopt.length -1] + '</span> Select Option:</label>');
         $(self.el).find(".row").attr("data-option", self.optName);
         $(self.el).find(".select-opts-location").html(optselct);
         $('.selectpicker').selectpicker();
