@@ -286,7 +286,7 @@ window.LocationView = Backbone.View.extend({
 
         $(self.el).find(".well").attr("data-location", self.locationname);
 
-        $(self.el).find(".num-location").html("Location " + '<span class="badge">' + self.locationname.split("-")[1] + '</span>'  + " Settings");
+        $(self.el).find(".num-location").html("Location " + '<span class="badge btn-default">' + self.locationname.split("-")[1] + '</span>'  + " Settings");
 
         $(self.el).find('.slider-cache-ext, .slider-cache-path').slider().on('slide', function(ev) {
             $(self.el).find("." + $(ev.target).data("extid") + "-value").text(this.value);

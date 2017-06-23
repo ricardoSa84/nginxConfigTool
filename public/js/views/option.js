@@ -55,7 +55,7 @@ window.OptionView = Backbone.View.extend({
         var self = this;
         self.optName = opt;
         var numopt = self.optName.split("-");
-        $(self.el).find(".num-option").html('<label><span class="badge">' + numopt[numopt.length -1] + '</span> Select Option:</label>');
+        $(self.el).find(".num-option").html('<label> Select Option <span class="badge btn-default">' + numopt[numopt.length -1] + '</span> :</label>');
         $(self.el).find(".row").attr("data-option", self.optName);
         $(self.el).find(".select-opts-location").html(optselct);
         $('.selectpicker').selectpicker();
