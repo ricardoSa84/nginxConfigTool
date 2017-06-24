@@ -262,7 +262,7 @@ window.SettingsView = Backbone.View.extend({
                     }
                     self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
-                    showmsg('.my-modal', "error", "Bad Values to Save, check the Server options <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
+                    showmsg('.my-modal', "error", "Bad Values to Save, check the Server options <b>x</b>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
                     self.servercontinue = false;
                     return;
                 }
@@ -278,7 +278,7 @@ window.SettingsView = Backbone.View.extend({
                     }
                     self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
-                    showmsg('.my-modal', "error", "Bad Values to Save, check the default location options <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
+                    showmsg('.my-modal', "error", "Bad Values to Save, check the default location options <b>x</b>. " + capitalizeFirstAndReplaceArrow(obj.optname), false);
                     self.servercontinue = false;
                     return;
                 }
@@ -324,7 +324,7 @@ window.SettingsView = Backbone.View.extend({
             //             data: serverconfig
             //         });
         } else {
-            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>.", true);
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <b>x</b>.", true);
         }
         console.log("----------------------------------------");
     },

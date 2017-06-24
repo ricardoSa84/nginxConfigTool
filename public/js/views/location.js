@@ -262,7 +262,7 @@ window.LocationView = Backbone.View.extend({
                             locJson.options.push(obj);
                         }
                     } else {
-                         auxOptionName = obj.optname;
+                        auxOptionName = obj.optname;
                         self.locationcontinue = false;
                     }
                 }
@@ -272,7 +272,7 @@ window.LocationView = Backbone.View.extend({
         if (self.locationcontinue) {
             return locJson;
         } else {
-            showmsg('.my-modal', "error", "Bad Values to Save, check the <i class='icon fa fa-close'>. " + capitalizeFirstAndReplaceArrow(auxOptionName), false);
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <b>x</b>. " + capitalizeFirstAndReplaceArrow(auxOptionName) + "<br>", false);
         }
         return locJson;
     },
@@ -286,7 +286,7 @@ window.LocationView = Backbone.View.extend({
 
         $(self.el).find(".well").attr("data-location", self.locationname);
 
-        $(self.el).find(".num-location").html("Location " + '<span class="badge btn-default">' + self.locationname.split("-")[1] + '</span>'  + " Settings");
+        $(self.el).find(".num-location").html("Location " + '<span class="badge btn-default">' + self.locationname.split("-")[1] + '</span>' + " Settings");
 
         $(self.el).find('.slider-cache-ext, .slider-cache-path').slider().on('slide', function(ev) {
             $(self.el).find("." + $(ev.target).data("extid") + "-value").text(this.value);
