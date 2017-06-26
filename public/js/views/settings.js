@@ -302,7 +302,7 @@ window.SettingsView = Backbone.View.extend({
         console.log("upstreams", arrayUpstreamName, checkIfArrayIsUnique(arrayUpstreamName));
 
         if (checkIfArrayIsUnique(arrayUpstreamName)) {
-          alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.")
+          alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.");
         }
         if (self.servercontinue) {
 
