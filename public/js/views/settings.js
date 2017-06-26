@@ -306,8 +306,6 @@ window.SettingsView = Backbone.View.extend({
         }
         if (self.servercontinue) {
 
-            console.log('obj: ', serverconfig);
-
             modem("POST", "/nginx/saveserver",
                      function(data) {
                          if (data.status === "created") {
