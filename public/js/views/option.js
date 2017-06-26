@@ -14,7 +14,39 @@ window.OptionView = Backbone.View.extend({
                 opt = element.text;
             });
             self.selectedOpt = opt;
+            if (opt.trim().length > 0) {
+                $(self.el).find(".option-help").children().addClass("fa fa-info-circle");
+                $(self.el).find(".option-help").attr('data-original-title', "Info");
+                $(self.el).find(".option-help").attr('data-option-select', self.selectedOpt);
+            } else {
+                $(self.el).find(".option-help").children().removeClass("fa fa-info-circle");
+                $(self.el).find(".option-help").attr('data-original-title', "");
+                $(self.el).find(".option-help").attr('data-option-select', "");
+            }
             self.checkImput();
+        },
+        "click .option-help": function(e) {
+            var self = this;
+            modem("GET",
+                '/optionsInfo/' + $(e.target).parent().attr('data-option-select'),
+                function(data) {
+                    showmsg('.my-modal', "info",
+                        '<br><br><span class="label label-primary"><i><b>Syntax</b></i></span> : ' + data[0].directives[0].syntax + ";<br><br>" +
+                        '<span class="label label-primary"><i><b>Default</b></i></span> : ' + data[0].directives[0].default+";<br><br>" +
+                        '<span class="label label-primary"><i><b>Variables</b></i></span> : ' + function() {
+                            var textVar = "";
+                            for (var i in data[0].variables) {
+                                textVar += data[0].variables[i] + "; ";
+                            }
+                            return textVar;
+                        }() + "<br><br>" +
+                        '<span class="label label-primary"><i><b>Context</b></i></span> : ' + data[0].directives[0].context + ";<br><br><br>" +
+                        "<a href='" + data[0].pageUrlInfo + "' target='blank'>Mode Info</a>", false);
+                },
+                function(xhr, ajaxOptions, thrownError) {
+                    var json = JSON.parse(xhr.responseText);
+                    error_launch(json.message);
+                }, {});
         }
     },
     initialize: function() {
@@ -54,6 +86,8 @@ window.OptionView = Backbone.View.extend({
     init: function(opt, optselct) {
         var self = this;
         self.optName = opt;
+        var numopt = self.optName.split("-");
+        $(self.el).find(".num-option").html('<label> Select Option <span class="badge btn-default">' + numopt[numopt.length - 1] + '</span> : &nbsp; &nbsp;<span class="option-help" data-option-select="" data-html="true" data-toggle="tooltip"><b><i class="" aria-hidden="true"></i></b> </span></label>');
         $(self.el).find(".row").attr("data-option", self.optName);
         $(self.el).find(".select-opts-location").html(optselct);
         $('.selectpicker').selectpicker();
