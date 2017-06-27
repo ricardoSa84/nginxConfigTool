@@ -17,6 +17,7 @@ var Router = Backbone.Router.extend({
     footer: undefined,
     dashboardform: undefined,
     settingsform: undefined,
+    editsettingsform: undefined,
     loginform: undefined,
     about: undefined,
     socketclt: null,
@@ -89,6 +90,7 @@ var Router = Backbone.Router.extend({
         "Inicio": "inicio",
         "Dashboard": "dashboard",
         "Settings": "settings",
+        "EditSettings": "editsettings",
         "Terminal": "cmdterminal",
         "About": "aCercaDe",
         '*notFound': 'login'
@@ -104,7 +106,8 @@ var Router = Backbone.Router.extend({
         this.loginform = undefined;
         this.dashboardform = undefined;
         this.settingsform = undefined;
-        this.terminalcmd = undefined;
+        this.editsettingsform = undefined,
+            this.terminalcmd = undefined;
         if (this.socketclt) {
             this.socketclt.disconnect();
         }
@@ -185,6 +188,16 @@ var Router = Backbone.Router.extend({
             self.contentnav.setView("Settings");
         });
     },
+    editsettings: function() {
+        var self = this;
+        self.verificaLogin(function() {
+            window.profile.set("Page", undefined);
+            self.editsettingsform = new EditsettingsView({});
+            $('#content').html(self.editsettingsform.render().el);
+            self.editsettingsform.init();
+            self.contentnav.setView("Edit Settings");
+        });
+    },
     cmdterminal: function() {
         var self = this;
         self.verificaLogin(function() {
@@ -230,6 +243,7 @@ templateLoader.load([
         "OptionView",
         "DashboardView",
         "SettingsView",
+        "EditsettingsView",
         "ContentNavView",
         "TerminalView",
         "AboutView"

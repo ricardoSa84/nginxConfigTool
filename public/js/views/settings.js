@@ -288,9 +288,9 @@ window.SettingsView = Backbone.View.extend({
             if (self.allLocations[i]) {
                 var loc = self.allLocations[i].getLocationJson();
                 if (loc.locValid) {
-                  // if (loc.upstreams) {
-                      arrayUpstreamName.push(loc.upstreams.name)
-                  // }
+                    if (loc.upstreams) {
+                        arrayUpstreamName.push(loc.upstreams.name)
+                    }
                     serverconfig.locations.push(loc);
                     self.servercontinue = self.servercontinue === false ? false : true;
                 } else {
@@ -302,31 +302,52 @@ window.SettingsView = Backbone.View.extend({
         console.log("upstreams", arrayUpstreamName, checkIfArrayIsUnique(arrayUpstreamName));
 
         if (checkIfArrayIsUnique(arrayUpstreamName)) {
-          alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.");
+            alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.");
         }
         if (self.servercontinue) {
 
             modem("POST", "/nginx/saveserver",
-                     function(data) {
-                         if (data.status === "created") {
-                             $('#test-nginx').prop('disabled', false);
-                             showmsg('.my-modal', "success", "Seved Settings!", true);
-                         } else {
-                             $('#test-nginx').prop('disabled', true);
-                             showmsg('.my-modal', "error", "Error", true);
-                         }
-                     },
-                     function(xhr, ajaxOptions, thrownError) {
-                         var json = JSON.parse(xhr.responseText);
-                         error_launch(json.message);
-                     }, {
-                         data: serverconfig
-                     });
+                function(data) {
+                    if (data.status === "created") {
+                        $('#test-nginx').prop('disabled', false);
+                        showmsg('.my-modal', "success", "Seved Settings!", true);
+                    } else {
+                        $('#test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "error", "Error", true);
+                    }
+                },
+                function(xhr, ajaxOptions, thrownError) {
+                    var json = JSON.parse(xhr.responseText);
+                    error_launch(json.message);
+                }, {
+                    data: serverconfig
+                });
 
         } else {
             showmsg('.my-modal', "error", "Bad Values to Save, check the <b>x</b>.", true);
         }
         console.log("----------------------------------------");
+    },
+    createServer: function(server) {
+        console.log(server);
+        var self = this;
+        $(self.el).find('.host-name').val(server[0].servername);
+        $(self.el).find('.host-port').val(server[0].port);
+        $(self.el).find('.location-input').val(server[0].defaultLocation.path);
+        $(self.el).find('.host-proxy').val(server[0].defaultLocation.proxy);
+
+        setTimeout(function() {
+            for (var i = 0; i < server[0].defaultLocation.options.length; i++) {
+                $(self.el).find(".option-list-default-location .option-add .fa").click();
+            }
+        }, 2000);
+
+        // for (var i = 0; i < server[0].serveropts.length; i++) {:
+        //     $(self.el).find(".option-list-server .option-add .fa").click();
+        // }
+
+
+        self.checkImputs();
     },
     render: function() {
         var self = this;
