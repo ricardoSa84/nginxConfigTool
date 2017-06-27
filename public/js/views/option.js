@@ -5,7 +5,7 @@ window.OptionView = Backbone.View.extend({
     continue: false,
     events: {
         "keyup .text-opt": function() {
-            this.checkImput();
+            this.checkInput();
         },
         "change .select-opts-location": function() {
             var self = this;
@@ -23,7 +23,7 @@ window.OptionView = Backbone.View.extend({
                 $(self.el).find(".option-help").attr('data-original-title', "");
                 $(self.el).find(".option-help").attr('data-option-select', "");
             }
-            self.checkImput();
+            self.checkInput();
         },
         "click .option-help": function(e) {
             var self = this;
@@ -52,7 +52,7 @@ window.OptionView = Backbone.View.extend({
     initialize: function() {
 
     },
-    checkImput: function() {
+    checkInput: function() {
         var self = this;
         $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         if (self.selectedOpt.trim().length !== 0) {
@@ -75,7 +75,7 @@ window.OptionView = Backbone.View.extend({
     },
     getValidOption: function() {
         var self = this;
-        self.checkImput();
+        self.checkInput();
         return {
             optname: self.optName,
             valid: self.continue,
@@ -90,7 +90,16 @@ window.OptionView = Backbone.View.extend({
         $(self.el).find(".num-option").html('<label> Select Option <span class="badge btn-default">' + numopt[numopt.length - 1] + '</span> : &nbsp; &nbsp;<span class="option-help" data-option-select="" data-html="true" data-toggle="tooltip"><b><i class="" aria-hidden="true"></i></b> </span></label>');
         $(self.el).find(".row").attr("data-option", self.optName);
         $(self.el).find(".select-opts-location").html(optselct);
-        $('.selectpicker').selectpicker();
+        $(self.el).find('.selectpicker').selectpicker();
+    },
+    setOption: function(option, text){
+        var self = this;
+        // console.log(option, text);
+        $(self.el).find('.selectpicker').val(option);
+        $(self.el).find('.selectpicker').selectpicker('render');
+        $(self.el).find(".text-opt").val(text);
+        self.selectedOpt = option;
+        self.checkInput();
     },
     render: function() {
         var self = this;

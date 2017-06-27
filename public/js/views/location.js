@@ -51,7 +51,7 @@ window.LocationView = Backbone.View.extend({
         if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-upstream").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) {
 
           // if (self.lastHeight !== 0) {
-          self.lastHeight = $(self.el).find(".location-path").height();
+            self.lastHeight = $(self.el).find(".location-path").height();
           // }
           $(self.el).find(".location-path").animate({
             "height": 0
@@ -114,38 +114,38 @@ window.LocationView = Backbone.View.extend({
 
         switch ($(self.el).find(obj).data("typevalue")) {
           case "location-path":
-            if (!$(self.el).find(".control-upstream").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
-              if ($(self.el).find(obj).val().trim().length >= 1) {
-                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.locationcontinue = true;
-              } else {
-                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                self.locationcontinue = false;
-              }
+          if (!$(self.el).find(".control-upstream").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
+            if ($(self.el).find(obj).val().trim().length >= 1) {
+              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+              self.locationcontinue = true;
+            } else {
+              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+              self.locationcontinue = false;
             }
-            break;
+          }
+          break;
           case "server-upstream-name":
-            if ($(self.el).find(".control-upstream").prop('checked')) {
-              if ($(self.el).find(obj).val().trim().length >= 1) {
-                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.locationcontinue = true;
-              } else {
-                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                self.locationcontinue = false;
-              }
+          if ($(self.el).find(".control-upstream").prop('checked')) {
+            if ($(self.el).find(obj).val().trim().length >= 1) {
+              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+              self.locationcontinue = true;
+            } else {
+              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+              self.locationcontinue = false;
             }
-            break;
+          }
+          break;
           case "location-path-files":
-            if ($(self.el).find(".control-cache-path").prop('checked')) {
-              if ($(self.el).find(obj).val().trim().length >= 1) {
-                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.locationcontinue = true;
-              } else {
-                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                self.locationcontinue = false;
-              }
+          if ($(self.el).find(".control-cache-path").prop('checked')) {
+            if ($(self.el).find(obj).val().trim().length >= 1) {
+              $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+              self.locationcontinue = true;
+            } else {
+              $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+              self.locationcontinue = false;
             }
-            break;
+          }
+          break;
         }
       }
     });
@@ -203,42 +203,37 @@ window.LocationView = Backbone.View.extend({
     var self = this;
     var auxOptionName = self.locationname;
     var locJson = {};
-
+    console.log("teste - ", $(self.el).find(".location-input").val().trim());
     // if (self.locationcontinue) {
-    locJson = {
-      locValid: false,
-      locname: self.locationname,
-      locationPath: $(self.el).find(".location-input").text().trim(),
-      staicCacheExtentions: {},
-      staicCachePath: {},
-      options: [],
-      upstreams: {}
-    };
+      locJson = {
+        locValid: false,
+        locname: self.locationname,
+        locationPath: $(self.el).find(".location-input").val().trim(),
+        staicCacheExtentions: {},
+        staicCachePath: {},
+        options: [],
+        upstreams: {}
+      };
 
-    if ($(self.el).find(".control-cache-path").prop('checked')) {
-      locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").text();
-      locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
-      locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val();
-    }
+      if ($(self.el).find(".control-cache-ext").prop('checked')) {
+        locJson.staicCacheExtentions.locpath = self.selectedOptsExt.trim();
+        locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
+      }
 
-    if ($(self.el).find(".control-cache-path").prop('checked')) {
-      locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").text();
-      locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
-      locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-patht-time.selectpicker option:selected").val();
-    }
+      if ($(self.el).find(".control-cache-path").prop('checked')) {
+        console.log("Teste 2 - ", $(self.el).find(".initPathText").val().trim());
+        locJson.staicCachePath.initLocPath = $(self.el).find(".initPathText").val().trim();
+        locJson.staicCachePath.locpath = self.selectedOptsPath.trim();
+        locJson.staicCachePath.timecache = $(self.el).find(".slider-cache-path-value").text() + $(self.el).find(".select-cache-path-time.selectpicker option:selected").val();
+      }
 
-    if ($(self.el).find(".control-cache-ext").prop('checked')) {
-      locJson.staicCacheExtentions.locpath = self.selectedOptsExt.trim();
-      locJson.staicCacheExtentions.timecache = $(self.el).find(".slider-cache-ext-value").text() + $(self.el).find(".select-cache-ext-time.selectpicker option:selected").val();
-    }
-
-    if ($(self.el).find(".control-upstream").prop('checked')) {
-      locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
-      locJson.upstreams.options = [];
-
-      if ($(self.el).find(".control-upstream").prop('checked') && $(self.el).find('.server-upstream-name').val().trim() != '') {
+      if ($(self.el).find(".control-upstream").prop('checked')) {
         locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
         locJson.upstreams.options = [];
+
+        if ($(self.el).find(".control-upstream").prop('checked') && $(self.el).find('.server-upstream-name').val().trim() != '') {
+          locJson.upstreams.name = $(self.el).find('.server-upstream-name').val().trim();
+          locJson.upstreams.options = [];
 
         // Validação das opções selecionadas
         for (var i in self.allOptionupstream) {
@@ -283,7 +278,7 @@ window.LocationView = Backbone.View.extend({
     }
     return locJson;
   },
-  init: function(name, optlocation, optUpstream, optExt, optPath) {
+  init: function(name, optlocation, optUpstream, optExt, optPath, location) {
     var self = this;
     self.locationname = name;
     self.allListOptionsLocation = optlocation;
@@ -324,6 +319,66 @@ window.LocationView = Backbone.View.extend({
     $(self.el).find('.btn-on-off').bootstrapToggle();
 
     $.AdminLTE.boxWidget.activate();
+    if (location) {
+      self.setLocation(location);
+    }
+  },
+  setLocation : function(location){
+    var self = this;
+    // console.log(location);
+    if (location) {
+      $(self.el).find(".location-input").val(location.locationPath);
+
+      for (var i = 0; i < location.options.length; i++) {
+        self.allOptionlocation[self.locationname + "-loc-option-" + (self.countoptionlocation - 1)].setOption(location.options[i].select, location.options[i].text);
+        if (i !== location.options.length - 1) {
+          $(self.el).find(".option-list-location .option-add .fa").click();
+        }
+      }
+
+      if (location.staicCacheExtentions) {
+        $(self.el).find(".control-cache-ext").prop('checked', true).change();
+        self.selectedOptsExt = location.staicCacheExtentions.locpath;
+        var exts = location.staicCacheExtentions.locpath.split("|");
+        $(self.el).find('.select-extensao.selectpicker').val(exts);
+        $(self.el).find('.select-extensao.selectpicker').selectpicker('render');
+        var timeSelect = location.staicCacheExtentions.timecache.substr(location.staicCacheExtentions.timecache.length - 1);
+        var time = location.staicCacheExtentions.timecache.slice(0, -1);
+        $(self.el).find(".slider-cache-ext-value").text(time);
+        $(self.el).find(".slider-cache-ext").slider('setValue', time);
+        $(self.el).find('.select-cache-ext-time.selectpicker').val(timeSelect);
+        $(self.el).find('.select-cache-ext-time.selectpicker').selectpicker('render');
+      }
+
+      if (location.staicCachePath) {
+        $(self.el).find(".initPathText").val(location.staicCachePath.initLocPath);
+        $(self.el).find(".control-cache-path").prop('checked', true).change();
+        self.selectedOptsPath = location.staicCachePath.locpath;
+        var paths = location.staicCachePath.locpath.split("|");
+        $(self.el).find('.select-path.selectpicker').val(paths);
+        $(self.el).find('.select-path.selectpicker').selectpicker('render');
+        var timeSelect = location.staicCachePath.timecache.substr(location.staicCachePath.timecache.length - 1);
+        var time = location.staicCachePath.timecache.slice(0, -1);
+
+        $(self.el).find(".slider-cache-path-value").text(time);
+        $(self.el).find(".slider-cache-path").slider('setValue', time);
+
+        $(self.el).find('.select-cache-path-time.selectpicker').val(timeSelect);
+        $(self.el).find('.select-cache-path-time.selectpicker').selectpicker('render');        
+      }
+
+      if (location.upstreams.name) {
+        $(self.el).find(".control-upstream").prop('checked', true).change();
+        $(self.el).find('.server-upstream-name').val(location.upstreams.name);
+        for (var i = 0; i < location.upstreams.options.length; i++) {
+          self.allOptionupstream[self.locationname + "-upst-option-" + (self.countoptionupstream - 1)].setOption(location.upstreams.options[i].select, location.upstreams.options[i].text);
+          if (i !== location.upstreams.options.length - 1) {
+            $(self.el).find(".option-list-upstream .option-add .fa").click();
+          }
+        }
+      }
+      self.checkImputs();
+    }
   },
   render: function() {
     var self = this;

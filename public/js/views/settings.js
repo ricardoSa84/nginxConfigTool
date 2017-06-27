@@ -17,6 +17,10 @@ window.SettingsView = Backbone.View.extend({
     optionsToDropdownPath: "",
     optscountserver: 1,
     optscountdefault: 1,
+    ajaxReqServer : false,
+    ajaxReqLocation: false,
+    ajaxReqUpstreams: false,
+    ajaxReqPathExt : false,
     events: {
         'keyup input': function() {
             this.checkImputs();
@@ -109,7 +113,7 @@ window.SettingsView = Backbone.View.extend({
             self.optscountdefault++;
         }
     },
-    init: function() {
+    init: function(server) {
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
@@ -131,6 +135,10 @@ window.SettingsView = Backbone.View.extend({
             optionView.init("server-option-" + self.optscountserver, self.allListOptionsServer);
             self.optionsListserver["server-option-" + self.optscountserver] = optionView;
             self.optscountserver++;
+            if (server && !self.ajaxReqServer) {
+                self.ajaxReqServer = true;
+                self.createServer(server);
+            }
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
@@ -148,6 +156,10 @@ window.SettingsView = Backbone.View.extend({
             optionView.init("default-location-option-" + self.optscountdefault, self.allListOptionsDefault);
             self.optionsListdefault["default-location-option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
+            if (server && !self.ajaxReqLocation) {
+                self.ajaxReqLocation = true;
+                self.createServer(server);
+            }
 
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -162,35 +174,43 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
             self.allListOptionsUpstream = options;
+            if (server && !self.ajaxReqUpstreams) {
+                self.ajaxReqUpstreams = true;
+                self.createServer(server);
+            }
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
         }, {});
 
         modem("GET", '/ext/all', function(data) {
-                var options1 = "";
-                var options2 = "";
-                for (var i in data) {
-                    options1 += "<optgroup label='" + data[i].text + "'>";
-                    if (data[i].type === "ext") {
-                        for (var j in data[i].ext.sort()) {
-                            options1 += "<option>" + data[i].ext[j] + "</option>";
-                        }
+            var options1 = "";
+            var options2 = "";
+            for (var i in data) {
+                options1 += "<optgroup label='" + data[i].text + "'>";
+                if (data[i].type === "ext") {
+                    for (var j in data[i].ext.sort()) {
+                        options1 += "<option>" + data[i].ext[j] + "</option>";
                     }
-                    if (data[i].type === "path") {
-                        for (var k in data[i].ext.sort()) {
-                            options2 += "<option>" + data[i].ext[k] + "</option>";
-                        }
-                    }
-                    options1 += "</optgroup>";
                 }
-                self.optionsToDropdownExt = options1;
-                self.optionsToDropdownPath = options2
-            },
-            function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
+                if (data[i].type === "path") {
+                    for (var k in data[i].ext.sort()) {
+                        options2 += "<option>" + data[i].ext[k] + "</option>";
+                    }
+                }
+                options1 += "</optgroup>";
+            }
+            self.optionsToDropdownExt = options1;
+            self.optionsToDropdownPath = options2;
+            if (server && !self.ajaxReqPathExt) {
+                self.ajaxReqPathExt = true;
+                self.createServer(server);
+            }
+        },
+        function(xhr, ajaxOptions, thrownError) {
+            var json = JSON.parse(xhr.responseText);
+            error_launch(json.message);
+        }, {});
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -204,33 +224,33 @@ window.SettingsView = Backbone.View.extend({
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "host-name":
-                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                     case "host-port":
-                        if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                     case "host-proxy":
-                        var ipPort = $(self.el).find(obj).val().trim().split(":");
-                        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    var ipPort = $(self.el).find(obj).val().trim().split(":");
+                    if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                 }
             }
         });
@@ -329,25 +349,36 @@ window.SettingsView = Backbone.View.extend({
         console.log("----------------------------------------");
     },
     createServer: function(server) {
-        console.log(server);
         var self = this;
-        $(self.el).find('.host-name').val(server[0].servername);
-        $(self.el).find('.host-port').val(server[0].port);
-        $(self.el).find('.location-input').val(server[0].defaultLocation.path);
-        $(self.el).find('.host-proxy').val(server[0].defaultLocation.proxy);
+        if (self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
+            console.log(server);
+            var self = this;
+            $(self.el).find('.host-name').val(server[0].servername);
+            $(self.el).find('.host-port').val(server[0].port);
+            $(self.el).find('.location-input').val(server[0].defaultLocation.path);
+            $(self.el).find('.host-proxy').val(server[0].defaultLocation.proxy);
 
-        setTimeout(function() {
             for (var i = 0; i < server[0].defaultLocation.options.length; i++) {
-                $(self.el).find(".option-list-default-location .option-add .fa").click();
+                self.optionsListdefault["default-location-option-" + (self.optscountdefault - 1)].setOption(server[0].defaultLocation.options[i].select, server[0].defaultLocation.options[i].text);
+                if (i !== server[0].defaultLocation.options.length - 1) {
+                    $(self.el).find(".option-list-default-location .option-add .fa").click();
+                }
             }
-        }, 2000);
-
-        // for (var i = 0; i < server[0].serveropts.length; i++) {:
-        //     $(self.el).find(".option-list-server .option-add .fa").click();
-        // }
-
-
-        self.checkImputs();
+            for (var i = 0; i < server[0].serveropts.length; i++) {
+                self.optionsListserver["server-option-" + (self.optscountserver - 1)].setOption(server[0].serveropts[i].select, server[0].serveropts[i].text);
+                if (i !== server[0].serveropts.length - 1) {
+                    $(self.el).find(".option-list-server .option-add .fa").click();
+                }
+            }
+            for (var i = 0; i < server[0].locations.length; i++) {                
+                var locationView = new LocationView({});
+                $(self.el).find(".server-locations").append(locationView.render().el);
+                locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath, server[0].locations[i]);
+                self.allLocations["location-" + self.countlocation] = locationView;
+                self.countlocation++;
+            }
+            self.checkImputs();
+        }
     },
     render: function() {
         var self = this;

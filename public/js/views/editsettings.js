@@ -13,8 +13,7 @@ window.EditsettingsView = Backbone.View.extend({
                 function(data) {
                     var serverSettings = new SettingsView({});
                     $(self.el).find(".server-settings").html(serverSettings.render().el);
-                    serverSettings.init();
-                    serverSettings.createServer(data.stdout);
+                    serverSettings.init(data.stdout);
                 },
                 function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
