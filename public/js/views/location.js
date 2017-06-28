@@ -278,6 +278,20 @@ window.LocationView = Backbone.View.extend({
     },
     init: function(name, optlocation, optUpstream, optExt, optPath, location) {
         var self = this;
+        if (location) {
+            self.electedOptsExt = "";
+            self.selectedOptsPath = "";
+            self.optionsToDropdownExt = "";
+            self.optionsToDropdownPath = "";
+            self.lastHeight = -1;
+            self.locationcontinue = false;
+            self.countoptionlocation = 1;
+            self.allOptionlocation = [];
+            self.countoptionupstream = 1;
+            self.allOptionupstream = [];
+            self.allListOptionsLocation = "";
+            self.allListOptionsUpstream = "";
+        }
         self.locationname = name;
         self.allListOptionsLocation = optlocation;
         self.allListOptionsUpstream = optUpstream;

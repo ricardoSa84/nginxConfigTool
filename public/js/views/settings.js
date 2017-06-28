@@ -22,7 +22,7 @@ window.SettingsView = Backbone.View.extend({
     ajaxReqUpstreams: false,
     ajaxReqPathExt: false,
     editmode: false,
-    lastkey : "",
+    lastkey: "",
     events: {
         'keyup input': function() {
             this.checkImputs();
@@ -125,6 +125,21 @@ window.SettingsView = Backbone.View.extend({
         $.AdminLTE.boxWidget.activate();
         if (server) {
             displayWait('.my-modal');
+            self.selectedOpts = "";
+            self.servercontinue = false;
+            self.countlocation = 1;
+            self.allLocations = [];
+            self.optionsListserver = [];
+            self.allListOptionsServer = "";
+            self.optionsListdefault = [];
+            self.allListOptionsDefault = "";
+            self.allListOptionsUpstream = "";
+            self.optionsToDropdownExt = "";
+            self.optionsToDropdownPath = "";
+            self.optscountserver = 1;
+            self.optscountdefault = 1;
+            self.editmode = false;
+            self.lastkey = "";
         }
 
         //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
