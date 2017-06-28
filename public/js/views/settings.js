@@ -31,12 +31,14 @@ window.SettingsView = Backbone.View.extend({
             var self = this;
             var idServer = $(self.el).find('.host-name').val().trim() + "-" + $(self.el).find('.host-port').val().trim();
             if (self.lastkey === idServer) {
-
                 modem("POST", 
                     "/nginx/removeserver", 
                     function(data) {
-                        console.log(data);
-
+                        if (data.status === "Server deleted") {
+                            showmsg('.my-modal', "success", "This server deleted.", false);
+                        } else if (data.status === "Server delete Error") {
+                            showmsg('.my-modal', "error", "Error to delete this server.", false);
+                        }
                     }, function(xhr, ajaxOptions, thrownError) {
                         var json = JSON.parse(xhr.responseText);
                         error_launch(json.message);
