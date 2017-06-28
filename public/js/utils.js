@@ -84,6 +84,19 @@ var showmsg = function(local, tipo, msg, autoclose) {
     }
 };
 
+var displayWait = function(local) {
+    $(local).html('<div class="col-md-8">' +
+        '<div class="modal-info ">' +
+        '<div class="modal-content ">' +
+        '<div class="modal-header ">' +
+        '<h2 class="modal-title"> Wait</h2>' +
+        '</div>' +
+        '<div class="modal-body ">' +
+        ' <label><h4><b>Wait while the server settings are sent.</b></h4></label>' +
+        '<div class="loader"></div>' +
+        '</div></div></div></div>');
+    $(local).show();
+};
 
 var capitalizeFirstAndReplaceArrow = function(str) {
     return str.replace(/-/g, " ").replace(/\w\S*/g, function(txt) {

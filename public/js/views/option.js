@@ -16,7 +16,7 @@ window.OptionView = Backbone.View.extend({
             self.selectedOpt = opt;
             if (opt.trim().length > 0) {
                 $(self.el).find(".option-help").children().addClass("fa fa-info-circle");
-                $(self.el).find(".option-help").attr('data-original-title', "Info");
+                $(self.el).find(".option-help").attr('data-original-title', "Click View Info <br> '" + self.selectedOpt + "'");
                 $(self.el).find(".option-help").attr('data-option-select', self.selectedOpt);
             } else {
                 $(self.el).find(".option-help").children().removeClass("fa fa-info-circle");
@@ -41,7 +41,7 @@ window.OptionView = Backbone.View.extend({
                             return textVar;
                         }() + "<br><br>" +
                         '<span class="label label-primary"><i><b>Context</b></i></span> : ' + data[0].directives[0].context + ";<br><br><br>" +
-                        "<a href='" + data[0].pageUrlInfo + "' target='blank'>Mode Info</a>", false);
+                        "<a href='" + data[0].pageUrlInfo + "' target='blank'>More Info</a>", false);
                 },
                 function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
@@ -92,13 +92,17 @@ window.OptionView = Backbone.View.extend({
         $(self.el).find(".select-opts-location").html(optselct);
         $(self.el).find('.selectpicker').selectpicker();
     },
-    setOption: function(option, text){
+    setOption: function(option, text) {
         var self = this;
         // console.log(option, text);
         $(self.el).find('.selectpicker').val(option);
         $(self.el).find('.selectpicker').selectpicker('render');
         $(self.el).find(".text-opt").val(text);
         self.selectedOpt = option;
+
+        $(self.el).find(".option-help").children().addClass("fa fa-info-circle");
+        $(self.el).find(".option-help").attr('data-original-title', "Click View Info <br> '" + self.selectedOpt + "'");
+        $(self.el).find(".option-help").attr('data-option-select', self.selectedOpt);
         self.checkInput();
     },
     render: function() {

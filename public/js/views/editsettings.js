@@ -11,8 +11,10 @@ window.EditsettingsView = Backbone.View.extend({
             modem("GET",
                 '/nginx/get/' + opt,
                 function(data) {
+                    $(self.el).find(".server-settings").children().remove();
                     var serverSettings = new SettingsView({});
                     $(self.el).find(".server-settings").html(serverSettings.render().el);
+                    data.stdout.editmode = true;
                     serverSettings.init(data.stdout);
                 },
                 function(xhr, ajaxOptions, thrownError) {

@@ -17,10 +17,12 @@ window.SettingsView = Backbone.View.extend({
     optionsToDropdownPath: "",
     optscountserver: 1,
     optscountdefault: 1,
-    ajaxReqServer : false,
+    ajaxReqServer: false,
     ajaxReqLocation: false,
     ajaxReqUpstreams: false,
-    ajaxReqPathExt : false,
+    ajaxReqPathExt: false,
+    editmode: false,
+    lastkey : "",
     events: {
         'keyup input': function() {
             this.checkImputs();
@@ -88,7 +90,9 @@ window.SettingsView = Backbone.View.extend({
             self.countlocation++;
         }
     },
-    initialize: function() {},
+    initialize: function() {
+        this.listenTo(this.model, 'change', this.render);
+    },
     addnewoptionserver: function(e) {
         var self = this;
         $(e.target).removeClass("fa-plus-circle").addClass("fa-minus-circle");
@@ -119,6 +123,9 @@ window.SettingsView = Backbone.View.extend({
         $('body').on('input', function(e) {});
         showInfoMsg(false, '.my-modal');
         $.AdminLTE.boxWidget.activate();
+        if (server) {
+            displayWait('.my-modal');
+        }
 
         //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
         //E RETORNAR O ARRAY
@@ -184,33 +191,33 @@ window.SettingsView = Backbone.View.extend({
         }, {});
 
         modem("GET", '/ext/all', function(data) {
-            var options1 = "";
-            var options2 = "";
-            for (var i in data) {
-                options1 += "<optgroup label='" + data[i].text + "'>";
-                if (data[i].type === "ext") {
-                    for (var j in data[i].ext.sort()) {
-                        options1 += "<option>" + data[i].ext[j] + "</option>";
+                var options1 = "";
+                var options2 = "";
+                for (var i in data) {
+                    options1 += "<optgroup label='" + data[i].text + "'>";
+                    if (data[i].type === "ext") {
+                        for (var j in data[i].ext.sort()) {
+                            options1 += "<option>" + data[i].ext[j] + "</option>";
+                        }
                     }
-                }
-                if (data[i].type === "path") {
-                    for (var k in data[i].ext.sort()) {
-                        options2 += "<option>" + data[i].ext[k] + "</option>";
+                    if (data[i].type === "path") {
+                        for (var k in data[i].ext.sort()) {
+                            options2 += "<option>" + data[i].ext[k] + "</option>";
+                        }
                     }
+                    options1 += "</optgroup>";
                 }
-                options1 += "</optgroup>";
-            }
-            self.optionsToDropdownExt = options1;
-            self.optionsToDropdownPath = options2;
-            if (server && !self.ajaxReqPathExt) {
-                self.ajaxReqPathExt = true;
-                self.createServer(server);
-            }
-        },
-        function(xhr, ajaxOptions, thrownError) {
-            var json = JSON.parse(xhr.responseText);
-            error_launch(json.message);
-        }, {});
+                self.optionsToDropdownExt = options1;
+                self.optionsToDropdownPath = options2;
+                if (server && !self.ajaxReqPathExt) {
+                    self.ajaxReqPathExt = true;
+                    self.createServer(server);
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -224,33 +231,33 @@ window.SettingsView = Backbone.View.extend({
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "host-name":
-                    if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                     case "host-port":
-                    if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                     case "host-proxy":
-                    var ipPort = $(self.el).find(obj).val().trim().split(":");
-                    if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        var ipPort = $(self.el).find(obj).val().trim().split(":");
+                        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                 }
             }
         });
@@ -308,7 +315,7 @@ window.SettingsView = Backbone.View.extend({
             if (self.allLocations[i]) {
                 var loc = self.allLocations[i].getLocationJson();
                 if (loc.locValid) {
-                    if (loc.upstreams) {
+                    if (loc.upstreams.name) {
                         arrayUpstreamName.push(loc.upstreams.name)
                     }
                     serverconfig.locations.push(loc);
@@ -325,15 +332,23 @@ window.SettingsView = Backbone.View.extend({
             alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.");
         }
         if (self.servercontinue) {
-
-            modem("POST", "/nginx/saveserver",
+            if (self.editmode) {
+                serverconfig.editmode = self.editmode;
+                serverconfig.lastkey = self.lastkey;
+            }
+            modem("POST",
+                "/nginx/saveserver",
                 function(data) {
-                    if (data.status === "created") {
-                        $('#test-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "Seved Settings!", true);
+                    if (data.status === "Server Created") {
+                        $('.test-nginx').prop('disabled', false);
+                        showmsg('.my-modal', "success", "The server has been correctly saved!", true);
+                    } else if (data.status === "Server Exists") {
+                        $('.test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "warning", "This server, servername '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system, in case you need to change it go to the tab to edit.", false);
+
                     } else {
-                        $('#test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", "Error", true);
+                        $('.test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "error", "Error while trying to save the server.", false);
                     }
                 },
                 function(xhr, ajaxOptions, thrownError) {
@@ -351,8 +366,9 @@ window.SettingsView = Backbone.View.extend({
     createServer: function(server) {
         var self = this;
         if (self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
-            console.log(server);
-            var self = this;
+            // console.log(server);
+            self.editmode = server.editmode;
+            self.lastkey = server[0].servername + "-" + server[0].port;
             $(self.el).find('.host-name').val(server[0].servername);
             $(self.el).find('.host-port').val(server[0].port);
             $(self.el).find('.location-input').val(server[0].defaultLocation.path);
@@ -370,7 +386,7 @@ window.SettingsView = Backbone.View.extend({
                     $(self.el).find(".option-list-server .option-add .fa").click();
                 }
             }
-            for (var i = 0; i < server[0].locations.length; i++) {                
+            for (var i = 0; i < server[0].locations.length; i++) {
                 var locationView = new LocationView({});
                 $(self.el).find(".server-locations").append(locationView.render().el);
                 locationView.init("location-" + self.countlocation, self.allListOptionsDefault, self.allListOptionsUpstream, self.optionsToDropdownExt, self.optionsToDropdownPath, server[0].locations[i]);
@@ -378,6 +394,8 @@ window.SettingsView = Backbone.View.extend({
                 self.countlocation++;
             }
             self.checkImputs();
+            $('.my-modal').hide();
+            $('.my-modal').html("");
         }
     },
     render: function() {
