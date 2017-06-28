@@ -27,6 +27,25 @@ window.SettingsView = Backbone.View.extend({
         'keyup input': function() {
             this.checkImputs();
         },
+        "click .remove-server": function(){
+            var self = this;
+            var idServer = $(self.el).find('.host-name').val().trim() + "-" + $(self.el).find('.host-port').val().trim();
+            if (self.lastkey === idServer) {
+
+                modem("POST", 
+                    "/nginx/removeserver", 
+                    function(data) {
+                        console.log(data);
+
+                    }, function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, {server: idServer});
+
+            } else {
+                showmsg('.my-modal', "warning", "The server name or port was changed. The server is not removed.", false);
+            }
+        },
         "change .btn-on-off": function(evt) {
             var self = this;
             $(self.el).find(evt.target).parent().next().click();
@@ -140,6 +159,11 @@ window.SettingsView = Backbone.View.extend({
             self.optscountdefault = 1;
             self.editmode = false;
             self.lastkey = "";
+        } else {
+            $(self.el).find(".remove-server").parent().css({
+                display : "none"
+            });
+
         }
 
         //ISTO PODE SER OPTIMIZADO, COLOCAR NUMA PARTE COMUM PARA SER INVOCADA COM PARAMETRO (location || server || upstream)
@@ -206,33 +230,33 @@ window.SettingsView = Backbone.View.extend({
         }, {});
 
         modem("GET", '/ext/all', function(data) {
-                var options1 = "";
-                var options2 = "";
-                for (var i in data) {
-                    options1 += "<optgroup label='" + data[i].text + "'>";
-                    if (data[i].type === "ext") {
-                        for (var j in data[i].ext.sort()) {
-                            options1 += "<option>" + data[i].ext[j] + "</option>";
-                        }
+            var options1 = "";
+            var options2 = "";
+            for (var i in data) {
+                options1 += "<optgroup label='" + data[i].text + "'>";
+                if (data[i].type === "ext") {
+                    for (var j in data[i].ext.sort()) {
+                        options1 += "<option>" + data[i].ext[j] + "</option>";
                     }
-                    if (data[i].type === "path") {
-                        for (var k in data[i].ext.sort()) {
-                            options2 += "<option>" + data[i].ext[k] + "</option>";
-                        }
+                }
+                if (data[i].type === "path") {
+                    for (var k in data[i].ext.sort()) {
+                        options2 += "<option>" + data[i].ext[k] + "</option>";
                     }
-                    options1 += "</optgroup>";
                 }
-                self.optionsToDropdownExt = options1;
-                self.optionsToDropdownPath = options2;
-                if (server && !self.ajaxReqPathExt) {
-                    self.ajaxReqPathExt = true;
-                    self.createServer(server);
-                }
-            },
-            function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
+                options1 += "</optgroup>";
+            }
+            self.optionsToDropdownExt = options1;
+            self.optionsToDropdownPath = options2;
+            if (server && !self.ajaxReqPathExt) {
+                self.ajaxReqPathExt = true;
+                self.createServer(server);
+            }
+        },
+        function(xhr, ajaxOptions, thrownError) {
+            var json = JSON.parse(xhr.responseText);
+            error_launch(json.message);
+        }, {});
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -246,33 +270,33 @@ window.SettingsView = Backbone.View.extend({
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "host-name":
-                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                     case "host-port":
-                        if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                     case "host-proxy":
-                        var ipPort = $(self.el).find(obj).val().trim().split(":");
-                        if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                            self.servercontinue = self.servercontinue === false ? false : true;
-                        } else {
-                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                            self.servercontinue = false;
-                        }
-                        break;
+                    var ipPort = $(self.el).find(obj).val().trim().split(":");
+                    if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                        self.servercontinue = self.servercontinue === false ? false : true;
+                    } else {
+                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                        self.servercontinue = false;
+                    }
+                    break;
                 }
             }
         });
