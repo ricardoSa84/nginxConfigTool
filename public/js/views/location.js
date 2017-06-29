@@ -48,7 +48,7 @@ window.LocationView = Backbone.View.extend({
                     $(self.el).find(evt.target).parent().next().click();
                 }
 
-                if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-upstream").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')) {
+                if ($(self.el).find(".control-cache-ext").prop('checked') || $(self.el).find(".control-cache-path").prop('checked')/* || $(self.el).find(".control-upstream").prop('checked')*/) {
 
                     // if (self.lastHeight !== 0) {
                     self.lastHeight = $(self.el).find(".location-path").height();
