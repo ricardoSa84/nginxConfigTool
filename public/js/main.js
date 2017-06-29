@@ -57,18 +57,6 @@ var Router = Backbone.Router.extend({
                 self.terminalcmd.terminalsetprompt(data);
             }
         });
-
-
-        self.appEventBus.on('logaccess', function(data) {
-            if (window.profile && window.profile.get("Page") === "Dashboard") {
-                self.dashboardform.dashboardstdaccess(data);
-            }
-        });
-        self.appEventBus.on('logerror', function(data) {
-            if (window.profile && window.profile.get("Page") === "Dashboard") {
-                self.dashboardform.dashboardstderror(data);
-            }
-        });
     },
     showView: function(view, elem, sub) {
         elem.show();
