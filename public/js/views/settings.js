@@ -4,6 +4,7 @@ window.SettingsView = Backbone.View.extend({
     textRegex: /^\w+$/,
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
+    httpRegex: /^(http|https):\/\//,
     selectedOpts: "",
     servercontinue: false,
     countlocation: 1,
@@ -27,22 +28,23 @@ window.SettingsView = Backbone.View.extend({
         'keyup input': function() {
             this.checkImputs();
         },
-        "click .remove-server": function(){
+        "click .remove-server": function() {
             var self = this;
             var idServer = $(self.el).find('.host-name').val().trim() + "-" + $(self.el).find('.host-port').val().trim();
             if (self.lastkey === idServer) {
-                modem("POST", 
-                    "/nginx/removeserver", 
+                modem("POST",
+                    "/nginx/removeserver",
                     function(data) {
                         if (data.status === "Server deleted") {
                             showmsg('.my-modal', "success", "This server deleted.", false);
                         } else if (data.status === "Server delete Error") {
                             showmsg('.my-modal', "error", "Error to delete this server.", false);
                         }
-                    }, function(xhr, ajaxOptions, thrownError) {
+                    },
+                    function(xhr, ajaxOptions, thrownError) {
                         var json = JSON.parse(xhr.responseText);
                         error_launch(json.message);
-                    }, {server: idServer});
+                    }, { server: idServer });
 
             } else {
                 showmsg('.my-modal', "warning", "The server name or port was changed. The server is not removed.", false);
@@ -163,7 +165,7 @@ window.SettingsView = Backbone.View.extend({
             self.lastkey = "";
         } else {
             $(self.el).find(".remove-server").parent().css({
-                display : "none"
+                display: "none"
             });
 
         }
@@ -232,33 +234,33 @@ window.SettingsView = Backbone.View.extend({
         }, {});
 
         modem("GET", '/ext/all', function(data) {
-            var options1 = "";
-            var options2 = "";
-            for (var i in data) {
-                options1 += "<optgroup label='" + data[i].text + "'>";
-                if (data[i].type === "ext") {
-                    for (var j in data[i].ext.sort()) {
-                        options1 += "<option>" + data[i].ext[j] + "</option>";
+                var options1 = "";
+                var options2 = "";
+                for (var i in data) {
+                    options1 += "<optgroup label='" + data[i].text + "'>";
+                    if (data[i].type === "ext") {
+                        for (var j in data[i].ext.sort()) {
+                            options1 += "<option>" + data[i].ext[j] + "</option>";
+                        }
                     }
-                }
-                if (data[i].type === "path") {
-                    for (var k in data[i].ext.sort()) {
-                        options2 += "<option>" + data[i].ext[k] + "</option>";
+                    if (data[i].type === "path") {
+                        for (var k in data[i].ext.sort()) {
+                            options2 += "<option>" + data[i].ext[k] + "</option>";
+                        }
                     }
+                    options1 += "</optgroup>";
                 }
-                options1 += "</optgroup>";
-            }
-            self.optionsToDropdownExt = options1;
-            self.optionsToDropdownPath = options2;
-            if (server && !self.ajaxReqPathExt) {
-                self.ajaxReqPathExt = true;
-                self.createServer(server);
-            }
-        },
-        function(xhr, ajaxOptions, thrownError) {
-            var json = JSON.parse(xhr.responseText);
-            error_launch(json.message);
-        }, {});
+                self.optionsToDropdownExt = options1;
+                self.optionsToDropdownPath = options2;
+                if (server && !self.ajaxReqPathExt) {
+                    self.ajaxReqPathExt = true;
+                    self.createServer(server);
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
 
         $(self.el).find('.btn-on-off').bootstrapToggle();
 
@@ -272,33 +274,34 @@ window.SettingsView = Backbone.View.extend({
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "host-name":
-                    if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        if ($(self.el).find(obj).val().trim().match(self.textRegex)) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                     case "host-port":
-                    if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        if ($(self.el).find(obj).val().trim().match(self.portRegex)) {
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                     case "host-proxy":
-                    var ipPort = $(self.el).find(obj).val().trim().split(":");
-                    if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                        $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                        self.servercontinue = self.servercontinue === false ? false : true;
-                    } else {
-                        $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                        self.servercontinue = false;
-                    }
-                    break;
+                        // var ipPort = $(self.el).find(obj).val().trim().split(":");
+                        // if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
+                        if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, ""). length > 3) {                            
+                            $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                            self.servercontinue = self.servercontinue === false ? false : true;
+                        } else {
+                            $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                            self.servercontinue = false;
+                        }
+                        break;
                 }
             }
         });
