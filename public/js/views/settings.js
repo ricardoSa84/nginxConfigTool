@@ -74,10 +74,10 @@ window.SettingsView = Backbone.View.extend({
             console.log('deu certo');
             modem("POST", '/nginx/test', function(data) {
                 if (data.status === "nginx test ok") {
-                    $('#restart-nginx').prop('disabled', false);
+                    $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "success", "NGinx Test OK!", true);
                 } else {
-                    $('#restart-nginx').prop('disabled', true);
+                    $('.restart-nginx').prop('disabled', true);
                     showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
                 }
             }, function(xhr, ajaxOptions, thrownError) {
@@ -87,11 +87,12 @@ window.SettingsView = Backbone.View.extend({
         },
         "click .restart-nginx": function() {
             modem("POST", '/nginx/reload', function(data) {
+                console.log('chegou aqui:',data);
                 if (data.status === "nginx reload ok") {
-                    $('#restart-nginx').prop('disabled', false);
+                    $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "success", "NGinx Test OK!", true);
                 } else {
-                    $('#restart-nginx').prop('disabled', true);
+                    $('.restart-nginx').prop('disabled', true);
                     showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
                 }
             }, function(xhr, ajaxOptions, thrownError) {
@@ -314,7 +315,6 @@ window.SettingsView = Backbone.View.extend({
               if (data.status === "Instance Created") {
                 showmsg('.my-modal', "success", "A new instance as been created!", true);
               } else {
-                  $('.test-nginx').prop('disabled', true);
                   showmsg('.my-modal', "error", "Error while trying to create a new instance.", false);
               }
           },
@@ -322,7 +322,7 @@ window.SettingsView = Backbone.View.extend({
               var json = JSON.parse(xhr.responseText);
               error_launch(json.message);
           }, {
-              data: serverconfig
+              data: {}
           });
     },
     savesettings: function() {
