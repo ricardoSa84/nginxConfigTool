@@ -68,6 +68,7 @@ window.SettingsView = Backbone.View.extend({
             self.optionsListdefault[optName] = null;
         },
         "click .save-settings": "savesettings",
+        "click .newInstance": "newInstance",
 
         "click .test-nginx": function() {
             console.log('deu certo');
@@ -294,7 +295,7 @@ window.SettingsView = Backbone.View.extend({
                     case "host-proxy":
                         // var ipPort = $(self.el).find(obj).val().trim().split(":");
                         // if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                        if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, ""). length > 3) {                            
+                        if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, ""). length > 3) {
                             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                             self.servercontinue = self.servercontinue === false ? false : true;
                         } else {
@@ -305,6 +306,24 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         });
+    },
+    newInstance: function() {
+      modem("POST",
+          "/nginx/createNewInstance",
+          function(data) {
+              if (data.status === "Instance Created") {
+                showmsg('.my-modal', "success", "A new instance as been created!", true);
+              } else {
+                  $('.test-nginx').prop('disabled', true);
+                  showmsg('.my-modal', "error", "Error while trying to create a new instance.", false);
+              }
+          },
+          function(xhr, ajaxOptions, thrownError) {
+              var json = JSON.parse(xhr.responseText);
+              error_launch(json.message);
+          }, {
+              data: serverconfig
+          });
     },
     savesettings: function() {
         var self = this;
