@@ -1,4 +1,0 @@
-*.class
-node_modules/
-.vagrant/
-*.log
