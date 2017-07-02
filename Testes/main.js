@@ -2,11 +2,19 @@ var express = require('express');
 var app = express();
 
 app.get('/', function (req, res) {
-  res.send('Hello World! ' + new Date().toString() + ' - ' + process.env.PORT);
+  res.send('Hello World! ' + new Date().toString() + ' - Port -> "' + process.env.PORT + '"');
 });
 
-app.get('/login', function (req, res) {
-  res.send('Login! ' + new Date().toString());
+app.get('/Teste', function (req, res) {
+  res.send('Teste! ' + new Date().toString() + ' - Port -> "' + process.env.PORT + '"');
+});
+
+app.get('/TesteRedirect', function (req, res) {
+  res.send('Teste Redirect! ' + new Date().toString() + ' - Port -> "' + process.env.PORT + '"');
+});
+
+app.get('/Redirected', function (req, res) {
+  res.send('Redirected! ' + new Date().toString() + ' - Port -> "' + process.env.PORT + '"');
 });
 
 app.get('/error', function (req, res) {
