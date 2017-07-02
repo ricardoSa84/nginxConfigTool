@@ -76,6 +76,8 @@ window.SettingsView = Backbone.View.extend({
                 if (data.status === "nginx test ok") {
                     $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "success", "NGinx Test OK!", true);
+                } else if (data.status === 'nginx test warning') {
+                    showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
                 } else {
                     $('.restart-nginx').prop('disabled', true);
                     showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
@@ -87,7 +89,7 @@ window.SettingsView = Backbone.View.extend({
         },
         "click .restart-nginx": function() {
             modem("POST", '/nginx/reload', function(data) {
-                console.log('chegou aqui:',data);
+                console.log('chegou aqui:', data);
                 if (data.status === "nginx reload ok") {
                     $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "success", "NGinx Test OK!", true);
@@ -296,7 +298,7 @@ window.SettingsView = Backbone.View.extend({
                     case "host-proxy":
                         // var ipPort = $(self.el).find(obj).val().trim().split(":");
                         // if (ipPort[0].match(self.ipRegex) && ipPort[1].match(self.portRegex)) {
-                        if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, ""). length > 3) {
+                        if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, "").length > 3) {
                             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                             self.servercontinue = self.servercontinue === false ? false : true;
                         } else {
@@ -309,21 +311,21 @@ window.SettingsView = Backbone.View.extend({
         });
     },
     newInstance: function() {
-      modem("POST",
-          "/nginx/createNewInstance",
-          function(data) {
-              if (data.status === "Instance Created") {
-                showmsg('.my-modal', "success", "A new instance as been created!", true);
-              } else {
-                  showmsg('.my-modal', "error", "Error while trying to create a new instance.", false);
-              }
-          },
-          function(xhr, ajaxOptions, thrownError) {
-              var json = JSON.parse(xhr.responseText);
-              error_launch(json.message);
-          }, {
-              data: {}
-          });
+        modem("POST",
+            "/nginx/createNewInstance",
+            function(data) {
+                if (data.status === "Instance Created") {
+                    showmsg('.my-modal', "success", "A new instance as been created!", true);
+                } else {
+                    showmsg('.my-modal', "error", "Error while trying to create a new instance.", false);
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {
+                data: {}
+            });
     },
     savesettings: function() {
         var self = this;
