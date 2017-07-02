@@ -114,7 +114,7 @@ window.LocationView = Backbone.View.extend({
 
                 switch ($(self.el).find(obj).data("typevalue")) {
                     case "location-path":
-                        if (!$(self.el).find(".control-upstream").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
+                        if (!$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
                             if ($(self.el).find(obj).val().trim().length >= 1) {
                                 $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
                                 self.locationcontinue = true;
