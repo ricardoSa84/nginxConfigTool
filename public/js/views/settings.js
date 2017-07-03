@@ -77,6 +77,7 @@ window.SettingsView = Backbone.View.extend({
                     $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "success", "NGinx Test OK!", true);
                 } else if (data.status === 'nginx test warning') {
+                    $('.restart-nginx').prop('disabled', false);
                     showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
                 } else {
                     $('.restart-nginx').prop('disabled', true);

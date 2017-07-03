@@ -25,13 +25,13 @@ window.LocationView = Backbone.View.extend({
             var self = this;
             var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
             $(e.target).parent().parent().parent().parent().parent().remove();
-            self.allOptionlocation[self.locationname + "-loc-" + optName] = null;
+            self.allOptionlocation[optName] = null;
         },
         "click .option-upstream-remove": function(e) {
             var self = this;
             var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
             $(e.target).parent().parent().parent().parent().parent().remove();
-            self.allOptionupstream[self.locationname + "-upst-" + optName] = null;
+            self.allOptionupstream[optName] = null;
         },
         "change .btn-on-off": function(evt) {
             var self = this;
@@ -187,13 +187,13 @@ window.LocationView = Backbone.View.extend({
         $(self.el).find(".option-list-" + classname).append(optionView.render().el);
         if (classname === "location") {
             $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-location-remove");
-            optionView.init(self.locationname + "-option-" + self.countoptionlocation, self.allListOptionsLocation);
+            optionView.init(self.locationname + "-loc-option-" + self.countoptionlocation, self.allListOptionsLocation);
             self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
             self.countoptionlocation++;
         }
         if (classname === "upstream") {
             $(self.el).find(e.target).parent().removeClass("option-add").addClass("option-upstream-remove");
-            optionView.init(self.locationname + "-upsteam-option-" + self.countoptionupstream, self.allListOptionsUpstream);
+            optionView.init(self.locationname + "-upst-option-" + self.countoptionupstream, self.allListOptionsUpstream);
             self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
             self.countoptionupstream++;
         }
