@@ -242,10 +242,10 @@ window.LocationView = Backbone.View.extend({
                                 if (obj.text != '') {
                                     locJson.upstreams.options.push(obj);
                                 }
+                            } else {
+                                auxOptionName = obj.optname;
+                                self.locationcontinue = false;
                             }
-                        } else {
-                            auxOptionName = obj.optname;
-                            self.locationcontinue = false;
                         }
                     }
                 }
