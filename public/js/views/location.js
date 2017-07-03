@@ -312,13 +312,13 @@ window.LocationView = Backbone.View.extend({
 
         var optionView = new OptionView({});
         $(self.el).find(".option-list-location").append(optionView.render().el);
-        optionView.init(self.locationname + "-option-" + self.countoptionlocation, self.allListOptionsLocation);
+        optionView.init(self.locationname + "-loc-option-" + self.countoptionlocation, self.allListOptionsLocation);
         self.allOptionlocation[self.locationname + "-loc-option-" + self.countoptionlocation] = optionView;
         self.countoptionlocation++;
 
         var optionView = new OptionView({});
         $(self.el).find(".option-list-upstream").append(optionView.render().el);
-        optionView.init(self.locationname + "-upsteam-option-" + self.countoptionupstream, self.allListOptionsUpstream);
+        optionView.init(self.locationname + "-upst-option-" + self.countoptionupstream, self.allListOptionsUpstream);
         self.allOptionupstream[self.locationname + "-upst-option-" + self.countoptionupstream] = optionView;
         self.countoptionupstream++;
 
