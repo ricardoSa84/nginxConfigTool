@@ -151,23 +151,23 @@ window.SettingsView = Backbone.View.extend({
         $('body').on('input', function(e) {});
         showInfoMsg(false, '.my-modal');
         $.AdminLTE.boxWidget.activate();
+        self.selectedOpts = "";
+        self.servercontinue = false;
+        self.countlocation = 1;
+        self.allLocations = [];
+        self.optionsListserver = [];
+        self.allListOptionsServer = "";
+        self.optionsListdefault = [];
+        self.allListOptionsDefault = "";
+        self.allListOptionsUpstream = "";
+        self.optionsToDropdownExt = "";
+        self.optionsToDropdownPath = "";
+        self.optscountserver = 1;
+        self.optscountdefault = 1;
+        self.editmode = false;
+        self.lastkey = "";
         if (server) {
             displayWait('.my-modal');
-            self.selectedOpts = "";
-            self.servercontinue = false;
-            self.countlocation = 1;
-            self.allLocations = [];
-            self.optionsListserver = [];
-            self.allListOptionsServer = "";
-            self.optionsListdefault = [];
-            self.allListOptionsDefault = "";
-            self.allListOptionsUpstream = "";
-            self.optionsToDropdownExt = "";
-            self.optionsToDropdownPath = "";
-            self.optscountserver = 1;
-            self.optscountdefault = 1;
-            self.editmode = false;
-            self.lastkey = "";
         } else {
             $(self.el).find(".remove-server").parent().css({
                 display: "none"
