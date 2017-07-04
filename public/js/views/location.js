@@ -135,17 +135,17 @@ window.LocationView = Backbone.View.extend({
                             }
                         }
                         break;
-                    case "location-path-files":
-                        if ($(self.el).find(".control-cache-path").prop('checked')) {
-                            if ($(self.el).find(obj).val().trim().length >= 1) {
-                                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                                self.locationcontinue = true;
-                            } else {
-                                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                                self.locationcontinue = false;
-                            }
-                        }
-                        break;
+                    // case "location-path-files":
+                    //     if ($(self.el).find(".control-cache-path").prop('checked')) {
+                    //         if ($(self.el).find(obj).val().trim().length >= 1) {
+                    //             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                    //             self.locationcontinue = true;
+                    //         } else {
+                    //             $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                    //             self.locationcontinue = false;
+                    //         }
+                    //     }
+                    //     break;
                 }
             }
         });
