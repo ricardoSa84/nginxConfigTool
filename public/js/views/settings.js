@@ -37,6 +37,7 @@ window.SettingsView = Backbone.View.extend({
                     function(data) {
                         if (data.status === "Server deleted") {
                             showmsg('.my-modal', "success", "This server deleted.", false);
+                            $(self.el).find(".remove-server-ok").click();
                         } else if (data.status === "Server delete Error") {
                             showmsg('.my-modal', "error", "Error to delete this server.", false);
                         }
