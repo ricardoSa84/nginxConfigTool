@@ -17,6 +17,10 @@ app.get('/Redirected', function (req, res) {
   res.send('Redirected! ' + new Date().toString() + ' - Port -> "' + process.env.PORT + '"');
 });
 
+app.get('/TestCache', function(req, res) {
+    res.sendFile(__dirname + '/test.html');
+});
+
 app.get('/error', function (req, res) {
   res.status(500).send('Ja foste '  + new Date().toString());
 });
