@@ -2,16 +2,22 @@
     <div class="col-md-12">
         <div class="box">
             <div class="box-header with-border">
-                <h2 class="box-title"><i class="fa fa-server"></i>Edit Server Settings</h2>
+                <h2 class="box-title"><i class="fa fa-server"></i>Create or Edit Server Settings</h2>
             </div>
             <div class="box-body">
                 <div class="row ">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <label class="input-group-addon select-server-list">Select Server:</label>
-                            <select class="select-server show-menu-arrow form-control selectpicker show-tick" data-live-search="true" title="Select Server."></select>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                            <label class="input-group-addon select-instance-list">Select Instance:</label>
+                                <select class="select-instance show-menu-arrow form-control selectpicker show-tick" data-live-search="true" title="Select Instance.">
+                                    <option value='localhost'>localhost</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-md-12 server-settings">
                             <img class="center-block" alt="" src="./img/Nginx-Logo.png" style="width: 15%; height: auto">
@@ -26,4 +32,3 @@
         </div>
     </div>
 </div>
-

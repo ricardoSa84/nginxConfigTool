@@ -5,6 +5,7 @@ window.SettingsView = Backbone.View.extend({
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
     httpRegex: /^(http|https):\/\//,
+    selectedInstance : "localhost",
     selectedOpts: "",
     servercontinue: false,
     countlocation: 1,
@@ -146,7 +147,7 @@ window.SettingsView = Backbone.View.extend({
             self.optscountdefault++;
         }
     },
-    init: function(server) {
+    init: function(server, instancesrv) {
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
@@ -167,6 +168,7 @@ window.SettingsView = Backbone.View.extend({
         self.optscountdefault = 1;
         self.editmode = false;
         self.lastkey = "";
+        self.selectedInstance = instancesrv;
         if (server) {
             displayWait('.my-modal');
         } else {
@@ -337,6 +339,7 @@ window.SettingsView = Backbone.View.extend({
 
         serverconfig = {
             servername: $(self.el).find('.host-name').val().trim(),
+            instanceserver: self.selectedInstance,
             port: $(self.el).find('.host-port').val().trim(),
             serveropts: [],
             defaultLocation: {

@@ -16,7 +16,7 @@ var Router = Backbone.Router.extend({
     content: undefined,
     footer: undefined,
     dashboardform: undefined,
-    settingsform: undefined,
+    instanceServerSettings: undefined,
     editsettingsform: undefined,
     loginform: undefined,
     about: undefined,
@@ -77,7 +77,7 @@ var Router = Backbone.Router.extend({
         //Pagina Inicial
         "Inicio": "inicio",
         "Dashboard": "dashboard",
-        "Settings": "settings",
+        "InstanceServer": "instanceServerSettings",
         "EditSettings": "editsettings",
         "Terminal": "cmdterminal",
         "About": "aCercaDe",
@@ -93,7 +93,7 @@ var Router = Backbone.Router.extend({
         this.footer = undefined;
         this.loginform = undefined;
         this.dashboardform = undefined;
-        this.settingsform = undefined;
+        // this.settingsform = undefined;
         this.editsettingsform = undefined,
             this.terminalcmd = undefined;
         if (this.socketclt) {
@@ -165,15 +165,14 @@ var Router = Backbone.Router.extend({
             window.profile.set("Page", "Dashboard");
         });
     },
-    // carrega as configuracoes do site
-    settings: function() {
+    instanceServerSettings: function() {
         var self = this;
         self.verificaLogin(function() {
             window.profile.set("Page", undefined);
-            self.settingsform = new SettingsView({});
-            $('#content').html(self.settingsform.render().el);
-            self.settingsform.init();
-            self.contentnav.setView("Settings");
+            self.instanceServer = new InstanceServerView({});
+            $('#content').html(self.instanceServer.render().el);
+            self.instanceServer.init();
+            self.contentnav.setView("Create / Edit Instance Server");
         });
     },
     editsettings: function() {
@@ -183,7 +182,7 @@ var Router = Backbone.Router.extend({
             self.editsettingsform = new EditsettingsView({});
             $('#content').html(self.editsettingsform.render().el);
             self.editsettingsform.init();
-            self.contentnav.setView("Edit Settings");
+            self.contentnav.setView("Create / Edit Server Settings");
         });
     },
     cmdterminal: function() {
@@ -231,6 +230,7 @@ templateLoader.load([
         "OptionView",
         "DashboardView",
         "SettingsView",
+        "InstanceServerView",
         "EditsettingsView",
         "ContentNavView",
         "TerminalView",
