@@ -33,6 +33,7 @@ Vagrant::Config.run do |config|
 end
 
 Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
+  config.vm.network "forwarded_port", guest: 9869, host: 9869
   config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.provider :virtualbox do |vb, override|
     override.vm.provision :shell, :inline => $script

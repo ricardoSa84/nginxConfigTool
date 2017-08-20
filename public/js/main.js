@@ -169,7 +169,7 @@ var Router = Backbone.Router.extend({
         var self = this;
         self.verificaLogin(function() {
             window.profile.set("Page", undefined);
-            self.instanceServer = new InstanceServerView({});
+            self.instanceServer = new EditInstanceServerView({});
             $('#content').html(self.instanceServer.render().el);
             self.instanceServer.init();
             self.contentnav.setView("Create / Edit Instance Server");
@@ -231,6 +231,7 @@ templateLoader.load([
         "DashboardView",
         "SettingsView",
         "InstanceServerView",
+        "EditInstanceServerView",
         "EditsettingsView",
         "ContentNavView",
         "TerminalView",

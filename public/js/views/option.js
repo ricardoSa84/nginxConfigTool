@@ -32,7 +32,7 @@ window.OptionView = Backbone.View.extend({
                 function(data) {
                     showmsg('.my-modal', "info",
                         '<br><br><span class="label label-primary"><i><b>Syntax</b></i></span> : ' + data[0].directives[0].syntax + ";<br><br>" +
-                        '<span class="label label-primary"><i><b>Default</b></i></span> : ' + data[0].directives[0].default+";<br><br>" +
+                        '<span class="label label-primary"><i><b>Default</b></i></span> : ' + data[0].directives[0].default + ";<br><br>" +
                         '<span class="label label-primary"><i><b>Variables</b></i></span> : ' + function() {
                             var textVar = "";
                             for (var i in data[0].variables) {
@@ -54,11 +54,12 @@ window.OptionView = Backbone.View.extend({
     },
     checkInput: function() {
         var self = this;
+        self.continue = true;
         $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
         if (self.selectedOpt.trim().length !== 0) {
             if ($(self.el).find(".text-opt").val().trim().length >= 1) {
                 $(self.el).find(".text-opt").next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.continue = true;
+                self.continue = (self.continue === false ? false : true);
             } else {
                 $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.continue = false;
@@ -66,7 +67,7 @@ window.OptionView = Backbone.View.extend({
         } else if (self.selectedOpt.trim().length === 0) {
             if ($(self.el).find(".text-opt").val().trim().length === 0) {
                 $(self.el).find(".text-opt").next().children().removeClass("fa-close color-red").removeClass("fa-check color-green");
-                self.continue = true;
+                self.continue = (self.continue === false ? false : true);
             } else {
                 $(self.el).find(".text-opt").next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.continue = false;

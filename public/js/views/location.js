@@ -108,6 +108,7 @@ window.LocationView = Backbone.View.extend({
     initialize: function() {},
     checkImputs: function() {
         var self = this;
+        self.locationcontinue = true;
         $(self.el).find('.valid-input').each(function(i, obj) {
             if ($(self.el).find(obj)) {
                 $(self.el).find(obj).parent().next().children().children().removeClass("fa-check color-green").addClass("fa-close color-red");
@@ -117,7 +118,7 @@ window.LocationView = Backbone.View.extend({
                         if (!$(self.el).find(".control-cache-path").prop('checked') && !$(self.el).find(".control-cache-ext").prop('checked')) {
                             if ($(self.el).find(obj).val().trim().length >= 1) {
                                 $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                                self.locationcontinue = true;
+                                self.locationcontinue = (self.locationcontinue === false ? false : true);
                             } else {
                                 $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                                 self.locationcontinue = false;
@@ -128,7 +129,7 @@ window.LocationView = Backbone.View.extend({
                         if ($(self.el).find(".control-upstream").prop('checked')) {
                             if ($(self.el).find(obj).val().trim().length >= 1) {
                                 $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                                self.locationcontinue = true;
+                                self.locationcontinue = (self.locationcontinue === false ? false : true);
                             } else {
                                 $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                                 self.locationcontinue = false;
@@ -139,7 +140,7 @@ window.LocationView = Backbone.View.extend({
                     //     if ($(self.el).find(".control-cache-path").prop('checked')) {
                     //         if ($(self.el).find(obj).val().trim().length >= 1) {
                     //             $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                    //             self.locationcontinue = true;
+                    //             self.locationcontinue = (self.locationcontinue === false ? false : true);
                     //         } else {
                     //             $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                     //             self.locationcontinue = false;
@@ -153,7 +154,7 @@ window.LocationView = Backbone.View.extend({
         if ($(self.el).find(".control-cache-ext").prop('checked')) {
             if (self.selectedOptsExt.trim().length > 0) {
                 $(self.el).find(".select-extensao").parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.locationcontinue = true;
+                self.locationcontinue = (self.locationcontinue === false ? false : true);
             } else {
                 $(self.el).find(".select-extensao").parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.locationcontinue = false;
@@ -165,7 +166,7 @@ window.LocationView = Backbone.View.extend({
         if ($(self.el).find(".control-cache-path").prop('checked')) {
             if (self.selectedOptsPath.trim().length > 0) {
                 $(self.el).find(".select-path").parent().next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                self.locationcontinue = true;
+                self.locationcontinue = (self.locationcontinue === false ? false : true);
             } else {
                 $(self.el).find(".select-path").parent().next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
                 self.locationcontinue = false;

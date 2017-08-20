@@ -5,7 +5,7 @@ window.SettingsView = Backbone.View.extend({
     portRegex: /^0*(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{1,3}|[0-9])$/,
     ipRegex: /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/,
     httpRegex: /^(http|https):\/\//,
-    selectedInstance : "localhost",
+    selectedInstance: "localhost",
     selectedOpts: "",
     servercontinue: false,
     countlocation: 1,
@@ -151,7 +151,7 @@ window.SettingsView = Backbone.View.extend({
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        showInfoMsg(false, '.my-modal');
+        // showInfoMsg(false, '.my-modal');
         $.AdminLTE.boxWidget.activate();
         self.selectedOpts = "";
         self.servercontinue = false;
@@ -193,10 +193,9 @@ window.SettingsView = Backbone.View.extend({
             optionView.init("server-option-" + self.optscountserver, self.allListOptionsServer);
             self.optionsListserver["server-option-" + self.optscountserver] = optionView;
             self.optscountserver++;
-            if (server && !self.ajaxReqServer) {
-                self.ajaxReqServer = true;
-                self.createServer(server);
-            }
+            self.ajaxReqServer = true;
+            self.createServer(server);
+
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
@@ -214,10 +213,8 @@ window.SettingsView = Backbone.View.extend({
             optionView.init("default-location-option-" + self.optscountdefault, self.allListOptionsDefault);
             self.optionsListdefault["default-location-option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
-            if (server && !self.ajaxReqLocation) {
-                self.ajaxReqLocation = true;
-                self.createServer(server);
-            }
+            self.ajaxReqLocation = true;
+            self.createServer(server);
 
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -232,10 +229,8 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
             self.allListOptionsUpstream = options;
-            if (server && !self.ajaxReqUpstreams) {
-                self.ajaxReqUpstreams = true;
-                self.createServer(server);
-            }
+            self.ajaxReqUpstreams = true;
+            self.createServer(server);
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
@@ -260,10 +255,8 @@ window.SettingsView = Backbone.View.extend({
                 }
                 self.optionsToDropdownExt = options1;
                 self.optionsToDropdownPath = options2;
-                if (server && !self.ajaxReqPathExt) {
-                    self.ajaxReqPathExt = true;
-                    self.createServer(server);
-                }
+                self.ajaxReqPathExt = true;
+                self.createServer(server);
             },
             function(xhr, ajaxOptions, thrownError) {
                 var json = JSON.parse(xhr.responseText);
@@ -435,7 +428,10 @@ window.SettingsView = Backbone.View.extend({
     },
     createServer: function(server) {
         var self = this;
-        if (self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
+        if (!server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
+            $('.my-modal').hide();
+            $('.my-modal').html("");
+        } else if (server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
             // console.log(server);
             self.editmode = server.editmode;
             self.lastkey = server[0].servername + "-" + server[0].port;

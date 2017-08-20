@@ -11,6 +11,7 @@ window.EditsettingsView = Backbone.View.extend({
                 opt += element.value;
             });
             self.optionServerselected = opt;
+            displayWait('.my-modal');
             if (self.optionServerselected == "newserver") {
                 $(self.el).find(".server-settings").children().remove();
                 var serverSettings = new SettingsView({});
@@ -43,7 +44,7 @@ window.EditsettingsView = Backbone.View.extend({
             modem("GET",
                 '/nginx/allservers',
                 function(data) {
-                    var opts = /*"<option></option>"*/ "";
+                    var opts = "";
                     for (var i in data.stdout) {
                         var optserver = data.stdout[i]._id.split("-");
                         opts += "<option value='" + data.stdout[i]._id + "'> Hostname - " + optserver[0] + " / Port - " + optserver[1] + "</option>";
@@ -52,7 +53,7 @@ window.EditsettingsView = Backbone.View.extend({
 
                     $('<div class="col-md-6"><div class="input-group"><label class="input-group-addon select-server-list">Select Server:</label><select class="select-server show-menu-arrow form-control selectpicker show-tick" data-live-search="true" title="Select Server.">' + opts + '</select></div></div>').insertAfter($(self.el).find(".select-instance-list").parent().parent());
 
-                    $(".select-server.select-server").html(opts);
+                    $(".select-server.selectpicker").html(opts);
                     $('.select-server.selectpicker').selectpicker('refresh');
                 },
                 function(xhr, ajaxOptions, thrownError) {
