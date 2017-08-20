@@ -89,31 +89,6 @@ window.InstanceServerView = Backbone.View.extend({
 
                 if (instancesel) {
                     self.addOptInstance(self.selectedInstance);
-
-                    modem("GET",
-                        '/vm/statusInstance/' + self.selectedInstance._id,
-                        function(data) {
-                            console.log(data);
-                            if (data.status === "OK") {
-                                showmsg('.my-modal', "success", function() {
-                                    var ht = "";
-                                    $.each(data.stdout, function(k, v) {
-                                        $.each(v, function(key, value) {
-                                            console.log("T- ", key + ": " + value);
-                                            ht += '<p>' + key + ": " + value + '</p><br>';
-                                        });
-                                    });
-                                    return ht;
-                                }(), false);
-                            } else {
-                                showmsg('.my-modal', "error", data.stdout, false);
-                            }
-                        },
-                        function(xhr, ajaxOptions, thrownError) {
-                            var json = JSON.parse(xhr.responseText);
-                            error_launch(json.message);
-                        }, {});
-
                 } else {
                     $('.my-modal').hide();
                     $('.my-modal').html("");
@@ -185,6 +160,30 @@ window.InstanceServerView = Backbone.View.extend({
         self.checkInputs();
         $('.my-modal').hide();
         $('.my-modal').html("");
+
+        modem("GET",
+            '/vm/statusInstance/' + self.selectedInstance._id,
+            function(data) {
+                // console.log(data);
+                if (data.status === "OK") {
+                    showmsg('.my-modal', "success", function() {
+                        var ht = "";
+                        $.each(data.stdout, function(k, v) {
+                            $.each(v, function(key, value) {
+                                console.log("T- ", key + ": " + value);
+                                ht += '<p>' + key + ": " + value + '</p><br>';
+                            });
+                        });
+                        return ht;
+                    }(), false);
+                } else {
+                    showmsg('.my-modal', "error", data.stdout, false);
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
     },
     render: function() {
         var self = this;
