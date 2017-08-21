@@ -10,7 +10,7 @@ window.EditInstanceServerView = Backbone.View.extend({
             $(self.el).find(".select-instance.selectpicker option:selected").each(function(index, element) {
                 opt += element.value;
             });
-            displayWait('.my-modal');
+            displayWait('.my-modal-wait');
             self.instanceselected = opt;
             self.instance = null;
             if (self.instanceselected === "newinstance") {
@@ -37,7 +37,7 @@ window.EditInstanceServerView = Backbone.View.extend({
                         // console.log(data);
                         if (data.status === "OK") {
                             showmsg('.my-modal', "success", data.stdout, true);
-                            self.selectInstabcePopulate(instanceData.newInstance.instanceName);
+                            self.selectInstancePopulate(instanceData.newInstance.instanceName);
                         } else {
                             showmsg('.my-modal', "error", data.stdout, false);
                         }
@@ -76,6 +76,29 @@ window.EditInstanceServerView = Backbone.View.extend({
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
                 }, {});
+        },
+        "click .saveresize": function() {
+            var self = this;
+            var instanceData = self.instance.getInstaceContinue();
+            if (instanceData.continue) {
+                modem("POST",
+                    '/vm/resizeInstance',
+                    function(data) {
+                        console.log(data);
+                        if (data.status === "OK") {
+                            showmsg('.my-modal', "success", data.stdout, true);
+                            self.selectInstancePopulate(instanceData.newInstance.instanceName);
+                        } else {
+                            showmsg('.my-modal', "error", data.stdout, false);
+                        }
+                    },
+                    function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, {
+                        data: instanceData
+                    });
+            }
         }
     },
     initialize: function(skt) {},
@@ -86,9 +109,9 @@ window.EditInstanceServerView = Backbone.View.extend({
         showInfoMsg(false, '.my-modal');
         $.AdminLTE.boxWidget.activate();
         $('.selectpicker').selectpicker('refresh');
-        self.selectInstabcePopulate(null);
+        self.selectInstancePopulate(null);
     },
-    selectInstabcePopulate: function(sel) {
+    selectInstancePopulate: function(sel) {
         var self = this;
         modem("GET",
             '/vm/allInstances',

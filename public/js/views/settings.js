@@ -151,7 +151,7 @@ window.SettingsView = Backbone.View.extend({
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        // showInfoMsg(false, '.my-modal');
+        showInfoMsg(false, '.my-modal');
         $.AdminLTE.boxWidget.activate();
         self.selectedOpts = "";
         self.servercontinue = false;
@@ -170,7 +170,7 @@ window.SettingsView = Backbone.View.extend({
         self.lastkey = "";
         self.selectedInstance = instancesrv;
         if (server) {
-            displayWait('.my-modal');
+            displayWait('.my-modal-wait');
         } else {
             $(self.el).find(".remove-server").parent().css({
                 display: "none"
@@ -429,8 +429,8 @@ window.SettingsView = Backbone.View.extend({
     createServer: function(server) {
         var self = this;
         if (!server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
-            $('.my-modal').hide();
-            $('.my-modal').html("");
+            $('.my-modal-wait').hide();
+            $('.my-modal-wait').html("");
         } else if (server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
             // console.log(server);
             self.editmode = server.editmode;
@@ -460,8 +460,8 @@ window.SettingsView = Backbone.View.extend({
                 self.countlocation++;
             }
             self.checkImputs();
-            $('.my-modal').hide();
-            $('.my-modal').html("");
+            $('.my-modal-wait').hide();
+            $('.my-modal-wait').html("");
         }
     },
     render: function() {

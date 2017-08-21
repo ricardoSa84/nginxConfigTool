@@ -45,7 +45,7 @@
 
 .login-box-body,
 .register-box-body,
-.register-box > form {
+.register-box>form {
     box-shadow: 5px 5px 5px black;
 }
 
@@ -142,6 +142,7 @@ table #imgsensor {
 }
 
 
+
 /* The whole thing */
 
 .custom-menu {
@@ -157,6 +158,7 @@ table #imgsensor {
     border-radius: 5px;
     padding: 0;
 }
+
 
 
 /* Each of the items in the list */
@@ -219,6 +221,7 @@ table #imgsensor {
 }
 
 
+
 /* example styles for validation form demo */
 
 #register-form {
@@ -270,7 +273,8 @@ table #imgsensor {
     width: 220px;
 }
 
-.my-modal {
+.my-modal,
+.my-modal-wait {
     display: none;
     position: fixed;
     width: 100%;
@@ -280,7 +284,8 @@ table #imgsensor {
     z-index: 100000;
 }
 
-.my-modal:before {
+.my-modal:before,
+.my-modal-wait:before {
     content: '';
     position: fixed;
     top: 0;
@@ -294,7 +299,8 @@ table #imgsensor {
     opacity: 0.5;
 }
 
-.my-modal > div {
+.my-modal>div,
+.my-modal-wait>div {
     left: 10%;
     top: 2%;
     width: 80%;
@@ -372,11 +378,11 @@ table #imgsensor {
     transition: all 0.3s ease-in 0s;
 }
 
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
 
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
     right: 0px;
 }
 
@@ -458,4 +464,14 @@ table #imgsensor {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.active2 {
+    z-index: 2;
+    background-color: #e7e7e7 !important;
+    background-image: none;
+    color: #333;
+    border-color: #adadad !important;
+    outline: 0;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125) !important;
 }
