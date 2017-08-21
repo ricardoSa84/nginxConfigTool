@@ -49,7 +49,7 @@ window.InstanceServerView = Backbone.View.extend({
         self.checkInputs();
         return {
             continue: self.instancecontinue,
-            id: self.selectedInstance._id,
+            id: (self.selectedInstance ? self.selectedInstance._id : null),
             newInstance: {
                 instanceName: $(self.el).find(".instance-name").val().trim(),
                 templateNum: self.templateNum,
