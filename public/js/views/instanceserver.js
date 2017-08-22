@@ -66,7 +66,7 @@ window.InstanceServerView = Backbone.View.extend({
         self.selectedInstance = instancesel;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        showInfoMsg(false, '.my-modal');
+        hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
         $('.selectpicker').selectpicker('refresh');
 
@@ -104,8 +104,7 @@ window.InstanceServerView = Backbone.View.extend({
                     if (instancesel) {
                         self.addOptInstance(self.selectedInstance);
                     } else {
-                        $('.my-modal-wait').hide();
-                        $('.my-modal-wait').html("");
+                        hideMsg('.my-modal-wait');
                     }
 
                     if (self.editmode) {
@@ -179,8 +178,7 @@ window.InstanceServerView = Backbone.View.extend({
         $(self.el).find(".slider-ram-size").slider('disable');
 
         self.checkInputs();
-        $('.my-modal-wait').hide();
-        $('.my-modal-wait').html("");
+        hideMsg('.my-modal-wait');
         self.reloadstatus();
 
     },

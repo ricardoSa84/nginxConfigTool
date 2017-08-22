@@ -29,29 +29,6 @@ window.SettingsView = Backbone.View.extend({
         'keyup input': function() {
             this.checkImputs();
         },
-        "click .remove-server": function() {
-            var self = this;
-            var idServer = $(self.el).find('.host-name').val().trim() + "-" + $(self.el).find('.host-port').val().trim();
-            if (self.lastkey === idServer) {
-                modem("POST",
-                    "/nginx/removeserver",
-                    function(data) {
-                        if (data.status === "Server deleted") {
-                            showmsg('.my-modal', "success", "This server deleted.", false);
-                            $(self.el).find(".remove-server-ok").click();
-                        } else if (data.status === "Server delete Error") {
-                            showmsg('.my-modal', "error", "Error to delete this server.", false);
-                        }
-                    },
-                    function(xhr, ajaxOptions, thrownError) {
-                        var json = JSON.parse(xhr.responseText);
-                        error_launch(json.message);
-                    }, { server: idServer });
-
-            } else {
-                showmsg('.my-modal', "warning", "The server name or port was changed. The server is not removed.", false);
-            }
-        },
         "change .btn-on-off": function(evt) {
             var self = this;
             $(self.el).find(evt.target).parent().next().click();
@@ -69,41 +46,27 @@ window.SettingsView = Backbone.View.extend({
             $(e.target).parent().parent().parent().parent().parent().remove();
             self.optionsListdefault[optName] = null;
         },
-        "click .save-settings": "savesettings",
-        "click .newInstance": "newInstance",
-
-        "click .test-nginx": function() {
-            console.log('deu certo');
-            modem("POST", '/nginx/test', function(data) {
-                if (data.status === "nginx test ok") {
-                    $('.restart-nginx').prop('disabled', false);
-                    showmsg('.my-modal', "success", "NGinx Test OK!", true);
-                } else if (data.status === 'nginx test warning') {
-                    $('.restart-nginx').prop('disabled', false);
-                    showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
-                } else {
-                    $('.restart-nginx').prop('disabled', true);
-                    showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-                }
-            }, function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
+        "click .test-nginx": function(){
+            this.testeNginx(null);
         },
         "click .restart-nginx": function() {
-            modem("POST", '/nginx/reload', function(data) {
-                console.log('chegou aqui:', data);
-                if (data.status === "nginx reload ok") {
-                    $('.restart-nginx').prop('disabled', false);
-                    showmsg('.my-modal', "success", "NGinx Test OK!", true);
-                } else {
-                    $('.restart-nginx').prop('disabled', true);
-                    showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-                }
-            }, function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
+            this.testeNginx(function() {
+                displayWait('.my-modal-wait');
+                modem("POST", '/nginx/reload', function(data) {
+                    hideMsg('.my-modal-wait');
+                    // console.log('chegou aqui:', data);
+                    if (data.status === "nginx reload ok") {
+                        $('.restart-nginx').prop('disabled', false);
+                        showmsg('.my-modal', "success", "NGinx Test OK!", true);
+                    } else {
+                        $('.restart-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
+                    }
+                }, function(xhr, ajaxOptions, thrownError) {
+                    var json = JSON.parse(xhr.responseText);
+                    error_launch(json.message);
+                }, {});
+            });
         },
         "click .remove-row": function(evt) {
             var self = this;
@@ -122,6 +85,16 @@ window.SettingsView = Backbone.View.extend({
     },
     initialize: function() {
         this.listenTo(this.model, 'change', this.render);
+    },
+    checkServerRemove: function() {
+        var self = this;
+        var idServer = $(self.el).find('.host-name').val().trim() + "-" + $(self.el).find('.host-port').val().trim();
+        if (self.lastkey === idServer) {
+            return idServer;
+        } else {
+            showmsg('.my-modal', "warning", "The server name or port was changed. The server is not removed.", false);
+            return null;
+        }
     },
     addnewoptionserver: function(e) {
         var self = this;
@@ -151,7 +124,7 @@ window.SettingsView = Backbone.View.extend({
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        showInfoMsg(false, '.my-modal');
+        hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
         self.selectedOpts = "";
         self.servercontinue = false;
@@ -194,7 +167,7 @@ window.SettingsView = Backbone.View.extend({
             self.optionsListserver["server-option-" + self.optscountserver] = optionView;
             self.optscountserver++;
             self.ajaxReqServer = true;
-            self.createServer(server);
+            self.gerateServerSaved(server);
 
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -214,7 +187,7 @@ window.SettingsView = Backbone.View.extend({
             self.optionsListdefault["default-location-option-" + self.optscountdefault] = optionView;
             self.optscountdefault++;
             self.ajaxReqLocation = true;
-            self.createServer(server);
+            self.gerateServerSaved(server);
 
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
@@ -230,7 +203,7 @@ window.SettingsView = Backbone.View.extend({
             }
             self.allListOptionsUpstream = options;
             self.ajaxReqUpstreams = true;
-            self.createServer(server);
+            self.gerateServerSaved(server);
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
@@ -256,7 +229,7 @@ window.SettingsView = Backbone.View.extend({
                 self.optionsToDropdownExt = options1;
                 self.optionsToDropdownPath = options2;
                 self.ajaxReqPathExt = true;
-                self.createServer(server);
+                self.gerateServerSaved(server);
             },
             function(xhr, ajaxOptions, thrownError) {
                 var json = JSON.parse(xhr.responseText);
@@ -307,24 +280,7 @@ window.SettingsView = Backbone.View.extend({
             }
         });
     },
-    newInstance: function() {
-        modem("POST",
-            "/nginx/createNewInstance",
-            function(data) {
-                if (data.status === "Instance Created") {
-                    showmsg('.my-modal', "success", "A new instance as been created!", true);
-                } else {
-                    showmsg('.my-modal', "error", "Error while trying to create a new instance.", false);
-                }
-            },
-            function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {
-                data: {}
-            });
-    },
-    savesettings: function() {
+    servercreate: function() {
         var self = this;
         self.checkImputs();
         var serverconfig = {};
@@ -341,7 +297,7 @@ window.SettingsView = Backbone.View.extend({
                 options: []
             },
             locations: []
-        }
+        };
 
         for (var i in self.optionsListserver) {
             if (self.optionsListserver[i]) {
@@ -358,7 +314,6 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         }
-
         for (var i in self.optionsListdefault) {
             if (self.optionsListdefault[i]) {
                 var obj = self.optionsListdefault[i].getValidOption();
@@ -389,7 +344,7 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         }
-        console.log("upstreams", arrayUpstreamName, checkIfArrayIsUnique(arrayUpstreamName));
+        // console.log("upstreams", arrayUpstreamName, checkIfArrayIsUnique(arrayUpstreamName));
 
         if (checkIfArrayIsUnique(arrayUpstreamName)) {
             alert("Existe Upstreams com o mesmo nome. O Processo continua apenas está validação está em teste. Para alterar depois.");
@@ -399,38 +354,18 @@ window.SettingsView = Backbone.View.extend({
                 serverconfig.editmode = self.editmode;
                 serverconfig.lastkey = self.lastkey;
             }
-            modem("POST",
-                "/nginx/saveserver",
-                function(data) {
-                    if (data.status === "Server Created") {
-                        $('.test-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "The server has been correctly saved!", true);
-                    } else if (data.status === "Server Exists") {
-                        $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "warning", "This server, servername '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system, in case you need to change it go to the tab to edit.", false);
-
-                    } else {
-                        $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", "Error while trying to save the server.", false);
-                    }
-                },
-                function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {
-                    data: serverconfig
-                });
-
+            return serverconfig;
         } else {
-            showmsg('.my-modal', "error", "Bad Values to Save, check the <b>x</b>.", true);
+            showmsg('.my-modal', "error", "Bad Values to Save, check the <b>x</b>.", false);
+            return null;
         }
         console.log("----------------------------------------");
     },
-    createServer: function(server) {
+    gerateServerSaved: function(server) {
         var self = this;
         if (!server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
-            $('.my-modal-wait').hide();
-            $('.my-modal-wait').html("");
+            $(".server-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default server-create btn-block"><label><i class="fa fa-save"></i> Create Server </label></button></div>');
+            hideMsg('.my-modal-wait');
         } else if (server && self.ajaxReqServer && self.ajaxReqLocation && self.ajaxReqUpstreams && self.ajaxReqPathExt) {
             // console.log(server);
             self.editmode = server.editmode;
@@ -460,9 +395,43 @@ window.SettingsView = Backbone.View.extend({
                 self.countlocation++;
             }
             self.checkImputs();
-            $('.my-modal-wait').hide();
-            $('.my-modal-wait').html("");
+            $(".server-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default server-create btn-block"><label><i class="fa fa-save"></i> Save Server </label></button></div>' +
+                '<div class="col-md-2"><button type="button " class="btn btn-default btn-block remove-server"><label><i class="fa fa-trash-o"></i> Remove Server</label></button></div>' +
+                '<div class="col-md-2 "><button type="button " class="btn btn-default btn-block test-nginx"><label> Test Nginx </label></button></div>' +
+                '<div class="col-md-2 "><button type="button " disabled class="btn btn-default btn-block restart-nginx"><label><i class="fa fa-refresh "></i></i> Restart Ngnix</label></button></div>');
+            hideMsg('.my-modal-wait');
         }
+    },
+    testeNginx: function(callback) {
+        if (!callback) {
+            displayWait('.my-modal-wait');
+        }
+        modem("POST", '/nginx/test', function(data) {
+            if (!callback) {
+                hideMsg('.my-modal-wait');
+            }
+            if (data.status === "nginx test ok") {
+                if (callback) {
+                    callback();
+                } else {
+                    $('.restart-nginx').prop('disabled', false);
+                }
+                showmsg('.my-modal', "success", "NGinx Test OK!", true);
+            } else if (data.status === 'nginx test warning') {
+                $('.restart-nginx').prop('disabled', false);
+                if (callback) {
+                    callback();
+                } else {
+                    showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
+                }
+            } else {
+                $('.restart-nginx').prop('disabled', true);
+                showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
+            }
+        }, function(xhr, ajaxOptions, thrownError) {
+            var json = JSON.parse(xhr.responseText);
+            error_launch(json.message);
+        }, {});
     },
     render: function() {
         var self = this;

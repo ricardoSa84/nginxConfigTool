@@ -3,6 +3,8 @@
 window.EditsettingsView = Backbone.View.extend({
     optionServerselected: "",
     instanceselected: "",
+    allInstances: [],
+    serverCreatedOpt: null,
     events: {
         "change .select-server.selectpicker": function(e) {
             var self = this;
@@ -11,12 +13,13 @@ window.EditsettingsView = Backbone.View.extend({
                 opt += element.value;
             });
             self.optionServerselected = opt;
-            displayWait('.my-modal');
+            displayWait('.my-modal-wait');
             if (self.optionServerselected == "newserver") {
                 $(self.el).find(".server-settings").children().remove();
                 var serverSettings = new SettingsView({});
                 $(self.el).find(".server-settings").html(serverSettings.render().el);
                 serverSettings.init(null, self.instanceselected);
+                self.serverCreatedOpt = serverSettings;
             } else {
                 modem("GET",
                     '/nginx/get/' + opt,
@@ -26,6 +29,7 @@ window.EditsettingsView = Backbone.View.extend({
                         $(self.el).find(".server-settings").html(serverSettings.render().el);
                         data.stdout.editmode = true;
                         serverSettings.init(data.stdout, self.instanceselected);
+                        self.serverCreatedOpt = serverSettings;
                     },
                     function(xhr, ajaxOptions, thrownError) {
                         var json = JSON.parse(xhr.responseText);
@@ -41,44 +45,144 @@ window.EditsettingsView = Backbone.View.extend({
             });
             // console.log(opt);
             self.instanceselected = opt;
+            displayWait('.my-modal-wait');
             modem("GET",
-                '/nginx/allservers',
+                '/nginx/allServersInstance/' + self.instanceselected,
                 function(data) {
-                    var opts = "";
-                    for (var i in data.stdout) {
-                        var optserver = data.stdout[i]._id.split("-");
-                        opts += "<option value='" + data.stdout[i]._id + "'> Hostname - " + optserver[0] + " / Port - " + optserver[1] + "</option>";
+                    // console.log(data);
+                    if (data.status === "OK") {
+                        var opts = "";
+                        for (var i in data.stdout) {
+                            var optserver = data.stdout[i]._id.split("-");
+                            opts += "<option value='" + data.stdout[i]._id + "'> Hostname - " + optserver[1] + " / Port - " + optserver[2] + "</option>";
+                        }
+                        opts += "<option value='newserver'>Create New Server</option>";
+
+                        $(self.el).find(".server-list").html('<label class="input-group-addon select-server-list">Select Server:</label><select class="select-server show-menu-arrow form-control selectpicker show-tick" data-live-search="true" title="Select Server.">' + opts + '</select>');
+
+                        $(".select-server.selectpicker").html(opts);
+                        $('.select-server.selectpicker').selectpicker('refresh');
+
+                        hideMsg('.my-modal-wait');
+                    } else {
+                        hideMsg('.my-modal-wait');
+                        $(".select-server.selectpicker").html("");
+                        $('.select-server.selectpicker').selectpicker('refresh');
+                        showmsg('.my-modal', "error", data.stdout, false);
                     }
-                    opts += "<option value='newserver'>Create New Server</option>";
-
-                    $('<div class="col-md-6"><div class="input-group"><label class="input-group-addon select-server-list">Select Server:</label><select class="select-server show-menu-arrow form-control selectpicker show-tick" data-live-search="true" title="Select Server.">' + opts + '</select></div></div>').insertAfter($(self.el).find(".select-instance-list").parent().parent());
-
-                    $(".select-server.selectpicker").html(opts);
-                    $('.select-server.selectpicker').selectpicker('refresh');
+                    $(self.el).find(".server-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
+                        "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
+                        "<hr class='soften' />");
                 },
                 function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
                 }, {});
         },
-        "click .remove-server-ok": function() {
+        "click .remove-server": function() {
             var self = this;
-            $(self.el).find(".server-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
-                "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
-                "<hr class='soften' />");
-            $(self.el).find(".select-server.selectpicker").find('[value=' + self.optionServerselected + ']').remove();
-            $(self.el).find(".select-server.selectpicker").selectpicker('refresh');
-            // console.log("remove-server-ok");
-        }
+            var idServer = self.serverCreatedOpt.checkServerRemove();
+            if (idServer) {
+                var serverRemove = idServer;
+                idServer = self.instanceselected + "-" + idServer;
+                modem("POST",
+                    "/nginx/removeserver",
+                    function(data) {
+                        if (data.status === "Server deleted") {
+                            $(self.el).find(".server-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
+                                "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
+                                "<hr class='soften' />");
+                            console.log(serverRemove);
+                            $(self.el).find(".select-server.selectpicker").find('[value=' + idServer + ']').remove();
+                            $(self.el).find(".select-server.selectpicker").selectpicker('refresh');
+                            showmsg('.my-modal', "success", "This server deleted.", false);
+                        } else if (data.status === "Server delete Error") {
+                            showmsg('.my-modal', "error", "Error to delete this server.", false);
+                        }
+                    },
+                    function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, { server: idServer });
+            }
+        },
+        "click .server-create": "serversave",
     },
     initialize: function() {},
     init: function() {
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        showInfoMsg(false, '.my-modal');
+        hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
         $('.selectpicker').selectpicker('refresh');
+
+        modem("GET",
+            '/vm/allInstances',
+            function(data) {
+                // console.log(data);
+                if (data.status === "OK") {
+                    var opts = "";
+                    for (var i in data.stdout) {
+                        opts += "<option value='" + data.stdout[i]._id + "'> Name - " + data.stdout[i].instanceName + " / Template - " + data.stdout[i].templateName + "</option>";
+                        self.allInstances[data.stdout[i]._id] = data.stdout[i];
+                    }
+                    opts += "<option value='localhost'>Name - localhost / Template - localhost</option>";
+
+                    $(".select-instance.selectpicker").html(opts);
+                    $('.select-instance.selectpicker').selectpicker('refresh');
+                    // if (sel) {
+                    //     for (var i in self.allInstances) {
+                    //         if (sel === self.allInstances[i].instanceName) {
+                    //             $('.select-instance.selectpicker').val(self.allInstances[i]._id);
+                    //             $('.select-instance.selectpicker').selectpicker('render');
+                    //             $('.select-instance.selectpicker').val(self.allInstances[i]._id).change();
+                    //             $(".instace-new-created").attr("data-instanceName", "");
+                    //             return;
+                    //         }
+                    //     }
+                    // }
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
+    },
+    serversave: function() {
+        var self = this;
+        var serverconfig = self.serverCreatedOpt.servercreate();
+        if (serverconfig) {
+            serverconfig.instanceid = self.instanceselected;
+            modem("POST",
+                "/nginx/saveserver",
+                function(data) {
+                    if (data.status === "Server Created") {
+                        $('.test-nginx').prop('disabled', false);
+                        showmsg('.my-modal', "success", "The server has been correctly saved!", true);
+                        $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
+                        // $('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>').prependTo();
+
+
+                        $('.select-server.selectpicker').append('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>' + "<option value='newserver'>Create New Server</option>");
+                        $('.select-server.selectpicker').selectpicker("refresh");
+                        $('.select-server.selectpicker').val(serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port).change();
+                    } else if (data.status === "Server Exists") {
+                        $('.test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "warning", "This server, servername '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
+
+                    } else {
+                        $('.test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "error", "Error while trying to save the server.", false);
+                    }
+                },
+                function(xhr, ajaxOptions, thrownError) {
+                    var json = JSON.parse(xhr.responseText);
+                    error_launch(json.message);
+                }, {
+                    data: serverconfig
+                });
+        }
     },
     render: function() {
         var self = this;

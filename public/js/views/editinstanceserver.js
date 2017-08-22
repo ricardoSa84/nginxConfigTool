@@ -106,7 +106,7 @@ window.EditInstanceServerView = Backbone.View.extend({
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        showInfoMsg(false, '.my-modal');
+        hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
         $('.selectpicker').selectpicker('refresh');
         self.selectInstancePopulate(null);

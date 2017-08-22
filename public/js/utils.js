@@ -146,6 +146,11 @@ var showInfoMsg = function(show, local, msg) {
     }
 };
 
+var hideMsg = function(local){
+	$(local).hide();
+    $(local).html("");
+};
+
 /**
  * Normaliza uma string
  * @param {type} str
