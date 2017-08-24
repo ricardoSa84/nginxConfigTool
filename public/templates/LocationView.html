@@ -97,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="box thumbnail no-margin-b collapsed-box">
+                <!-- <div class="box thumbnail no-margin-b collapsed-box">
                     <div class="box-header">
                         <div class=" display-start-elemet">
                             <input class="control-upstream btn-on-off" type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled" data-size="small" data-onstyle="success">
@@ -120,7 +120,7 @@
                         <div class="option-list-upstream box-body" data-container="upstream">
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="box thumbnail no-margin-b">
                     <div class="box-body">
                         <div class="row with-border location-path">
@@ -133,7 +133,18 @@
                             </div>
                         </div>
                         <div class="row">&nbsp;</div>
-                        <h5 class="box-title display-start-elemet">Add Options:</h5>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="input-group-addon add-proxy-pass-opt-location">
+                                        <input class="control-upstream-select-location btn-on-off-upstream" type="checkbox" data-toggle="tooltip" data-on="Enable Upstream" data-off="Disable Upstream" data-size="small" data-onstyle="success" title=""> &nbsp;&nbsp; Proxy pass:</label>
+                                    <input class="input-proxy-pass-location host-proxy valid-input form-control" data-typevalue="host-proxy" type="text " placeholder="http://127.0.0.1:3000" value="">
+                                    <span class="input-group-addon color-red" data-toggle="tooltip" title="Insert a valid ip and port namber."> <i class="icon fa fa-close "></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <h5 class="box-title display-start-elemet">Add Location Options:</h5>
                     </div>
                     <div class="option-list-location box-body" data-container="location">
                     </div>

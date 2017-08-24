@@ -18,6 +18,7 @@ var Router = Backbone.Router.extend({
     dashboardform: undefined,
     instanceServerSettings: undefined,
     editsettingsform: undefined,
+    editupstreamform: undefined,
     loginform: undefined,
     about: undefined,
     socketclt: null,
@@ -79,6 +80,7 @@ var Router = Backbone.Router.extend({
         "Dashboard": "dashboard",
         "InstanceServer": "instanceServerSettings",
         "EditSettings": "editsettings",
+        "Editupstrean": "editupstreamSettings",
         "Terminal": "cmdterminal",
         "About": "aCercaDe",
         '*notFound': 'login'
@@ -93,9 +95,9 @@ var Router = Backbone.Router.extend({
         this.footer = undefined;
         this.loginform = undefined;
         this.dashboardform = undefined;
-        // this.settingsform = undefined;
-        this.editsettingsform = undefined,
-            this.terminalcmd = undefined;
+        this.editsettingsform = undefined;
+        this.editupstreamform = undefined;
+        this.terminalcmd = undefined;
         if (this.socketclt) {
             this.socketclt.disconnect();
         }
@@ -185,6 +187,16 @@ var Router = Backbone.Router.extend({
             self.contentnav.setView("Create / Edit Server Settings");
         });
     },
+    editupstreamSettings: function() {
+        var self = this;
+        self.verificaLogin(function() {
+            window.profile.set("Page", undefined);
+            self.editupstreamform = new EditServerUpstreamView({});
+            $('#content').html(self.editupstreamform.render().el);
+            self.editupstreamform.init();
+            self.contentnav.setView("Create / Edit Upstream Settings");
+        });
+    },
     cmdterminal: function() {
         var self = this;
         self.verificaLogin(function() {
@@ -233,6 +245,8 @@ templateLoader.load([
         "InstanceServerView",
         "EditInstanceServerView",
         "EditsettingsView",
+        "EditServerUpstreamView",
+        "UpstreamView",
         "ContentNavView",
         "TerminalView",
         "AboutView"

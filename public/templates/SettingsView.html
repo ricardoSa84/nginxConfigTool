@@ -52,11 +52,12 @@
                                                 <input class="location-input alid-input form-control" disabled type="text" placeholder="/" value="/" data-mask="/">
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-8">
                                             <div class="input-group">
-                                                <label class="input-group-addon">Proxy pass:</label>
-                                                <input class="host-proxy valid-input form-control" data-typevalue="host-proxy" type="text " placeholder="http://127.0.0.1:3000" value="">
-                                                <span class="input-group-addon color-red" data-toggle="tooltip" title="Insert a valid ip and port namber. "> <i class="icon fa fa-close "></i></span>
+                                                <label class="input-group-addon add-proxy-pass-opt">
+                                                    <input class="control-upstream-select btn-on-off-upstream" type="checkbox" data-toggle="tooltip" data-on="Enable Upstream" data-off="Disable Upstream" data-size="small" data-onstyle="success" title=""> &nbsp;&nbsp; Proxy pass:</label>
+                                                <input class="host-proxy input-proxy-pass valid-input form-control" data-typevalue="host-proxy" type="text " placeholder="http://127.0.0.1:3000" value="">
+                                                <span class="input-group-addon color-red" data-toggle="tooltip" title="Insert a valid ip and port namber."> <i class="icon fa fa-close "></i></span>
                                             </div>
                                         </div>
                                     </div>
@@ -92,7 +93,7 @@
                     </button>
                 </div>
             </div>
-            <div class="box-body server-btns">  
+            <div class="box-body server-btns">
             </div>
         </div>
     </div>

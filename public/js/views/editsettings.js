@@ -71,7 +71,7 @@ window.EditsettingsView = Backbone.View.extend({
                         showmsg('.my-modal', "error", data.stdout, false);
                     }
                     $(self.el).find(".server-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
-                        "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
+                        "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Create or Edit Server Settings</h1>" +
                         "<hr class='soften' />");
                 },
                 function(xhr, ajaxOptions, thrownError) {
@@ -131,17 +131,6 @@ window.EditsettingsView = Backbone.View.extend({
 
                     $(".select-instance.selectpicker").html(opts);
                     $('.select-instance.selectpicker').selectpicker('refresh');
-                    // if (sel) {
-                    //     for (var i in self.allInstances) {
-                    //         if (sel === self.allInstances[i].instanceName) {
-                    //             $('.select-instance.selectpicker').val(self.allInstances[i]._id);
-                    //             $('.select-instance.selectpicker').selectpicker('render');
-                    //             $('.select-instance.selectpicker').val(self.allInstances[i]._id).change();
-                    //             $(".instace-new-created").attr("data-instanceName", "");
-                    //             return;
-                    //         }
-                    //     }
-                    // }
                 }
             },
             function(xhr, ajaxOptions, thrownError) {
@@ -154,19 +143,19 @@ window.EditsettingsView = Backbone.View.extend({
         var serverconfig = self.serverCreatedOpt.servercreate();
         if (serverconfig) {
             serverconfig.instanceid = self.instanceselected;
+            serverconfig.lastkey = self.instanceselected + "-" + serverconfig.lastkey;
+            // console.log(serverconfig);
             modem("POST",
                 "/nginx/saveserver",
                 function(data) {
                     if (data.status === "Server Created") {
                         $('.test-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "The server has been correctly saved!", true);
                         $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
-                        // $('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>').prependTo();
-
 
                         $('.select-server.selectpicker').append('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>' + "<option value='newserver'>Create New Server</option>");
                         $('.select-server.selectpicker').selectpicker("refresh");
                         $('.select-server.selectpicker').val(serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port).change();
+                        showmsg('.my-modal', "success", "The server has been correctly saved!", true);
                     } else if (data.status === "Server Exists") {
                         $('.test-nginx').prop('disabled', true);
                         showmsg('.my-modal', "warning", "This server, servername '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
