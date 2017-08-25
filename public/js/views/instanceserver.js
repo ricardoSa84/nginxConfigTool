@@ -196,14 +196,15 @@ window.InstanceServerView = Backbone.View.extend({
                             $.each(data.stdout, function(k, v) {
                                 $.each(v, function(key, value) {
                                     // console.log("T- ", key + ": " + value);
-
                                     ht += '<tr><td><label>' + key + '</label></td>';
                                     if (typeof value !== 'object') {
                                         ht += '<td>' + value + '</td>';
                                     } else {
                                         ht += '<table class="table table-condensed"><tbody>';
-                                        $.each(value, function(key2, value2) {
-                                            ht += '<tr><td><label>' + key2 + '</label></td><td>' + value2 + '</td>'
+                                        $.each(value, function(k2, v2) {
+                                            $.each(v2, function(key2, value2) {
+                                                ht += '<tr><td><label>' + key2 + '</label></td><td>' + value2 + '</td>'
+                                            });
                                         });
                                         ht += '</tbody></table>';
                                     }
