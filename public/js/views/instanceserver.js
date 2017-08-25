@@ -119,7 +119,7 @@ window.InstanceServerView = Backbone.View.extend({
                         $(self.el).find(".instance-btn").html('<div class="col-md-2"><button type="button " class="btn btn-default btn-block create-instance"><label><i class="fa fa-plus" aria-hidden="true"></i> Create Instance</label></button></div>');
                     }
                 } else {
-                  showmsg('.my-modal', "error", data.stdout, false);
+                    showmsg('.my-modal', "error", data.stdout, false);
                 }
             },
             function(xhr, ajaxOptions, thrownError) {
@@ -196,7 +196,18 @@ window.InstanceServerView = Backbone.View.extend({
                             $.each(data.stdout, function(k, v) {
                                 $.each(v, function(key, value) {
                                     // console.log("T- ", key + ": " + value);
-                                    ht += '<tr><td><label>' + key + '</label></td><td>' + value + '</td></tr>';
+
+                                    ht += '<tr><td><label>' + key + '</label></td>';
+                                    if (typeof value !== 'object') {
+                                        ht += '<td>' + value + '</td>';
+                                    } else {
+                                        ht += '<table class="table table-condensed"><tbody>';
+                                        $.each(value, function(key2, value2) {
+                                            ht += '<tr><td><label>' + key2 + '</label></td><td>' + value2 + '</td>'
+                                        });
+                                        ht += '</tbody></table>';
+                                    }
+                                    nt += '</tr>'
                                 });
                             });
                             return ht;
