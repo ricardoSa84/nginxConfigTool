@@ -200,13 +200,13 @@ window.InstanceServerView = Backbone.View.extend({
                                     if (typeof value !== 'object') {
                                         ht += '<td>' + value + '</td>';
                                     } else {
-                                        ht += '<table class="table table-condensed"><tbody>';
+                                        ht += '<td><table class="table table-condensed"><tbody>';
                                         $.each(value, function(k2, v2) {
                                             $.each(v2, function(key2, value2) {
                                                 ht += '<tr><td><label>' + key2 + '</label></td><td>' + value2 + '</td>'
                                             });
                                         });
-                                        ht += '</tbody></table>';
+                                        ht += '</tbody></table></td>';
                                     }
                                     ht += '</tr>'
                                 });
