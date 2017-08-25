@@ -207,7 +207,7 @@ window.InstanceServerView = Backbone.View.extend({
                                         });
                                         ht += '</tbody></table>';
                                     }
-                                    nt += '</tr>'
+                                    ht += '</tr>'
                                 });
                             });
                             return ht;
