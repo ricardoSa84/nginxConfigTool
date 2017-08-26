@@ -88,8 +88,8 @@ window.UpstreamView = Backbone.View.extend({
         if (!self.editModeUpstream) {
             $(".upstream-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default upstream-create btn-block"><label><i class="fa fa-save"></i> Create Upstream </label></button></div>');
         } else {
-            $(".upstream-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default upstream-create btn-block"><label><i class="fa fa-save"></i> Save Server </label></button></div>' +
-                '<div class="col-md-2"><button type="button " class="btn btn-default btn-block remove-upstream"><label><i class="fa fa-trash-o"></i> Remove Server</label></button></div>' +
+            $(".upstream-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default upstream-create btn-block"><label><i class="fa fa-save"></i> Save Upstream </label></button></div>' +
+                '<div class="col-md-2"><button type="button " class="btn btn-default btn-block remove-upstream"><label><i class="fa fa-trash-o"></i> Remove Upstream</label></button></div>' +
                 '<div class="col-md-2 "><button type="button " class="btn btn-default btn-block test-nginx"><label> Test Nginx </label></button></div>' +
                 '<div class="col-md-2 "><button type="button" class="btn btn-default btn-block restart-nginx"><label><i class="fa fa-refresh "></i></i> Restart Ngnix</label></button></div>');
         }
