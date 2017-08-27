@@ -80,7 +80,9 @@ window.EditsettingsView = Backbone.View.extend({
                 function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
-                }, {});
+                }, {
+                    data: self.instanceselected
+                });
         },
         "click .remove-server": function() {
             var self = this;
@@ -230,7 +232,9 @@ window.EditsettingsView = Backbone.View.extend({
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
-        }, {});
+        }, {
+            data: self.instanceselected
+        });
     },
     render: function() {
         var self = this;
