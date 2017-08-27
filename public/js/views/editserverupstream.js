@@ -119,12 +119,12 @@ window.EditServerUpstreamView = Backbone.View.extend({
                 function(data) {
                     // console.log(data);
                     if (data.status === "OK") {
-                        showmsg('.my-modal', "success", data.stdout, false);
                         $(self.el).find('.select-upstream.selectpicker').find('[value="' + self.optionUpstreamselected + '"]').remove();
                         $('.select-upstream.selectpicker').selectpicker("refresh");
                         $(self.el).find(".upstream-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
                             "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Create or Edit Upstream Settings</h1>" +
                             "<hr class='soften' />");
+                        showmsg('.my-modal', "success", data.stdout, false);
                     } else {
                         showmsg('.my-modal', "error", data.stdout, false);
                     }
@@ -139,7 +139,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
     init: function() {
         var self = this;
         $('body').on('input', function(e) {});
-        // hideMsg('.my-modal');
+        hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
 
         modem("GET",
