@@ -80,9 +80,7 @@ window.EditsettingsView = Backbone.View.extend({
                 function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
-                }, {
-                    data: self.instanceselected
-                });
+                }, {});
         },
         "click .remove-server": function() {
             var self = this;
@@ -116,6 +114,7 @@ window.EditsettingsView = Backbone.View.extend({
             this.testeNginx(null);
         },
         "click .restart-nginx": function() {
+            var self = this;
             this.testeNginx(function() {
                 displayWait('.my-modal-wait');
                 modem("POST", '/nginx/reload', function(data) {
@@ -134,7 +133,9 @@ window.EditsettingsView = Backbone.View.extend({
                 }, function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
-                }, {});
+                }, {
+                    data: self.instanceselected
+                });
             });
         },
     },
