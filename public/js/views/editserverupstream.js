@@ -145,13 +145,15 @@ window.EditServerUpstreamView = Backbone.View.extend({
         "click .restart-nginx": function() {
             var self = this;
             this.testeNginx(function() {
-                displayWait('.my-modal-wait');
+                // displayWait('.my-modal-wait');
                 modem("POST", '/nginx/reload', function(data) {
                     hideMsg('.my-modal-wait');
                     // console.log('chegou aqui:', data);
                     if (data.status === "nginx reload ok") {
                         // $('.restart-nginx').prop('disabled', false);
                         showmsg('.my-modal', "success", "NGinx Test OK!", true);
+                    } else if (data.status === 'nginx test warning') {
+                        showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
                     } else {
                         // $('.restart-nginx').prop('disabled', true);
                         showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
@@ -205,8 +207,9 @@ window.EditServerUpstreamView = Backbone.View.extend({
             if (data.status === "nginx test ok") {
                 if (callback) {
                     callback();
+                } else {
+                    showmsg('.my-modal', "success", "NGinx Test OK!", false);
                 }
-                showmsg('.my-modal', "success", "NGinx Test OK!", true);
             } else if (data.status === 'nginx test warning') {
                 // $('.restart-nginx').prop('disabled', false);
                 if (callback) {
