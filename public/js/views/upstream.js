@@ -23,6 +23,7 @@ window.UpstreamView = Backbone.View.extend({
             this.testeNginx(null);
         },
         "click .restart-nginx": function() {
+            var self = this;
             this.testeNginx(function() {
                 displayWait('.my-modal-wait');
                 modem("POST", '/nginx/reload', function(data) {
@@ -38,7 +39,9 @@ window.UpstreamView = Backbone.View.extend({
                 }, function(xhr, ajaxOptions, thrownError) {
                     var json = JSON.parse(xhr.responseText);
                     error_launch(json.message);
-                }, {});
+                }, {
+                    data: self.instanceId
+                });
             });
         },
     },
@@ -176,6 +179,7 @@ window.UpstreamView = Backbone.View.extend({
         hideMsg('.my-modal-wait');
     },
     testeNginx: function(callback) {
+        var self = this;
         if (!callback) {
             displayWait('.my-modal-wait');
         }
@@ -202,7 +206,9 @@ window.UpstreamView = Backbone.View.extend({
         }, function(xhr, ajaxOptions, thrownError) {
             var json = JSON.parse(xhr.responseText);
             error_launch(json.message);
-        }, {});
+        }, {
+            data: self.instanceId
+        });
     },
     render: function() {
         var self = this;
