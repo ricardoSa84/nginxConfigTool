@@ -193,7 +193,7 @@ window.EditsettingsView = Backbone.View.extend({
 
                     } else {
                         $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", "Error while trying to save the server.", false);
+                        showmsg('.my-modal', "error", data.stdout, false);
                     }
                 },
                 function(xhr, ajaxOptions, thrownError) {
