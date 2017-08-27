@@ -10,7 +10,7 @@ module.exports = {
             host: 'http://127.0.0.1:2633/RPC2',
             auth: (fs.readFileSync('/var/lib/one/.one/one_auth').toString('utf8').trim() || 'oneadmin:oneadmin'),
             network: 'private',
-            sunstone: 'https://127.0.0.1'
+            sunstone: 'http://127.0.0.1'
         }
     },
 
@@ -24,4 +24,4 @@ module.exports = {
         email: "admin@admin.pt",
         pass: "admin"
     }
-}
+} 
