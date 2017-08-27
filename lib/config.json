@@ -1,4 +1,4 @@
 {
-  "servers": ["http://172.168.1.75:8080"],
+  "servers": [],
   "path": "/var/log/nginx/access.log"
 }
