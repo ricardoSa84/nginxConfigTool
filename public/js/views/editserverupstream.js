@@ -150,10 +150,10 @@ window.EditServerUpstreamView = Backbone.View.extend({
                     hideMsg('.my-modal-wait');
                     // console.log('chegou aqui:', data);
                     if (data.status === "nginx reload ok") {
-                        $('.restart-nginx').prop('disabled', false);
+                        // $('.restart-nginx').prop('disabled', false);
                         showmsg('.my-modal', "success", "NGinx Test OK!", true);
                     } else {
-                        $('.restart-nginx').prop('disabled', true);
+                        // $('.restart-nginx').prop('disabled', true);
                         showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
                     }
                 }, function(xhr, ajaxOptions, thrownError) {
