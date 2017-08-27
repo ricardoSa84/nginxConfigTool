@@ -56,28 +56,6 @@ window.SettingsView = Backbone.View.extend({
             $(e.target).parent().parent().parent().parent().parent().remove();
             self.optionsListdefault[optName] = null;
         },
-        "click .test-nginx": function() {
-            this.testeNginx(null);
-        },
-        "click .restart-nginx": function() {
-            this.testeNginx(function() {
-                displayWait('.my-modal-wait');
-                modem("POST", '/nginx/reload', function(data) {
-                    hideMsg('.my-modal-wait');
-                    // console.log('chegou aqui:', data);
-                    if (data.status === "nginx reload ok") {
-                        $('.restart-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "NGinx Test OK!", true);
-                    } else {
-                        $('.restart-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-                    }
-                }, function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {});
-            });
-        },
         "click .remove-row": function(evt) {
             var self = this;
             var locname = $(self.el).find(evt.target).parent().parent().parent().parent().parent().parent().attr("data-location");
@@ -455,37 +433,6 @@ window.SettingsView = Backbone.View.extend({
                 '<div class="col-md-2 "><button type="button " disabled class="btn btn-default btn-block restart-nginx"><label><i class="fa fa-refresh "></i></i> Restart Ngnix</label></button></div>');
             hideMsg('.my-modal-wait');
         }
-    },
-    testeNginx: function(callback) {
-        if (!callback) {
-            displayWait('.my-modal-wait');
-        }
-        modem("POST", '/nginx/test', function(data) {
-            if (!callback) {
-                hideMsg('.my-modal-wait');
-            }
-            if (data.status === "nginx test ok") {
-                if (callback) {
-                    callback();
-                } else {
-                    $('.restart-nginx').prop('disabled', false);
-                }
-                showmsg('.my-modal', "success", "NGinx Test OK!", true);
-            } else if (data.status === 'nginx test warning') {
-                $('.restart-nginx').prop('disabled', false);
-                if (callback) {
-                    callback();
-                } else {
-                    showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
-                }
-            } else {
-                $('.restart-nginx').prop('disabled', true);
-                showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-            }
-        }, function(xhr, ajaxOptions, thrownError) {
-            var json = JSON.parse(xhr.responseText);
-            error_launch(json.message);
-        }, {});
     },
     render: function() {
         var self = this;
