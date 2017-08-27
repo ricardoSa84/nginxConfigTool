@@ -180,7 +180,7 @@ window.EditsettingsView = Backbone.View.extend({
                 "/nginx/saveserver",
                 function(data) {
                     if (data.status === "OK") {
-                        $('.test-nginx').prop('disabled', false);
+                        // $('.test-nginx').prop('disabled', false);
                         $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
 
                         $('.select-server.selectpicker').append('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>' + "<option value='newserver'>Create New Server</option>");
@@ -188,11 +188,11 @@ window.EditsettingsView = Backbone.View.extend({
                         $('.select-server.selectpicker').val(serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port).change();
                         showmsg('.my-modal', "success", "The server has been correctly saved!", false);
                     } else if (data.status === "Server Exists") {
-                        $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "warning", "This server, servername '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
+                        // $('.test-nginx').prop('disabled', true);
+                        showmsg('.my-modal', "warning", "This server, ServerName '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
 
                     } else {
-                        $('.test-nginx').prop('disabled', true);
+                        // $('.test-nginx').prop('disabled', true);
                         showmsg('.my-modal', "error", data.stdout, false);
                     }
                 },
