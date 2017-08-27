@@ -117,8 +117,9 @@ window.EditServerUpstreamView = Backbone.View.extend({
             modem("DELETE",
                 '/nginx/deleteUpstreams/' + self.optionUpstreamselected,
                 function(data) {
-                    console.log(data);
+                    // console.log(data);
                     if (data.status === "OK") {
+                        showmsg('.my-modal', "success", data.stdout, false);
                         $(self.el).find('.select-upstream.selectpicker').find('[value="' + self.optionUpstreamselected + '"]').remove();
                         $('.select-upstream.selectpicker').selectpicker("refresh");
                         $(self.el).find(".upstream-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
