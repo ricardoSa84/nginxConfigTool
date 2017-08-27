@@ -204,6 +204,7 @@ window.EditsettingsView = Backbone.View.extend({
         }
     },
     testeNginx: function(callback) {
+        var self = this;
         if (!callback) {
             displayWait('.my-modal-wait');
         }
