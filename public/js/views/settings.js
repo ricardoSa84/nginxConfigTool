@@ -132,7 +132,7 @@ window.SettingsView = Backbone.View.extend({
         var self = this;
         $("#server-ip:input").inputmask();
         $('body').on('input', function(e) {});
-        hideMsg('.my-modal');
+        // hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
         self.selectedOpts = "";
         self.servercontinue = false;
