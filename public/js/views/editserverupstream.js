@@ -144,7 +144,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
         },
         "click .restart-nginx": function() {
             var self = this;
-            this.testeNginx(function() {
+            // this.testeNginx(function() {
                 displayWait('.my-modal-wait');
                 modem("POST", '/nginx/reload', function(data) {
                     hideMsg('.my-modal-wait');
@@ -162,7 +162,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
                 }, {
                     data: self.instanceselected
                 });
-            });
+            // });
         }
     },
     initialize: function(opt) {},
