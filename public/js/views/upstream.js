@@ -18,32 +18,7 @@ window.UpstreamView = Backbone.View.extend({
             $(e.target).parent().parent().parent().parent().parent().remove();
             self.allOptionupstream[optName] = null;
         },
-        "click .option-add": "addnewoption",
-        "click .test-nginx": function() {
-            this.testeNginx(null);
-        },
-        "click .restart-nginx": function() {
-            var self = this;
-            this.testeNginx(function() {
-                displayWait('.my-modal-wait');
-                modem("POST", '/nginx/reload', function(data) {
-                    hideMsg('.my-modal-wait');
-                    // console.log('chegou aqui:', data);
-                    if (data.status === "nginx reload ok") {
-                        $('.restart-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "NGinx Test OK!", true);
-                    } else {
-                        $('.restart-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-                    }
-                }, function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {
-                    data: self.instanceId
-                });
-            });
-        },
+        "click .option-add": "addnewoption"
     },
     initialize: function() {},
     init: function(upstreamData, instanceSel, editMode) {
@@ -177,38 +152,6 @@ window.UpstreamView = Backbone.View.extend({
         }
         self.checkImputs();
         hideMsg('.my-modal-wait');
-    },
-    testeNginx: function(callback) {
-        var self = this;
-        if (!callback) {
-            displayWait('.my-modal-wait');
-        }
-        modem("POST", '/nginx/test', function(data) {
-            if (!callback) {
-                hideMsg('.my-modal-wait');
-            }
-            if (data.status === "nginx test ok") {
-                if (callback) {
-                    callback();
-                }
-                showmsg('.my-modal', "success", "NGinx Test OK!", true);
-            } else if (data.status === 'nginx test warning') {
-                $('.restart-nginx').prop('disabled', false);
-                if (callback) {
-                    callback();
-                } else {
-                    showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
-                }
-            } else {
-                $('.restart-nginx').prop('disabled', true);
-                showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-            }
-        }, function(xhr, ajaxOptions, thrownError) {
-            var json = JSON.parse(xhr.responseText);
-            error_launch(json.message);
-        }, {
-            data: self.instanceId
-        });
     },
     render: function() {
         var self = this;
