@@ -139,7 +139,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
     init: function() {
         var self = this;
         $('body').on('input', function(e) {});
-        hideMsg('.my-modal');
+        // hideMsg('.my-modal');
         $.AdminLTE.boxWidget.activate();
 
         modem("GET",
