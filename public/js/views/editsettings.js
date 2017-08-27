@@ -91,7 +91,7 @@ window.EditsettingsView = Backbone.View.extend({
                 modem("POST",
                     "/nginx/removeserver",
                     function(data) {
-                        if (data.status === "Server deleted") {
+                        if (data.status === "OK") {
                             $(self.el).find(".server-settings").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
                                 "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
                                 "<hr class='soften' />");
@@ -99,7 +99,7 @@ window.EditsettingsView = Backbone.View.extend({
                             $(self.el).find(".select-server.selectpicker").find('[value=' + idServer + ']').remove();
                             $(self.el).find(".select-server.selectpicker").selectpicker('refresh');
                             showmsg('.my-modal', "success", "This server deleted.", false);
-                        } else if (data.status === "Server delete Error") {
+                        } else if (data.status === "ERROR") {
                             showmsg('.my-modal', "error", "Error to delete this server.", false);
                         }
                     },
@@ -176,7 +176,7 @@ window.EditsettingsView = Backbone.View.extend({
             modem("POST",
                 "/nginx/saveserver",
                 function(data) {
-                    if (data.status === "Server Created") {
+                    if (data.status === "OK") {
                         $('.test-nginx').prop('disabled', false);
                         $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
 
