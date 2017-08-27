@@ -2,7 +2,7 @@
 
 require('colors');
 var cp = require('child_process'),
-	collServer 0 require('./collectorServer.js'),
+	collServer = require('./collectorServer.js'),
     Collector = require('./lib/collector/collector.js');
 
 
