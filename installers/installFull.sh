@@ -72,7 +72,8 @@ if [ $(id -u) -ne 0 ] ; then
 	${bold}${red}   Please run as root ${normal}"
 	exit 1 ;
 fi
-
+cd
+folderNginx=$(pwd)/nginxConfigTool
 SELINUX=disabled
 
 # If system redhat
@@ -154,34 +155,40 @@ elif [ -f /etc/lsb-release ]; then
 
 fi
 
+if [ ! -d /root/.ssh ]; then
+  exec_cmd "sudo mkdir .ssh"
+fi
+
+cd /root && cd .ssh && [ -f ./id_rsa ] && echo "Rsa Key Found" || (echo "Rsa Key Not found, Create RSA Key" && ssh-keygen -t rsa -N "" -f id_rsa)
+
 cd
-exec_cmd 'rm -rf nginxConfigTool'
+exec_cmd 'rm -rf ${folderNginx}'
 print_status "Clone git repository NGINX Config Tool"
 exec_cmd 'git clone https://github.com/ricardoSa84/nginxConfigTool'
 
 print_status "Install node models"
-exec_cmd "cd $(pwd)/nginxConfigTool/ && sudo npm install"
-exec_cmd "cd $(pwd)/nginxConfigTool/ && sudo npm install opennebula"
+exec_cmd "cd ${folderNginx}/ && sudo npm install"
+exec_cmd "cd ${folderNginx}/ && sudo npm install opennebula"
 
 cd
 print_status "Copy necessary files to works this program."
-exec_cmd "sudo mv -f $(pwd)/nginxConfigTool/FilesMove/dashboard /etc/nginx/ || sudo cp -f $(pwd)/nginxConfigTool/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
-exec_cmd "sudo cp $(pwd)/nginxConfigTool/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
+exec_cmd "sudo mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || sudo cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
+exec_cmd "sudo cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
 
 print_status "Backup nginx.conf to nginx.conf.back."
 exec_cmd "sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back"
 
 print_status "Add new file nginx.conf."
-exec_cmd "sudo cp $(pwd)/nginxConfigTool/FilesMove/nginx/nginx.conf /etc/nginx/ || true"
+exec_cmd "sudo cp ${folderNginx}/FilesMove/nginx/nginx.conf /etc/nginx/ || true"
 
 print_status "Remove Old Files."
-exec_cmd "sudo rm -rf $(pwd)/nginxConfigTool/FilesMove || true"
+exec_cmd "sudo rm -rf ${folderNginx}/FilesMove || true"
 
 
 print_status "Install module to run nginxConfigTool."
 exec_cmd "sudo npm install pm2 -g"
 cd
-exec_cmd "cd $(pwd)/nginxConfigTool/ && sudo pm2 start main.js --name 'nginxConfigTool' || true"
+exec_cmd "cd ${folderNginx}/ && sudo pm2 start main.js --name 'nginxConfigTool' || true"
 exec_cmd "sudo pm2 save || true"
 exec_cmd "sudo pm2 startup systemd || true"
 
