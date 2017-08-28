@@ -3,7 +3,10 @@ var fs = require('fs');
 module.exports = {
     mongodb: 'mongodb://127.0.0.1:27017/NginxTool',
 
-    sshKeyUser: fs.readFileSync('/var/lib/one/.ssh/id_rsa.pub').toString(),
+    fileInstallerFull : './installers/installFull.sh',
+    fileIntallerCollector: './installers/installCollector.sh',
+    sshKeyUser: '/var/lib/one/.ssh/id_rsa.pub',
+    sshKeyRoot: '/root/.ssh/id_rsa.pub',
 
     openNebulaparams: {
         one: {
