@@ -198,18 +198,4 @@ exec_cmd "sudo pm2 startup systemd || true"
 print_status "Restart system services."
 exec_cmd "sudo service nginx restart || sudo service nginx start"
 
-print_bold \
-"                            NGINX Config Tool                           " "\
-	${bold} This install complete.
-	${yellow} Restart your system ${normal}
-	${bold} Access your favorite browser and access to this server at
-	${blue} http://$(hostname -I) ${normal}
-	 Use
-		---------------------------
-		| user : \"admin@admin.pt\" |
-		| pass : \"admin\"          |
-		---------------------------
-
-Autores: Nelson Gomes & Ricardo Anacleto	  		"
-
 exit 0
