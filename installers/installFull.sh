@@ -184,6 +184,8 @@ exec_cmd "sudo cp ${folderNginx}/FilesMove/nginx/nginx.conf /etc/nginx/ || true"
 print_status "Remove Old Files."
 exec_cmd "sudo rm -rf ${folderNginx}/FilesMove || true"
 
+print_status "Populate MongoDB."
+exec_cmd "cd ${folderNginx}/ && node startPopulateDB.js || true"
 
 print_status "Install module to run nginxConfigTool."
 exec_cmd "sudo npm install pm2 -g"
