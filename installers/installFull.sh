@@ -179,7 +179,13 @@ print_status "Backup nginx.conf to nginx.conf.back."
 exec_cmd "sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back"
 
 print_status "Add new file nginx.conf."
-exec_cmd "sudo cp ${folderNginx}/FilesMove/nginx/nginx.conf /etc/nginx/ || true"
+# If system redhat
+if [ -f /etc/redhat-release ]; then
+	exec_cmd "sudo cp ${folderNginx}/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true"
+# if system debian
+elif [ -f /etc/lsb-release ]; then
+	exec_cmd "sudo cp ${folderNginx}/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true"
+fi
 
 print_status "Remove Old Files."
 exec_cmd "sudo rm -rf ${folderNginx}/FilesMove || true"
