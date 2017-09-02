@@ -112,7 +112,9 @@ window.EditsettingsView = Backbone.View.extend({
         "click .server-create": "serversave",
         "click .test-nginx": function() {
             var self = this;
-            this.reloadstatus(self.testeNginx(null));
+            this.reloadstatus(function() {
+                self.testeNginx(null);
+            });
         },
         "click .restart-nginx": function() {
             var self = this;
