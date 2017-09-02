@@ -111,30 +111,33 @@ window.EditsettingsView = Backbone.View.extend({
         },
         "click .server-create": "serversave",
         "click .test-nginx": function() {
-            this.testeNginx(null);
+            var self = this;
+            this.reloadstatus(self.testeNginx(null));
         },
         "click .restart-nginx": function() {
             var self = this;
-            this.testeNginx(function() {
-                displayWait('.my-modal-wait');
-                modem("POST", '/nginx/reload', function(data) {
-                    hideMsg('.my-modal-wait');
-                    // console.log('chegou aqui:', data);
-                    if (data.status === "nginx reload ok") {
-                        // $('.restart-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "success", "NGinx Test OK!", false);
-                    } else if (data.status === 'nginx test warning') {
-                        // $('.restart-nginx').prop('disabled', false);
-                        showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
-                    } else {
-                        // $('.restart-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
-                    }
-                }, function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {
-                    data: self.instanceselected
+            this.reloadstatus(function() {
+                self.testeNginx(function() {
+                    displayWait('.my-modal-wait');
+                    modem("POST", '/nginx/reload', function(data) {
+                        hideMsg('.my-modal-wait');
+                        // console.log('chegou aqui:', data);
+                        if (data.status === "nginx reload ok") {
+                            // $('.restart-nginx').prop('disabled', false);
+                            showmsg('.my-modal', "success", "NGinx Test OK!", false);
+                        } else if (data.status === 'nginx test warning') {
+                            // $('.restart-nginx').prop('disabled', false);
+                            showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
+                        } else {
+                            // $('.restart-nginx').prop('disabled', true);
+                            showmsg('.my-modal', "error", data.stdout.replace(/\n/g, '<br>'), false);
+                        }
+                    }, function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, {
+                        data: self.instanceselected
+                    });
                 });
             });
         },
@@ -176,32 +179,34 @@ window.EditsettingsView = Backbone.View.extend({
             serverconfig.instanceid = self.instanceselected;
             serverconfig.lastkey = self.instanceselected + "-" + serverconfig.lastkey;
             // console.log(serverconfig);
-            modem("POST",
-                "/nginx/saveserver",
-                function(data) {
-                    if (data.status === "OK") {
-                        // $('.test-nginx').prop('disabled', false);
-                        $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
+            self.reloadstatus(function() {
+                modem("POST",
+                    "/nginx/saveserver",
+                    function(data) {
+                        if (data.status === "OK") {
+                            // $('.test-nginx').prop('disabled', false);
+                            $(self.el).find('.select-server.selectpicker').find('[value=newserver]').remove();
 
-                        $('.select-server.selectpicker').append('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>' + "<option value='newserver'>Create New Server</option>");
-                        $('.select-server.selectpicker').selectpicker("refresh");
-                        $('.select-server.selectpicker').val(serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port).change();
-                        showmsg('.my-modal', "success", "The server has been correctly saved!", false);
-                    } else if (data.status === "Server Exists") {
-                        // $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "warning", "This server, ServerName '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
+                            $('.select-server.selectpicker').append('<option value="' + serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port + '" selected="">Hostname - ' + serverconfig.servername + ' / Port - ' + serverconfig.port + '</option>' + "<option value='newserver'>Create New Server</option>");
+                            $('.select-server.selectpicker').selectpicker("refresh");
+                            $('.select-server.selectpicker').val(serverconfig.instanceid + "-" + serverconfig.servername + "-" + serverconfig.port).change();
+                            showmsg('.my-modal', "success", "The server has been correctly saved!", false);
+                        } else if (data.status === "Server Exists") {
+                            // $('.test-nginx').prop('disabled', true);
+                            showmsg('.my-modal', "warning", "This server, ServerName '" + serverconfig.servername + "' port '" + serverconfig.port + "' already exists on the system.", false);
 
-                    } else {
-                        // $('.test-nginx').prop('disabled', true);
-                        showmsg('.my-modal', "error", data.stdout, false);
-                    }
-                },
-                function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {
-                    data: serverconfig
-                });
+                        } else {
+                            // $('.test-nginx').prop('disabled', true);
+                            showmsg('.my-modal', "error", data.stdout, false);
+                        }
+                    },
+                    function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, {
+                        data: serverconfig
+                    });
+            });
         }
     },
     testeNginx: function(callback) {
@@ -237,6 +242,23 @@ window.EditsettingsView = Backbone.View.extend({
         }, {
             data: self.instanceselected
         });
+    },
+    reloadstatus: function(callback) {
+        var self = this;
+        modem("GET",
+            '/vm/statusInstance/' + self.selectedInstance._id,
+            function(data) {
+                // console.log(data);
+                if (data.status === "OK") {
+                    callback();
+                } else {
+                    showmsg('.my-modal', "error", data.stdout, false);
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
     },
     render: function() {
         var self = this;
