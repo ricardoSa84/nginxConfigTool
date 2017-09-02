@@ -240,7 +240,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
     reloadstatus: function(callback) {
         var self = this;
         modem("GET",
-            '/vm/statusInstance/' + self.selectedInstance._id,
+            '/vm/statusInstance/' + self.instanceselected,
             function(data) {
                 // console.log(data);
                 if (data.status === "OK") {
