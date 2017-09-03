@@ -255,14 +255,13 @@ window.InstanceServerView = Backbone.View.extend({
                 $(self.el).find('.instance-action[data-action="restart"]').attr("disabled", true);
                 break;
         }
-        // if (self.instanceStatusLast !== self..instanceStatus) {
-        //     var self = this;
-        //     self.instanceStatusLast = self..instanceStatus
-        //     setTimeout(function() {
-        //         self.reloadstatus();
-        //         console.log("setTimeout run");
-        //     }, 3000);
-        // }
+        if (self.instanceStatusLast !== self..instanceStatus) {
+            self.instanceStatusLast = self..instanceStatus
+            setTimeout(function() {
+                self.reloadstatus();
+                console.log("setTimeout run");
+            }, 3000);
+        }
     },
     render: function() {
         var self = this;
