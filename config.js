@@ -17,7 +17,7 @@ module.exports = {
             sunstone: 'http://127.0.0.1'
         }
     },
-
+    
     serverHttpParams: {
         porthttp: 3000,
         stationServer: 'http://' + cp.execSync("ifconfig br0 | grep 'UP' -A1 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'").toString().replace(/[\n|\t]/g, ''),
