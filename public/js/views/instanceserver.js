@@ -3,6 +3,7 @@ window.InstanceServerView = Backbone.View.extend({
     instancecontinue: false,
     templateNum: null,
     templateName: "",
+    instanceStatus: null,
     selectedInstance: null,
     editmode: false,
     events: {
@@ -181,7 +182,6 @@ window.InstanceServerView = Backbone.View.extend({
         self.checkInputs();
         hideMsg('.my-modal-wait');
         self.reloadstatus();
-
     },
     reloadstatus: function() {
         var self = this;
@@ -194,6 +194,8 @@ window.InstanceServerView = Backbone.View.extend({
                         '<div class="box"><div class="box-header with-border"><h2 class="box-title"><i class="fa fa-cloud"></i> Status Instance</h2> </div><div class="box-body"><div class="col-md-3"></div><div class="col-md-6"><button type="button " class="btn btn-default btn-block refresh-instance"><label><i class="fa fa-refresh" aria-hidden="true"></i> Status Instance</label></button><table class="table table-condensed"><tbody>' +
                         function() {
                             var ht = "";
+                            self.instanceStatus = data.stdout.status;
+                            console.log("Status", self.instanceStatus);
                             $.each(data.stdout, function(k, v) {
                                 $.each(v, function(key, value) {
                                     // console.log("T- ", key + ": " + value);
