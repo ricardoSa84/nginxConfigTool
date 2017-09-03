@@ -1,9 +1,10 @@
-var fs = require('fs');
+var fs = require('fs'),
+    cp = require('child_process');
 
 module.exports = {
     mongodb: 'mongodb://127.0.0.1:27017/NginxTool',
 
-    fileInstallerFull : './installers/installFull.sh',
+    fileInstallerFull: './installers/installFull.sh',
     fileIntallerCollector: './installers/installCollector.sh',
     sshKeyUser: '/var/lib/one/.ssh/id_rsa.pub',
     sshKeyRoot: '/root/.ssh/id_rsa.pub',
@@ -19,12 +20,12 @@ module.exports = {
 
     serverHttpParams: {
         porthttp: 3000,
-        stationServer: 'http://127.0.0.1',
+        stationServer: 'http://' + cp.execSync("ifconfig br0 | grep 'UP,BROADCAST' -A1 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'"),
         stationPort: 8080
     },
 
-    defaultUser : {
+    defaultUser: {
         email: "admin@admin.pt",
         pass: "admin"
     }
-} 
+}
