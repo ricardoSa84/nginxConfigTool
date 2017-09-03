@@ -4,6 +4,7 @@ window.InstanceServerView = Backbone.View.extend({
     templateNum: null,
     templateName: "",
     instanceStatus: null,
+    instanceStatusLast: null,
     selectedInstance: null,
     editmode: false,
     events: {
@@ -253,6 +254,14 @@ window.InstanceServerView = Backbone.View.extend({
                 $(self.el).find('.instance-action[data-action="pause"]').attr("disabled", true);
                 $(self.el).find('.instance-action[data-action="restart"]').attr("disabled", true);
                 break;
+        }
+        if (self.instanceStatusLast !== self..instanceStatus) {
+            var self = this;
+            self.instanceStatusLast = self..instanceStatus;
+            setTimeout(function() {
+                self.reloadstatus();
+                console.log("setTimeout run");
+            }, 3000);
         }
     },
     render: function() {
