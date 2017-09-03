@@ -204,10 +204,13 @@ window.InstanceServerView = Backbone.View.extend({
                                         ht += '<td>' + value + '</td>';
                                     } else {
                                         ht += '<td><table class="table table-condensed"><tbody>';
+                                        ht += '<tr><th><label>Id</label></th><th><label>IP</label></th><th><label>Mac</label></th></tr>'
                                         $.each(value, function(k2, v2) {
+                                            ht += '<tr>';
                                             $.each(v2, function(key2, value2) {
-                                                ht += '<tr><td><label>' + key2 + '</label></td><td>' + value2 + '</td>'
+                                                ht += '<td>' + value2 + '</td>'
                                             });
+                                            ht += '</tr>';
                                         });
                                         ht += '</tbody></table></td>';
                                     }
@@ -260,7 +263,7 @@ window.InstanceServerView = Backbone.View.extend({
             setTimeout(function() {
                 self.reloadstatus();
                 console.log("setTimeout run");
-            }, 3000);
+            }, 5000);
         }
     },
     render: function() {
