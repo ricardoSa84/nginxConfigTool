@@ -216,7 +216,7 @@ window.InstanceServerView = Backbone.View.extend({
                             return ht;
                         }() +
                         '</tbody></table></div></div></div>');
-                    console.log("Status", self.instanceStatus);
+                    self.btnaction();
                 } else {
                     showmsg('.my-modal', "error", data.stdout, false);
                 }
@@ -225,6 +225,35 @@ window.InstanceServerView = Backbone.View.extend({
                 var json = JSON.parse(xhr.responseText);
                 error_launch(json.message);
             }, {});
+    },
+    btnaction: function() {
+        var self = this;
+        switch (self.instanceStatus) {
+            case 'running':
+                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", false);
+                break;
+            case 'stopped':
+                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", true);
+                break;
+            case 'paused':
+                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", false);
+                break;
+            case 'pending':
+                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", true);
+                break;
+        }
     },
     render: function() {
         var self = this;
