@@ -262,8 +262,8 @@ window.InstanceServerView = Backbone.View.extend({
             self.instanceStatusLast = self.instanceStatus;
             setTimeout(function() {
                 self.reloadstatus();
-                console.log("setTimeout run");
-            }, 5000);
+                // console.log("setTimeout run");
+            }, 10000);
         }
     },
     render: function() {
