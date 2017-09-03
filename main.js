@@ -10,7 +10,6 @@ var Main = function() {
         stationServer: config.serverHttpParams.stationServer,
         stationPort: config.serverHttpParams.stationPort
     };
-    console.log("Params main", args);
     // inicia p script e envia as configuracores do ficheiro ini
     var child2 = cp.fork('./lib/serverHTTP');
     child2.send({ "serverdata": args });
