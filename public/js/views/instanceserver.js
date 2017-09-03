@@ -192,7 +192,7 @@ window.InstanceServerView = Backbone.View.extend({
                 // console.log(data);
                 if (data.status === "OK") {
                     $(self.el).find(".status-instance").html('' +
-                        '<div class="box"><div class="box-header with-border"><h2 class="box-title"><i class="fa fa-cloud"></i> Status Instance</h2> </div><div class="box-body"><div class="col-md-3"></div><div class="col-md-6"><button type="button " class="btn btn-default btn-block refresh-instance"><label><i class="fa fa-refresh" aria-hidden="true"></i> Status Instance</label></button><table class="table table-condensed"><tbody>' +
+                        '<div class="box"><div class="box-header with-border"><h2 class="box-title"><i class="fa fa-cloud"></i> Status Instance</h2> </div><div class="box-body"><div class="col-md-2"></div><div class="col-md-8"><button type="button " class="btn btn-default btn-block refresh-instance"><label><i class="fa fa-refresh" aria-hidden="true"></i> Status Instance</label></button><table class="table table-condensed"><tbody>' +
                         function() {
                             var ht = "";
                             self.instanceStatus = data.stdout.details.status;
