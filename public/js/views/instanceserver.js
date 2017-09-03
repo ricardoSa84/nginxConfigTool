@@ -230,28 +230,28 @@ window.InstanceServerView = Backbone.View.extend({
         var self = this;
         switch (self.instanceStatus) {
             case 'running':
-                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", false);
-                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", false);
-                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="start"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="stop"]').prop("disabled", false);
+                $(self.el).find('.instance-action [data-action="pause"]').prop("disabled", false);
+                $(self.el).find('.instance-action [data-action="restart"]').prop("disabled", false);
                 break;
             case 'stopped':
-                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", false);
-                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="start"]').prop("disabled", false);
+                $(self.el).find('.instance-action [data-action="stop"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="pause"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').prop("disabled", true);
                 break;
             case 'paused':
-                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", false);
-                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", false);
-                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", false);
+                $(self.el).find('.instance-action [data-action="start"]').prop("disabled", false);
+                $(self.el).find('.instance-action [data-action="stop"]').prop("disabled", false);
+                $(self.el).find('.instance-action [data-action="pause"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').prop("disabled", false);
                 break;
             case 'pending':
-                $(self.el).find('.instance-action [data-action="start"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="stop"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="pause"]').attr("disabled", true);
-                $(self.el).find('.instance-action [data-action="restart"]').attr("disabled", true);
+                $(self.el).find('.instance-action [data-action="start"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="stop"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="pause"]').prop("disabled", true);
+                $(self.el).find('.instance-action [data-action="restart"]').prop("disabled", true);
                 break;
         }
     },
