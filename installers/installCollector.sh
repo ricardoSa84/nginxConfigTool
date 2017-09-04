@@ -85,9 +85,9 @@ exec_cmd "git clone https://github.com/ricardoSa84/nginxConfigTool"
 exec_cmd "cd ${folderNginx} && sudo npm install"
 exec_cmd "cd ${folderNginx} && sudo npm install opennebula"
 
-cd
-exec_cmd "sudo mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || sudo cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
-exec_cmd "sudo cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
+# cd
+# exec_cmd "sudo mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || sudo cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
+# exec_cmd "sudo cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
 
 exec_cmd "sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back"
 
