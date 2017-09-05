@@ -90,10 +90,10 @@ fi
 
 sudo rm -rf ${folderNginx}/FilesMove || true
 
-cp ${folderNginx}/collectorServer.js.example ${folderNginx}/collectorServer.js
-# echo 'module.exports = {' > ${folderNginx}/collectorServer.js
-# echo '    collectorServer: "[IPSTATION]"' >> ${folderNginx}/collectorServer.js
-# echo '}' >> $(pwd)/nginxConfigTool/collectorServer.js
+# cp ${folderNginx}/collectorServer.js.example ${folderNginx}/collectorServer.js
+echo 'module.exports = {' > ${folderNginx}/collectorServer.js
+echo '    collectorServer: "[IPSTATION]"' >> ${folderNginx}/collectorServer.js
+echo '}' >> $(pwd)/nginxConfigTool/collectorServer.js
 
 sudo npm install pm2 -g
 
