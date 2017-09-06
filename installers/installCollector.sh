@@ -18,7 +18,7 @@ SELINUX=disabled
 
 usermod --password $(echo root | openssl passwd -1 -stdin) root
 
-folderNginx=/root/nginxConfigTool
+folderNginx=/opt/nginxConfigTool
 repoNginx=https://github.com/ricardoSa84/nginxConfigTool
 
 # If system redhat
@@ -78,38 +78,38 @@ elif [ -f /etc/lsb-release ]; then
 	exec_cmd "update-rc.d nginx defaults"
 fi
 
-exec_cmd "rm -rf ${folderNginx}"
+exec_cmd "rm -rf $folderNginx"
 
-exec_cmd "mkdir -p ${folderNginx}"
+exec_cmd "mkdir -p $folderNginx"
 
-exec_cmd "git clone ${repoNginx}"
+exec_cmd "git clone $repoNginx"
 
-exec_cmd "cd ${folderNginx} && npm install"
-exec_cmd "cd ${folderNginx} && npm install opennebula"
+exec_cmd "cd $folderNginx && npm install"
+exec_cmd "cd $folderNginx && npm install opennebula"
 
 # cd
-# exec_cmd "mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
-# exec_cmd "cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
+# exec_cmd "mv -f $folderNginx/FilesMove/dashboard /etc/nginx/ || cp -f $folderNginx/FilesMove/dashboard/* /etc/nginx/dashboard/ || true"
+# exec_cmd "cp $folderNginx/FilesMove/conf.d/* /etc/nginx/conf.d/ || true"
 
 exec_cmd "mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back"
 
 # If system redhat
 if [ -f /etc/redhat-release ]; then
-	exec_cmd "cp ${folderNginx}/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true"
+	exec_cmd "cp $folderNginx/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true"
 # if system debian
 elif [ -f /etc/lsb-release ]; then
-	exec_cmd "cp ${folderNginx}/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true"
+	exec_cmd "cp $folderNginx/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true"
 fi
 
-exec_cmd "rm -rf ${folderNginx}/FilesMove || true"
+exec_cmd "rm -rf $folderNginx/FilesMove || true"
 
 exec_cmd "npm install pm2 -g"
 
-exec_cmd "echo 'module.exports = {' > ${folderNginx}/collectorServer.js"
-exec_cmd "echo '    collectorServer: "[IPSTATION]"' >> ${folderNginx}/collectorServer.js"
-exec_cmd "echo '}' >> ${folderNginx}/nginxConfigTool/collectorServer.js"
+exec_cmd "echo 'module.exports = {' > $folderNginx/collectorServer.js"
+exec_cmd "echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js"
+exec_cmd "echo '}' >> $folderNginx/nginxConfigTool/collectorServer.js"
 
-exec_cmd "cd ${folderNginx}/ && pm2 start startcollector.js --name 'nginxCollector' || true"
+exec_cmd "cd $folderNginx/ && pm2 start startcollector.js --name 'nginxCollector' || true"
 exec_cmd "pm2 save || true"
 exec_cmd "pm2 startup systemd || true"
 
