@@ -32,14 +32,14 @@ if [ -f /etc/redhat-release ]; then
 	echo 'enabled=1' >> /etc/yum.repos.d/mongodb-org.repo
 	echo 'gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc' >> /etc/yum.repos.d/mongodb-org.repo
 
-	sudo yum repolist
+	yum repolist
 
 	curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
-	sudo yum install -y nodejs nginx git mongodb-org net-tools nano
+	yum install -y nodejs nginx git mongodb-org net-tools nano
 
-	sudo chkconfig nginx on
+	chkconfig nginx on
 
-	sudo systemctl start mongod || sudo systemctl reload mongod
+	systemctl start mongod || systemctl reload mongod
 
 	echo "Fim If Red Hat" >> /root/log.log
 #fi
@@ -55,67 +55,67 @@ elif [ -f /etc/lsb-release ]; then
 			DISTRO="${4}"
 		fi
 	}
-	sudo apt-get install curl -y
+	apt-get install curl -y
 
-	wget https://nginx.org/keys/nginx_signing.key -O - | sudo apt-key add -
-	echo 'deb http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | sudo tee /etc/apt/sources.list.d/nginx.list
-	echo 'deb-src http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | sudo tee /etc/apt/sources.list.d/nginx.list
+	wget https://nginx.org/keys/nginx_signing.key -O - | apt-key add -
+	echo 'deb http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | tee /etc/apt/sources.list.d/nginx.list
+	echo 'deb-src http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | tee /etc/apt/sources.list.d/nginx.list
 
-	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-	echo 'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+	echo 'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-3.2.list
 
 	curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-	sudo apt-get install -y nodejs nginx git
+	apt-get install -y nodejs nginx git
 
-	sudo update-rc.d nginx defaults
+	update-rc.d nginx defaults
 fi
 
-sudo rm -rf ${folderNginx}
+rm -rf $folderNginx
 
-echo "${nginxToolRep} ${folderNginx}" >> /root/log.log
+echo "$nginxToolRep $folderNginx" >> /root/log.log
 
-git clone ${nginxToolRep} ${folderNginx}
+git clone $nginxToolRep $folderNginx
 
 echo "Inicio install modules" >> /root/log.log
 
-cd ${folderNginx} && sudo npm install
-cd ${folderNginx} && sudo npm install opennebula
+cd $folderNginx && npm install
+cd $folderNginx && npm install opennebula
 
 echo "Fim install modules" >> /root/log.log
 
 # cd
-# sudo mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || sudo cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true
-# sudo cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true
+# mv -f $folderNginx/FilesMove/dashboard /etc/nginx/ || cp -f $folderNginx/FilesMove/dashboard/* /etc/nginx/dashboard/ || true
+# cp $folderNginx/FilesMove/conf.d/* /etc/nginx/conf.d/ || true
 
 echo "Backup nginx.conf" >> /root/log.log
 
-sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back
+mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back
 
 echo "Copy new file" >> /root/log.log
 # If system redhat
 if [ -f /etc/redhat-release ]; then
-	sudo cp ${folderNginx}/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true
+	cp $folderNginx/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true
 # if system debian
 elif [ -f /etc/lsb-release ]; then
-	sudo cp ${folderNginx}/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true
+	cp $folderNginx/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true
 fi
 
-# sudo rm -rf ${folderNginx}/FilesMove || true
+# rm -rf $folderNginx/FilesMove || true
 
 
 echo "Create new file collector" >> /root/log.log
 
-# cp ${folderNginx}/collectorServer.js.example ${folderNginx}/collectorServer.js
-echo 'module.exports = {' > ${folderNginx}/collectorServer.js
-echo '    collectorServer: "[IPSTATION]"' >> ${folderNginx}/collectorServer.js
-echo '}' >> $(pwd)/nginxConfigTool/collectorServer.js
+# cp $folderNginx/collectorServer.js.example $folderNginx/collectorServer.js
+echo 'module.exports = {' > $folderNginx/collectorServer.js
+echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
+echo '}' >> $folderNginx/collectorServer.js
 
-sudo npm install pm2 -g
+npm install pm2 -g
 
-cd ${folderNginx}/ && sudo pm2 start startcollector.js --name 'nginxCollector' || true
-sudo pm2 save || true
-sudo pm2 startup systemd || true
+cd $folderNginx/ && pm2 start startcollector.js --name 'nginxCollector' || true
+pm2 save || true
+pm2 startup systemd || true
 
-sudo service nginx restart || sudo service nginx start
+service nginx restart || service nginx start
 
 exit 0
