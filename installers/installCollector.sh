@@ -4,7 +4,7 @@ usermod --password $(echo root | openssl passwd -1 -stdin) root
 
 SELINUX=disabled
 
-folderNginx=/var/nginxConfigTool
+folderNginx=/root/nginxConfigTool
 repoNginx=https://github.com/ricardoSa84/nginxConfigTool
 
 rm -rf $folderNginx
