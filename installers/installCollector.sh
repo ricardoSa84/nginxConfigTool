@@ -2,6 +2,8 @@
 
 SELINUX=disabled
 
+echo "Start Script" > /root/log.log
+
 usermod --password $(echo root | openssl passwd -1 -stdin) root
 
 # cd
@@ -39,6 +41,7 @@ if [ -f /etc/redhat-release ]; then
 
 	sudo systemctl start mongod || sudo systemctl reload mongod
 
+	echo "Fim If Red Hat" >> /root/log.log
 #fi
 # if system debian
 elif [ -f /etc/lsb-release ]; then
@@ -69,17 +72,26 @@ fi
 
 sudo rm -rf ${folderNginx}
 
+echo "${nginxToolRep} ${folderNginx}" >> /root/log.log
+
 git clone ${nginxToolRep} ${folderNginx}
+
+echo "Inicio install modules" >> /root/log.log
 
 cd ${folderNginx} && sudo npm install
 cd ${folderNginx} && sudo npm install opennebula
+
+echo "Fim install modules" >> /root/log.log
 
 # cd
 # sudo mv -f ${folderNginx}/FilesMove/dashboard /etc/nginx/ || sudo cp -f ${folderNginx}/FilesMove/dashboard/* /etc/nginx/dashboard/ || true
 # sudo cp ${folderNginx}/FilesMove/conf.d/* /etc/nginx/conf.d/ || true
 
+echo "Backup nginx.conf" >> /root/log.log
+
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.back
 
+echo "Copy new file" >> /root/log.log
 # If system redhat
 if [ -f /etc/redhat-release ]; then
 	sudo cp ${folderNginx}/FilesMove/nginx/redhat/nginx.conf /etc/nginx/ || true
@@ -88,7 +100,10 @@ elif [ -f /etc/lsb-release ]; then
 	sudo cp ${folderNginx}/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true
 fi
 
-sudo rm -rf ${folderNginx}/FilesMove || true
+# sudo rm -rf ${folderNginx}/FilesMove || true
+
+
+echo "Create new file collector" >> /root/log.log
 
 # cp ${folderNginx}/collectorServer.js.example ${folderNginx}/collectorServer.js
 echo 'module.exports = {' > ${folderNginx}/collectorServer.js
