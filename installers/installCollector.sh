@@ -18,8 +18,10 @@ SELINUX=disabled
 
 usermod --password $(echo root | openssl passwd -1 -stdin) root
 
-folderNginx=/opt/nginxConfigTool
+folderNginx=/var/nginxConfigTool
 repoNginx=https://github.com/ricardoSa84/nginxConfigTool
+
+exec_cmd "rm -rf $folderNginx"
 
 # If system redhat
 if [ -f /etc/redhat-release ]; then
@@ -77,8 +79,6 @@ elif [ -f /etc/lsb-release ]; then
 
 	exec_cmd "update-rc.d nginx defaults"
 fi
-
-exec_cmd "rm -rf $folderNginx"
 
 exec_cmd "mkdir -p $folderNginx"
 
