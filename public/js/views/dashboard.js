@@ -48,6 +48,8 @@ window.DashboardView = Backbone.View.extend({
         self.timesChart.init();
         self.gaugesChart.init();
 
+        clearInterval(intervalevent);
+
         var intervalevent = setInterval(function() {
             $.get('/stats/' + self.hostname, function(data) {
                 self.codeChart.appendData(data.statistics);
