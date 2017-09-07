@@ -16,18 +16,18 @@ if [ -f /etc/redhat-release ]; then
 	releasever=$(rpm -q --qf "%{version}" -f /etc/$distro)
 	basearch=$(rpm -q --qf "%{arch}" -f /etc/$distro)
 
-	echo '[nginx]' > /etc/yum.repos.d/nginx.repo
-	echo 'name=nginx repo' >> /etc/yum.repos.d/nginx.repo
-	echo 'baseurl=http://nginx.org/packages/centos/$releasever/$basearch/' >> /etc/yum.repos.d/nginx.repo
-	echo 'gpgcheck=0' >> /etc/yum.repos.d/nginx.repo
-	echo 'enabled=1' >> /etc/yum.repos.d/nginx.repo
+	echo "[nginx]" > /etc/yum.repos.d/nginx.repo
+	echo "name=nginx repo" >> /etc/yum.repos.d/nginx.repo
+	echo "baseurl=http://nginx.org/packages/centos/$releasever/$basearch/" >> /etc/yum.repos.d/nginx.repo
+	echo "gpgcheck=0" >> /etc/yum.repos.d/nginx.repo
+	echo "enabled=1" >> /etc/yum.repos.d/nginx.repo
 
-	echo '[mongodb-org-3.2]' > /etc/yum.repos.d/mongodb-org.repo
-	echo 'name=MongoDB Repository' >> /etc/yum.repos.d/mongodb-org.repo
-	echo 'baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/' >> /etc/yum.repos.d/mongodb-org.repo
-	echo 'gpgcheck=1' >> /etc/yum.repos.d/mongodb-org.repo
-	echo 'enabled=1' >> /etc/yum.repos.d/mongodb-org.repo
-	echo 'gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc' >> /etc/yum.repos.d/mongodb-org.repo
+	echo "[mongodb-org-3.2]" > /etc/yum.repos.d/mongodb-org.repo
+	echo "name=MongoDB Repository" >> /etc/yum.repos.d/mongodb-org.repo
+	echo "baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/" >> /etc/yum.repos.d/mongodb-org.repo
+	echo "gpgcheck=1" >> /etc/yum.repos.d/mongodb-org.repo
+	echo "enabled=1" >> /etc/yum.repos.d/mongodb-org.repo
+	echo "gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc" >> /etc/yum.repos.d/mongodb-org.repo
 
 	yum repolist
 
@@ -56,13 +56,13 @@ elif [ -f /etc/lsb-release ]; then
 	apt-get install curl -y
 
 	wget https://nginx.org/keys/nginx_signing.key -O - | apt-key add -
-	echo 'deb http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | tee /etc/apt/sources.list.d/nginx.list
-	echo 'deb-src http://nginx.org/packages/ubuntu/ ${DISTRO} nginx' | tee /etc/apt/sources.list.d/nginx.list
+	echo "deb http://nginx.org/packages/ubuntu/ ${DISTRO} nginx" > /etc/apt/sources.list.d/nginx.list
+	echo "deb-src http://nginx.org/packages/ubuntu/ ${DISTRO} nginx" >> /etc/apt/sources.list.d/nginx.list
 
 	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-	echo 'deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+	echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.2.list
 
-	curl -sL https://deb.nodesource.com/setup_8.x | -E bash -
+	curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 
 	apt-get install -y nodejs nginx git
 
