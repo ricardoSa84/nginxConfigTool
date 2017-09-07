@@ -94,14 +94,9 @@ fi
 
 npm install pm2 -g
 
-# echo 'module.exports = {' > $folderNginx/collectorServer.js
-# echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
-# echo '}' >> $folderNginx/collectorServer.js
-
-echo '
-module.exports = {
-    collectorServer: "[IPSTATION]"
-}' > $folderNginx/collectorServer.js
+echo 'module.exports = {' > $folderNginx/collectorServer.js
+echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
+echo '}' >> $folderNginx/collectorServer.js
 
 cd $folderNginx/ && pm2 start startcollector.js --name 'nginxCollector' || true
 pm2 save || true
