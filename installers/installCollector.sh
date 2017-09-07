@@ -4,7 +4,7 @@ usermod --password $(echo root | openssl passwd -1 -stdin) root
 
 SELINUX=disabled
 
-folderNginx=/opt/nginxConfigTool
+folderNginx=/root/nginxConfigTool
 repoNginx=https://github.com/ricardoSa84/nginxConfigTool
 
 rm -rf $folderNginx
@@ -86,13 +86,11 @@ elif [ -f /etc/lsb-release ]; then
 	cp $folderNginx/FilesMove/nginx/debian/nginx.conf /etc/nginx/ || true
 fi
 
+echo 'module.exports = {
+    collectorServer: "[IPSTATION]"
+}' > $folderNginx/collectorServer.js
 
-echo 'module.exports = {' > $folderNginx/collectorServer.js
-echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
-echo '}' >> $folderNginx/collectorServer.js
-
-echo "
-[Unit]
+echo "[Unit]
 Description=nginxCollector - To a simple management
 
 [Service]
@@ -101,9 +99,7 @@ Group=root
 ExecStart=/usr/bin/node $folderNginx/startcollector.js
 WorkingDirectory=$folderNginx
 Restart=always
-# Restart service after 10 seconds if node service crashes
 RestartSec=10
-# Output to syslog
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=nginxConfigTool
