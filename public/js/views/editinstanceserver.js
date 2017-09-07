@@ -56,26 +56,28 @@ window.EditInstanceServerView = Backbone.View.extend({
         },
         "click .instance-delete": function() {
             var self = this;
-            modem("DELETE",
-                '/vm/deleteInstance/' + self.allInstances[self.instanceselected]._id,
-                function(data) {
-                    // console.log(data);
-                    if (data.status === "OK") {
-                        showmsg('.my-modal', "success", data.stdout, true);
-                        $(self.el).find(".instance-server").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
-                            "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
-                            "<hr class='soften' />");
-                        $(self.el).find(".select-instance.selectpicker").find('[value=' + self.allInstances[self.instanceselected]._id + ']').remove();
-                        $(self.el).find(".select-instance.selectpicker").selectpicker('refresh');
-                    } else {
-                        showmsg('.my-modal', "error", data.stdout, false);
-                    }
+            self.reloadstatus(function() {
+                modem("DELETE",
+                    '/vm/deleteInstance/' + self.allInstances[self.instanceselected]._id,
+                    function(data) {
+                        // console.log(data);
+                        if (data.status === "OK") {
+                            showmsg('.my-modal', "success", data.stdout, true);
+                            $(self.el).find(".instance-server").html("<img class='center-block' alt='' src='./img/Nginx-Logo.png' style='width: 15%; height: auto'>" +
+                                "<h1 class='text-center' style='text-shadow: -4px 4px hsla(0, 0%, 70%, .4),-3px 3px hsla(0, 0%, 60%, .2), -2px 2px hsla(0, 0%, 70%, .2), -1px 1px hsla(0, 0%, 70%, .2), 0px 0px hsla(0, 0%, 50%, .5), 1px -1px hsla(0, 0%, 30%, .6), 2px -2px hsla(0, 0%, 30%, .7), 3px -3px hsla(0, 0%, 32%, .8), 4px -4px hsla(0, 0%, 30%, .9), 5px -5px hsla(0, 0%, 30%, 1.0); font-family: 'Permanent Marker', cursive;'>Edit Server Settings</h1>" +
+                                "<hr class='soften' />");
+                            $(self.el).find(".select-instance.selectpicker").find('[value=' + self.allInstances[self.instanceselected]._id + ']').remove();
+                            $(self.el).find(".select-instance.selectpicker").selectpicker('refresh');
+                        } else {
+                            showmsg('.my-modal', "error", data.stdout, false);
+                        }
 
-                },
-                function(xhr, ajaxOptions, thrownError) {
-                    var json = JSON.parse(xhr.responseText);
-                    error_launch(json.message);
-                }, {});
+                    },
+                    function(xhr, ajaxOptions, thrownError) {
+                        var json = JSON.parse(xhr.responseText);
+                        error_launch(json.message);
+                    }, {});
+            });
         },
         "click .saveresize": function() {
             var self = this;
@@ -139,6 +141,23 @@ window.EditInstanceServerView = Backbone.View.extend({
                             }
                         }
                     }
+                }
+            },
+            function(xhr, ajaxOptions, thrownError) {
+                var json = JSON.parse(xhr.responseText);
+                error_launch(json.message);
+            }, {});
+    },
+    reloadstatus: function(callback) {
+        var self = this;
+        modem("GET",
+            '/vm/statusInstance/' + self.selectedInstance._id,
+            function(data) {
+                // console.log(data);
+                if (data.status === "OK") {
+                    callback();
+                } else {
+                    showmsg('.my-modal', "error", data.stdout, false);
                 }
             },
             function(xhr, ajaxOptions, thrownError) {

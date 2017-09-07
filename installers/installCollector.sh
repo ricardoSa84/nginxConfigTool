@@ -91,15 +91,15 @@ echo 'module.exports = {' > $folderNginx/collectorServer.js
 echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
 echo '}' >> $folderNginx/collectorServer.js
 
-echo '
+echo "
 [Unit]
 Description=nginxCollector - To a simple management
 
 [Service]
 User=root
 Group=root
-ExecStart=/usr/bin/node /opt/nginxConfigTool/startcollector.js
-WorkingDirectory=/opt/nginxConfigTool
+ExecStart=/usr/bin/node $folderNginx/startcollector.js
+WorkingDirectory=$folderNginx
 Restart=always
 # Restart service after 10 seconds if node service crashes
 RestartSec=10
@@ -110,7 +110,7 @@ SyslogIdentifier=nginxConfigTool
 Environment=NODE_ENV=production
 
 [Install]
-WantedBy=multi-user.target' > /etc/systemd/system/nginxCollector.service
+WantedBy=multi-user.target" > /etc/systemd/system/nginxCollector.service
 
 systemctl enable nginxCollector.service
 systemctl start nginxCollector.service
