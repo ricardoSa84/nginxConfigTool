@@ -56,7 +56,7 @@ window.EditInstanceServerView = Backbone.View.extend({
         },
         "click .instance-delete": function() {
             var self = this;
-            self.reloadstatus(function() {
+            self.instance.reloadstatus(function() {
                 modem("DELETE",
                     '/vm/deleteInstance/' + self.allInstances[self.instanceselected]._id,
                     function(data) {
@@ -141,23 +141,6 @@ window.EditInstanceServerView = Backbone.View.extend({
                             }
                         }
                     }
-                }
-            },
-            function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
-    },
-    reloadstatus: function(callback) {
-        var self = this;
-        modem("GET",
-            '/vm/statusInstance/' + self.allInstances[self.instanceselected]._id,
-            function(data) {
-                // console.log(data);
-                if (data.status === "OK") {
-                    callback();
-                } else {
-                    showmsg('.my-modal', "error", data.stdout, false);
                 }
             },
             function(xhr, ajaxOptions, thrownError) {

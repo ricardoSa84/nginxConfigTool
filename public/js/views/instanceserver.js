@@ -184,43 +184,48 @@ window.InstanceServerView = Backbone.View.extend({
         hideMsg('.my-modal-wait');
         self.reloadstatus();
     },
-    reloadstatus: function() {
+    reloadstatus: function(callback) {
         var self = this;
         modem("GET",
             '/vm/statusInstance/' + self.selectedInstance._id,
             function(data) {
                 // console.log(data);
                 if (data.status === "OK") {
-                    $(self.el).find(".status-instance").html('' +
-                        '<div class="box"><div class="box-header with-border"><h2 class="box-title"><i class="fa fa-cloud"></i> Status Instance</h2> </div><div class="box-body"><div class="col-md-2"></div><div class="col-md-8"><button type="button " class="btn btn-default btn-block refresh-instance"><label><i class="fa fa-refresh" aria-hidden="true"></i> Status Instance</label></button><table class="table table-condensed"><tbody>' +
-                        function() {
-                            var ht = "";
-                            self.instanceStatus = data.stdout.details.status;
-                            $.each(data.stdout, function(k, v) {
-                                $.each(v, function(key, value) {
-                                    // console.log("T- ", key + ": " + value);
-                                    ht += '<tr><td><label>' + key + '</label></td>';
-                                    if (typeof value !== 'object') {
-                                        ht += '<td>' + value + '</td>';
-                                    } else {
-                                        ht += '<td><table class="table table-condensed"><tbody>';
-                                        ht += '<tr><th><label>Id</label></th><th><label>IP</label></th><th><label>Mac</label></th></tr>'
-                                        $.each(value, function(k2, v2) {
-                                            ht += '<tr>';
-                                            $.each(v2, function(key2, value2) {
-                                                ht += '<td>' + value2 + '</td>'
+                    if (callback) {
+                        callback();
+                    } else {
+
+                        $(self.el).find(".status-instance").html('' +
+                            '<div class="box"><div class="box-header with-border"><h2 class="box-title"><i class="fa fa-cloud"></i> Status Instance</h2> </div><div class="box-body"><div class="col-md-2"></div><div class="col-md-8"><button type="button " class="btn btn-default btn-block refresh-instance"><label><i class="fa fa-refresh" aria-hidden="true"></i> Status Instance</label></button><table class="table table-condensed"><tbody>' +
+                            function() {
+                                var ht = "";
+                                self.instanceStatus = data.stdout.details.status;
+                                $.each(data.stdout, function(k, v) {
+                                    $.each(v, function(key, value) {
+                                        // console.log("T- ", key + ": " + value);
+                                        ht += '<tr><td><label>' + key + '</label></td>';
+                                        if (typeof value !== 'object') {
+                                            ht += '<td>' + value + '</td>';
+                                        } else {
+                                            ht += '<td><table class="table table-condensed"><tbody>';
+                                            ht += '<tr><th><label>Id</label></th><th><label>IP</label></th><th><label>Mac</label></th></tr>'
+                                            $.each(value, function(k2, v2) {
+                                                ht += '<tr>';
+                                                $.each(v2, function(key2, value2) {
+                                                    ht += '<td>' + value2 + '</td>'
+                                                });
+                                                ht += '</tr>';
                                             });
-                                            ht += '</tr>';
-                                        });
-                                        ht += '</tbody></table></td>';
-                                    }
-                                    ht += '</tr>'
+                                            ht += '</tbody></table></td>';
+                                        }
+                                        ht += '</tr>'
+                                    });
                                 });
-                            });
-                            return ht;
-                        }() +
-                        '</tbody></table></div></div></div>');
-                    self.btnaction();
+                                return ht;
+                            }() +
+                            '</tbody></table></div></div></div>');
+                        self.btnaction();
+                    }
                 } else {
                     showmsg('.my-modal', "error", data.stdout, false);
                 }
