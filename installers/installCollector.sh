@@ -92,15 +92,41 @@ fi
 
 # rm -rf $folderNginx/FilesMove || true
 
-npm install pm2 -g
+# npm install pm2 -g
 
 echo 'module.exports = {' > $folderNginx/collectorServer.js
 echo '    collectorServer: "[IPSTATION]"' >> $folderNginx/collectorServer.js
 echo '}' >> $folderNginx/collectorServer.js
 
-cd $folderNginx/ && pm2 start startcollector.js --name 'nginxCollector' || true
-pm2 save || true
-pm2 startup systemd || true
+echo '[Unit]' > /etc/systemd/system/nginxCollector.service
+echo 'Description=nginxCollector - To a simple management' >> /etc/systemd/system/nginxCollector.service
+echo '' >> /etc/systemd/system/nginxCollector.service
+echo '[Service]' >> /etc/systemd/system/nginxCollector.service
+echo 'User=root' >> /etc/systemd/system/nginxCollector.service
+echo 'Group=root' >> /etc/systemd/system/nginxCollector.service
+echo 'ExecStart=/usr/bin/node /opt/nginxConfigTool/main.js' >> /etc/systemd/system/nginxCollector.service
+echo 'WorkingDirectory=/opt/nginxConfigTool' >> /etc/systemd/system/nginxCollector.service
+echo 'Restart=always' >> /etc/systemd/system/nginxCollector.service
+echo '  # Restart service after 10 seconds if node service crashes' >> /etc/systemd/system/nginxCollector.service
+echo '  RestartSec=10' >> /etc/systemd/system/nginxCollector.service
+echo ' # Output to syslog' >> /etc/systemd/system/nginxCollector.service
+echo 'StandardOutput=syslog' >> /etc/systemd/system/nginxCollector.service
+echo 'StandardError=syslog' >> /etc/systemd/system/nginxCollector.service
+echo 'SyslogIdentifier=nginxConfigTool' >> /etc/systemd/system/nginxCollector.service
+echo 'Environment=NODE_ENV=production PORT=3000' >> /etc/systemd/system/nginxCollector.service
+echo '' >> /etc/systemd/system/nginxCollector.service
+echo '[Install]' >> /etc/systemd/system/nginxCollector.service
+echo 'WantedBy=multi-user.target' >> /etc/systemd/system/nginxCollector.service
+
+systemctl enable nginxCollector.service
+systemctl start nginxCollector.service
+
+
+
+
+# cd $folderNginx/ && pm2 start startcollector.js --name 'nginxCollector' || true
+# pm2 save || true
+# pm2 startup systemd || true
 
 service nginx restart || service nginx start
 
