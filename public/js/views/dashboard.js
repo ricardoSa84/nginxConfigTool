@@ -58,8 +58,9 @@ window.DashboardView = Backbone.View.extend({
                 self.populateHostname(data.hostnames);
                 self.cacheChart.appendData(data);
 
-                $(self.el).find('.selectpicker').selectpicker();
+                $(self.el).find('.select-hostname.selectpicker').selectpicker();
 
+                console.log(data.hostnames);
                 // console.log(data);
                 // console.log(data.cache);
                 // console.log(data.statistics);
