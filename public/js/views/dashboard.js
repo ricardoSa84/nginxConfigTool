@@ -11,8 +11,8 @@ window.DashboardView = Backbone.View.extend({
     timesChart: null,
     hostnames: [],
     events: {
-        "change .select-hostnam": function(e) {
-          $(this.el).find(".select-hostnam.selectpicker option:selected").each(function(index, element) {
+        "change .select-hostname": function(e) {
+          $(this.el).find(".select-hostname.selectpicker option:selected").each(function(index, element) {
                 opt += element.value;
             });
             this.hostname = opt;
