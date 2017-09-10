@@ -60,7 +60,7 @@ GaugesChart.prototype.formatData = function(data) {
     var counter = 0;
     var errors = data ? data.codes['400'] + data.codes['500'] + data.codes.other : 0;
 
-    errors = parseInt((errors / data.requests) * 100);
+    errors = parseInt((errors / (data ? data.requests : 1)) * 100);
 
     if (isNaN(errors)) {
         errors = 0;
