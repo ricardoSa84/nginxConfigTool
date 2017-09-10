@@ -12,7 +12,10 @@ window.DashboardView = Backbone.View.extend({
     hostnames: [],
     events: {
         "change .select-hostnam": function(e) {
-            this.hostname = $(this.el).find(e.target).val().toLowerCase();
+          $(this.el).find(".select-hostnam.selectpicker option:selected").each(function(index, element) {
+                opt += element.value;
+            });
+            this.hostname = opt;
             console.log(this.hostname);
         },
         "click .btnClear": function() {
