@@ -48,9 +48,8 @@ window.DashboardView = Backbone.View.extend({
         self.timesChart.init();
         self.gaugesChart.init();
 
-        clearInterval(intervalevent);
 
-        var intervalevent = setInterval(function() {
+        self.intervalevent = setInterval(function() {
             $.get('/stats/' + self.hostname, function(data) {
                 self.codeChart.appendData(data.statistics);
                 self.verbChart.appendData(data.statistics);
@@ -59,8 +58,6 @@ window.DashboardView = Backbone.View.extend({
                 self.gaugesChart.appendData(data.statistics);
                 self.populateHostname(data.hostnames);
                 self.cacheChart.appendData(data);
-
-                $(self.el).find('.select-hostname.selectpicker').selectpicker();
 
                 console.log(data.hostnames);
                 // console.log(data);
@@ -76,6 +73,9 @@ window.DashboardView = Backbone.View.extend({
         }, 2000);
         $(self.el).find('.selectpicker').selectpicker();
 
+    },
+    dashboardClearTimer ; function(){
+        clearInterval(this.intervalevent);
     },
     populateHostname: function(hosts) {
         var self = this;
