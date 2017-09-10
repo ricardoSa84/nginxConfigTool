@@ -48,6 +48,8 @@ window.DashboardView = Backbone.View.extend({
         self.timesChart.init();
         self.gaugesChart.init();
 
+        self.hostnames= [];
+
         clearInterval(intervalevent);
 
         var intervalevent = setInterval(function() {
@@ -60,7 +62,7 @@ window.DashboardView = Backbone.View.extend({
                 self.populateHostname(data.hostnames);
                 self.cacheChart.appendData(data);
 
-                console.log(data.hostnames);
+                // console.log(data.hostnames);
                 // console.log(data);
                 // console.log(data.cache);
                 // console.log(data.statistics);
