@@ -13,6 +13,7 @@ window.DashboardView = Backbone.View.extend({
     events: {
         "change .select-hostnam": function(e) {
             this.hostname = $(this.el).find(e.target).val().toLowerCase();
+            console.log(this.hostname);
         },
         "click .btnClear": function() {
             this.clearCharts();
@@ -79,7 +80,6 @@ window.DashboardView = Backbone.View.extend({
     },
     populateHostname: function(hosts) {
         var self = this;
-        console.log("Hosts", hosts);
         var options = $(self.el).find('.select-hostname.selectpicker');
         for (var i = 0; i < hosts.length; i++) {
             if (self.hostnames.indexOf(hosts[i]) < 0) {
