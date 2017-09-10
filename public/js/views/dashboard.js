@@ -17,6 +17,7 @@ window.DashboardView = Backbone.View.extend({
                 opt += element.value;
             });
             this.hostname = opt;
+            console.log(opt);
         },
         "click .btnClear": function() {
             this.clearCharts();
