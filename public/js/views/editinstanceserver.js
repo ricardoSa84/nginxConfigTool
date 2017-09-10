@@ -57,6 +57,7 @@ window.EditInstanceServerView = Backbone.View.extend({
         "click .instance-delete": function() {
             var self = this;
             self.instance.reloadstatus(function() {
+                console.log("Instance deleete front end click.");
                 modem("DELETE",
                     '/vm/deleteInstance/' + self.allInstances[self.instanceselected]._id,
                     function(data) {
