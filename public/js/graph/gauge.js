@@ -230,7 +230,6 @@ function Gauge(placeholderName, configuration) {
 
         return function(step) {
           var rotation = currentRotation + (targetRotation - currentRotation) * step;
-          console.log(rotation, currentRotation, targetRotation, step);
           return "translate(" + self.config.cx + ", " + self.config.cy + ") rotate(" + rotation + ")";
         }
       });
@@ -239,8 +238,7 @@ function Gauge(placeholderName, configuration) {
   this.valueToDegrees = function(value) {
     // thanks @closealert
     //return value / this.config.range * 270 - 45;
-    console.log(value, this.config.range, this.config.min, this.config.range);
-    return (value === undefined ? 0 :  value)/ this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
+    return (value === undefined ? 0 :  value)  / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
   }
 
   this.valueToRadians = function(value) {
