@@ -52,7 +52,7 @@ GaugesChart.prototype.draw = function() {
 };
 
 GaugesChart.prototype.appendData = function(data) {
-  console-log("Data", data);
+  console.log("Data", data);
   this.formatData(data);
   this.draw();
 };
