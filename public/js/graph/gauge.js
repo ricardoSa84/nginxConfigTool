@@ -239,7 +239,7 @@ function Gauge(placeholderName, configuration) {
   this.valueToDegrees = function(value) {
     // thanks @closealert
     //return value / this.config.range * 270 - 45;
-    console.log(this.config.range, this.config.min, this.config.range, value / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45));
+    console.log(value, this.config.range, this.config.min, this.config.range);
     return value / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
   }
 
