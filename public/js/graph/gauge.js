@@ -65,6 +65,7 @@ function Gauge(placeholderName, configuration) {
 
     if (undefined != this.config.label) {
       var fontSize = Math.round(this.config.size / 9);
+      console.log("config Label", this.config.label);
       this.body.append("svg:text")
         .attr("x", this.config.cx)
         .attr("y", this.config.cy / 2 + fontSize / 2)
@@ -106,6 +107,7 @@ function Gauge(placeholderName, configuration) {
 
       if (major == this.config.min || major == this.config.max) {
         var point = this.valueToPoint(major, 0.63);
+      console.log("major", major);
 
         this.body.append("svg:text")
           .attr("x", point.x)
