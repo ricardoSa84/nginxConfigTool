@@ -227,6 +227,7 @@ function Gauge(placeholderName, configuration) {
         var targetRotation = (self.valueToDegrees(pointerValue) - 90);
         var currentRotation = self._currentRotation || targetRotation;
         self._currentRotation = targetRotation;
+          console.log("rotation", currentRotation, targetRotation, currentRotation, "step");
 
         return function(step) {
           var rotation = currentRotation + (targetRotation - currentRotation) * step;
