@@ -68,13 +68,13 @@ GaugesChart.prototype.formatData = function(data) {
 
     this.gauges.errors.data = errors;
 
-    var valueBW = parseInt(data.bandwidth);
+    var valueBW = parseInt(data ? data.bandwidth : 1);
     if (this.gauges.bw.config.max < valueBW) {
         this.gauges.bw = this.createGauge('bwGauge', 'MBps', 0, valueBW + 1, true);
     }
     this.gauges.bw.data = valueBW;
 
-    var valueReqs = parseInt(data.requestspers);
+    var valueReqs = parseInt(data ? data.requestspers : 1);
     if (this.gauges.requests.config.max < valueReqs) {
         this.gauges.requests = this.createGauge('requestsGauge', 'Req/s', 0, valueReqs);
     }
