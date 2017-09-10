@@ -230,6 +230,7 @@ function Gauge(placeholderName, configuration) {
 
         return function(step) {
           var rotation = currentRotation + (targetRotation - currentRotation) * step;
+          console.log(rotation, currentRotation, targetRotation, currentRotation, step);
           return "translate(" + self.config.cx + ", " + self.config.cy + ") rotate(" + rotation + ")";
         }
       });
