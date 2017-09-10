@@ -227,7 +227,6 @@ function Gauge(placeholderName, configuration) {
         var targetRotation = (self.valueToDegrees(pointerValue) - 90);
         var currentRotation = self._currentRotation || targetRotation;
         self._currentRotation = targetRotation;
-          console.log("rotation", self._currentRotation, targetRotation, self.valueToDegrees(pointerValue), "step");
 
         return function(step) {
           var rotation = currentRotation + (targetRotation - currentRotation) * step;
@@ -240,6 +239,7 @@ function Gauge(placeholderName, configuration) {
   this.valueToDegrees = function(value) {
     // thanks @closealert
     //return value / this.config.range * 270 - 45;
+    console.log(this.config.range, this.config.min, this.config.range);
     return value / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
   }
 
