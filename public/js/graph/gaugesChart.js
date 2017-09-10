@@ -14,8 +14,8 @@ GaugesChart.prototype.init = function() {
   var self = this;
 
   this.gauges.requests = this.createGauge('requestsGauge', 'Req/s', 0, 50);
-  // this.gauges.bw = this.createGauge('bwGauge', 'MBps', 0, 1, true);
-  // this.gauges.errors = this.createGauge('errorsGauge', 'Error %', 0, 100);
+  this.gauges.bw = this.createGauge('bwGauge', 'MBps', 0, 1, true);
+  this.gauges.errors = this.createGauge('errorsGauge', 'Error %', 0, 100);
 };
 
 GaugesChart.prototype.createGauge = function(container, label, min, max, decimalc) {
@@ -52,7 +52,6 @@ GaugesChart.prototype.draw = function() {
 };
 
 GaugesChart.prototype.appendData = function(data) {
-  console.log("Data", data);
   this.formatData(data);
   this.draw();
 };

@@ -238,7 +238,7 @@ function Gauge(placeholderName, configuration) {
   this.valueToDegrees = function(value) {
     // thanks @closealert
     //return value / this.config.range * 270 - 45;
-    return (value === undefined ? 0 :  value)  / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
+    return (value === undefined ? 0 :  value) / this.config.range * 270 - (this.config.min / this.config.range * 270 + 45);
   }
 
   this.valueToRadians = function(value) {
