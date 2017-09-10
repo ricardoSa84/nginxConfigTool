@@ -2283,7 +2283,10 @@ d3 = function() {
             a = mo.ns.qualify(n);
         return ki(this, "attr." + n, t, a.local ? i : u)
     }, Uc.attrTween = function(n, t) {
-        function e(n, e) { var r = t.call(this, n, e, this.getAttribute(u)); return r && function(n) { this.setAttribute(u, r(n)) } }
+        function e(n, e) { 
+        	var r = t.call(this, n, e, this.getAttribute(u)); 
+        	return r && function(n) { this.setAttribute(u, r(n)) } 
+        }
 
         function r(n, e) { var r = t.call(this, n, e, this.getAttributeNS(u.space, u.local)); return r && function(n) { this.setAttributeNS(u.space, u.local, r(n)) } } var u = mo.ns.qualify(n); return this.tween("attr." + n, u.local ? r : e) }, Uc.style = function(n, t, e) {
         function r() { this.style.removeProperty(n) }
