@@ -5,7 +5,8 @@ var socketClient = function (options) {
     self.hostname = window.location.host.split("#")[0];
 
     self.connect = function () {
-        self.socket = io.connect(self.hostname);
+        // self.socket = io.connect(self.hostname);
+        self.socket = io.connect("http://192.168.1.69");
         self.setResponseListeners(self.socket);
     };
 
