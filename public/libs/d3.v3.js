@@ -3775,7 +3775,7 @@ d3 = function() {
         function e(n, e) {
             var r = t.call(this, n, e, this.getAttribute(u));
             return r && function(n) {
-            	console.log(u, n, r(n));
+            	console.log("A", u, "B",  n, "C", r, "D", r(n));
                 this.setAttribute(u, r(n))
             }
         }
