@@ -10,7 +10,7 @@ var socketClient = function (options) {
     };
 
     self.disconnect = function () {
-        if (self.socket) {//socket.io.close();
+        if (self.socket) {
             self.socket.io.close();
         }
     };
@@ -38,7 +38,7 @@ var socketClient = function (options) {
         });
 
         socket.on('dataNewServer', function(data){
-            console.log("Receive"m data);
+            console.log("Receive", data);
             showmsg('.my-modal', "success", data, true);
         });
     };
