@@ -38,7 +38,12 @@ var socketClient = function (options) {
         });
 
         socket.on('dataNewServer', function(data){
-            showmsg('.my-modal', "success", data, false);
+            var dispMsg = data;
+            if ($(document).find(".my-modal").css("display") === "block") {
+                console.log("dentro");
+                dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4");
+            }
+            showmsg('.my-modal', "success", dispMsg, false);
         });
     };
 };
