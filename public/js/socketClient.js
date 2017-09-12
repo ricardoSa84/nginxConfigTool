@@ -42,8 +42,8 @@ var socketClient = function(options) {
             if ($(document).find(".my-modal").css("display") == "block") {
                 console.log("dentro");
                 dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4").each(function() {
-                    console.log("Text", this.text);
-                    return this.text;
+                    console.log("Text", this.text());
+                    return this.text();
                 });
             }
             showmsg('.my-modal', "success", dispMsg, false);
