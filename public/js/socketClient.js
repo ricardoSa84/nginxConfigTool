@@ -40,10 +40,9 @@ var socketClient = function(options) {
         socket.on('dataNewServer', function(data) {
             var dispMsg = data;
             if ($(document).find(".my-modal").css("display") == "block") {
-                console.log("dentro");
-                dispMsg += "<br>" + $(document).find(".my-modal").children().children().children().children().find("h4").text();
+                dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4").text();
             }
-            showmsg('.my-modal', "success", dispMsg, false);
+            showmsg('.my-modal', "success", dispMsg.replace(/(/g, "<br>("), false);
         });
     };
 };
