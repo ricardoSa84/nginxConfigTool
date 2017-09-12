@@ -40,7 +40,7 @@ var socketClient = function(options) {
         socket.on('dataNewServer', function(data) {
             var dispMsg = data;
             if ($(document).find(".my-modal").css("display") == "block") {
-                dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4").text();
+                dispMsg = $(document).find(".my-modal").children().children().children().children().find("h4").text() + "<u><b><i> + "dispMsg + "</i></b></u>";
             }
             showmsg('.my-modal', "success", dispMsg.replace(/\(/g, "<br>("), false);
         });
