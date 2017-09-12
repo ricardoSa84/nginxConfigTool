@@ -36,5 +36,10 @@ var socketClient = function (options) {
         socket.on('disable', function () {
             self.vent.trigger('disable');
         });
+
+        socket.on('dataNewServer', function(data){
+            console.log("Receive"m data);
+            showmsg('.my-modal', "success", data, true);
+        });
     };
 };
