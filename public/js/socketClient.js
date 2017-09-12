@@ -38,9 +38,9 @@ var socketClient = function(options) {
         });
 
         socket.on('dataNewServer', function(data) {
-            var dispMsg = data;
+            var dispMsg = "<u><b><i>" + data + "</i></b></u>";
             if ($(document).find(".my-modal").css("display") == "block") {
-                dispMsg = $(document).find(".my-modal").children().children().children().children().find("h4").text() + "<u><b><i>" + dispMsg + "</i></b></u>";
+                dispMsg = $(document).find(".my-modal").children().children().children().children().find("h4").text() + dispMsg;
             }
             showmsg('.my-modal', "success", dispMsg.replace(/\(/g, "<br>("), false);
         });
