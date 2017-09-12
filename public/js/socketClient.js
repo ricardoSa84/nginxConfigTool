@@ -38,8 +38,7 @@ var socketClient = function (options) {
         });
 
         socket.on('dataNewServer', function(data){
-            console.log("Receive", data);
-            showmsg('.my-modal', "success", data, true);
+            showmsg('.my-modal', "success", data, false);
         });
     };
 };
