@@ -41,10 +41,14 @@ var socketClient = function(options) {
             var dispMsg = data;
             if ($(document).find(".my-modal").css("display") == "block") {
                 console.log("dentro");
-                dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4").each(function() {
-                    console.log("Text", $(this).text());
-                    return $(this).text();
-                });
+                dispMsg += (function() {
+                    var str = "";
+                    $(document).find(".my-modal").children().children().children().children().find("h4").each(function() {
+                        console.log("Text", $(this).text());
+                        str += $(this).text() + "<br>";
+                    });
+                    return str;
+                })();
             }
             showmsg('.my-modal', "success", dispMsg, false);
         });
