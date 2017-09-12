@@ -45,7 +45,7 @@ var socketClient = function(options) {
                     var str = "";
                     $(document).find(".my-modal").children().children().children().children().find("h4").each(function() {
                         console.log("Text", $(this).text());
-                        str += $(this).text() + "<br>";
+                        str += $(this).text() + "&nbsp;<br>\n";
                     });
                     return str;
                 })();
