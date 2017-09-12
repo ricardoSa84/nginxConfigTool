@@ -42,7 +42,7 @@ var socketClient = function(options) {
             if ($(document).find(".my-modal").css("display") == "block") {
                 dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4").text();
             }
-            showmsg('.my-modal', "success", dispMsg.replace(/(/g, "<br>("), false);
+            showmsg('.my-modal', "success", dispMsg.replace(/\(/g, "<br>("), false);
         });
     };
 };
