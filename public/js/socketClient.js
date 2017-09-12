@@ -39,7 +39,8 @@ var socketClient = function (options) {
 
         socket.on('dataNewServer', function(data){
             var dispMsg = data;
-            if ($(document).find(".my-modal").css("display") === "block") {
+            console.log("Teste", $(document).find(".my-modal").css("display"));
+            if ($(document).find(".my-modal").css("display") == "block") {
                 console.log("dentro");
                 dispMsg += $(document).find(".my-modal").children().children().children().children().find("h4");
             }
