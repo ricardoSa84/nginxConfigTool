@@ -28,12 +28,6 @@ window.LocationView = Backbone.View.extend({
             $(e.target).parent().parent().parent().parent().parent().remove();
             self.allOptionlocation[optName] = null;
         },
-        // "click .option-upstream-remove": function(e) {
-        //     var self = this;
-        //     var optName = $(e.target).parent().parent().parent().parent().attr("data-option");
-        //     $(e.target).parent().parent().parent().parent().parent().remove();
-        //     self.allOptionupstream[optName] = null;
-        // },
         "change .btn-on-off": function(evt) {
             var self = this;
 
@@ -75,10 +69,6 @@ window.LocationView = Backbone.View.extend({
                 } else if ($(self.el).find(".control-cache-path").prop('checked')) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
                     // $(self.el).find(".control-upstream").bootstrapToggle('disable');
-
-                    // } else if ($(self.el).find(".control-upstream").prop('checked')) {
-                    //     $(self.el).find(".control-cache-ext").bootstrapToggle('disable');
-                    //     $(self.el).find(".control-cache-path").bootstrapToggle('disable');
 
                 } else if (!$(self.el).find(".control-cache-ext").prop('checked') && !$(self.el).find(".control-cache-path").prop('checked') /* && !$(self.el).find(".control-upstream").prop('checked')*/ ) {
                     $(self.el).find(".control-cache-ext").bootstrapToggle('enable');
@@ -160,6 +150,9 @@ window.LocationView = Backbone.View.extend({
                         if (!$(self.el).find(".control-upstream-select-location").prop('checked')) {
                             if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, "").length > 3) {
                                 $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                                self.locationcontinue = self.locationcontinue === false ? false : true;
+                            } else if ($(self.el).find(obj).val().trim().length === 0) {
+                                $(self.el).find(".input-proxy-pass-location").next().children().removeClass("fa-close color-red fa-check color-green");
                                 self.locationcontinue = self.locationcontinue === false ? false : true;
                             } else {
                                 $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
@@ -257,22 +250,24 @@ window.LocationView = Backbone.View.extend({
                 }
             }
         }
-        locJson.options.push({
-            optname: self.locationname + "-loc-option-" + self.countoptionlocation,
-            valid: true,
-            select: "proxy_pass",
-            text: (function() {
-                if ($(self.el).find(".control-upstream-select-location").prop('checked')) {
-                    if ($(self.el).find(".control-upstream-protocol-location").prop('checked')) {
-                        return "https://" + self.upstreamSelectLocation.trim();
+        if ($(self.el).find(".control-upstream-select-location").prop('checked') || $(self.el).find('.host-proxy.input-proxy-pass-location').val().trim().length > 10) {
+            locJson.options.push({
+                optname: self.locationname + "-loc-option-" + self.countoptionlocation,
+                valid: true,
+                select: "proxy_pass",
+                text: (function() {
+                    if ($(self.el).find(".control-upstream-select-location").prop('checked')) {
+                        if ($(self.el).find(".control-upstream-protocol-location").prop('checked')) {
+                            return "https://" + self.upstreamSelectLocation.trim();
+                        } else {
+                            return "http://" + self.upstreamSelectLocation.trim();
+                        }
                     } else {
-                        return "http://" + self.upstreamSelectLocation.trim();
+                        return $(self.el).find('.host-proxy.input-proxy-pass-location').val().trim();
                     }
-                } else {
-                    return $(self.el).find('.host-proxy.input-proxy-pass-location').val().trim();
-                }
-            })()
-        });
+                })()
+            });
+        }
         locJson.locValid = self.locationcontinue;
         if (self.locationcontinue) {
             return locJson;

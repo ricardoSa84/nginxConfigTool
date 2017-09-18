@@ -283,11 +283,15 @@ window.SettingsView = Backbone.View.extend({
                     case "host-proxy":
                         if (!$(self.el).find(".control-upstream-select").prop('checked')) {
                             if ($(self.el).find(obj).val().trim().match(self.httpRegex) && $(self.el).find(obj).val().trim().replace(self.httpRegex, "").length > 3) {
-                                $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
-                                self.servercontinue = self.servercontinue === false ? false : true;
+                                if ($(self.el).find(obj).attr("class").indexOf("input-proxy-pass-location") < 0) {
+                                    $(self.el).find(obj).next().children().removeClass("fa-close color-red").addClass("fa-check color-green");
+                                    self.servercontinue = self.servercontinue === false ? false : true;
+                                }
                             } else {
-                                $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
-                                self.servercontinue = false;
+                                if ($(self.el).find(obj).attr("class").indexOf("input-proxy-pass-location") < 0) {
+                                    $(self.el).find(obj).next().children().removeClass("fa-check color-green").addClass("fa-close color-red");
+                                    self.locationcontinue = false;
+                                }
                             }
                         } else if ($(self.el).find(".control-upstream-select").prop('checked')) {
                             if (self.upstreamSelect.trim().length > 0) {
@@ -378,7 +382,7 @@ window.SettingsView = Backbone.View.extend({
                 }
             }
         }
-        
+
         if (self.servercontinue) {
             if (self.editmode) {
                 serverconfig.editmode = self.editmode;
@@ -430,7 +434,7 @@ window.SettingsView = Backbone.View.extend({
             $(".server-btns").html('<div class="col-md-2 "><button type="button" class="btn btn-default server-create btn-block"><label><i class="fa fa-save"></i> Save Server </label></button></div>' +
                 '<div class="col-md-2"><button type="button " class="btn btn-default btn-block remove-server"><label><i class="fa fa-trash-o"></i> Remove Server</label></button></div>' +
                 '<div class="col-md-2 "><button type="button " class="btn btn-default btn-block test-nginx"><label> Test Nginx </label></button></div>' +
-                '<div class="col-md-2 "><button type="button " disabled class="btn btn-default btn-block restart-nginx"><label><i class="fa fa-refresh "></i></i> Restart Ngnix</label></button></div>');
+                '<div class="col-md-2 "><button type="button" class="btn btn-default btn-block restart-nginx"><label><i class="fa fa-refresh "></i></i> Restart Ngnix</label></button></div>');
             hideMsg('.my-modal-wait');
         }
     },

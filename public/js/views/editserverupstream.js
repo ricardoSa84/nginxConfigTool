@@ -239,20 +239,24 @@ window.EditServerUpstreamView = Backbone.View.extend({
     },
     reloadstatus: function(callback) {
         var self = this;
-        modem("GET",
-            '/vm/statusInstance/' + self.instanceselected,
-            function(data) {
-                // console.log(data);
-                if (data.status === "OK") {
-                    callback();
-                } else {
-                    showmsg('.my-modal', "error", data.stdout, false);
-                }
-            },
-            function(xhr, ajaxOptions, thrownError) {
-                var json = JSON.parse(xhr.responseText);
-                error_launch(json.message);
-            }, {});
+        if (self.instanceselected !== "localhost") {
+            modem("GET",
+                '/vm/statusInstance/' + self.instanceselected,
+                function(data) {
+                    // console.log(data);
+                    if (data.status === "OK") {
+                        callback();
+                    } else {
+                        showmsg('.my-modal', "error", data.stdout, false);
+                    }
+                },
+                function(xhr, ajaxOptions, thrownError) {
+                    var json = JSON.parse(xhr.responseText);
+                    error_launch(json.message);
+                }, {});
+        } else {
+            callback();
+        }
     },
     render: function() {
         var self = this;
