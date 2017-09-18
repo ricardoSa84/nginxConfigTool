@@ -146,7 +146,7 @@ var initPoints = function(array, numpoints) {
         for (var j = 0; j < array.length; j++) {
             array[j].data.push({
                 'x': parseInt(d.getTime() / 1000),
-                'y': null
+                'y': 0
             });
         }
     }
