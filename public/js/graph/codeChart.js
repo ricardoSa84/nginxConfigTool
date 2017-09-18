@@ -29,12 +29,15 @@ var CodeChart = function(placeholder, opts) {
         'color': '#68776C',
         'data': []
     }];
-};
+
+    initPoints(this.points, this.graphSize);
+}
 
 CodeChart.prototype.clear = function() {
-    for (var i = 0; i < this.points.length; i++) {
-        this.points[i].data = [];
-    }
+    // for (var i = 0; i < this.points.length; i++) {
+    //     this.points[i].data = [];
+    // }
+    initPoints(this.points, this.graphSize);
 };
 
 CodeChart.prototype.init = function() {
@@ -133,6 +136,18 @@ CodeChart.prototype.formatData = function(data) {
                 }
                 counter++;
             }
+        }
+    }
+};
+
+var initPoints = function(array, numpoints) {
+    for (var i = 0; i < numpoints; i++) {
+        var d = new Date();
+        for (var j = 0; j < array.length; j++) {
+            array[j].data.push({
+                'x': parseInt(d.getTime() / 1000),
+                'y': null
+            });
         }
     }
 };
