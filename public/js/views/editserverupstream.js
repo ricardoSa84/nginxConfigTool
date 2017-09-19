@@ -159,7 +159,7 @@ window.EditServerUpstreamView = Backbone.View.extend({
                         // console.log('chegou aqui:', data);
                         if (data.status === "nginx test ok") {
                             // $('.restart-nginx').prop('disabled', false);
-                            showmsg('.my-modal', "success", "NGinx Reload OK!", true);
+                            showmsg('.my-modal', "success", "NGinx Reload OK!", false);
                         } else if (data.status === 'nginx test warning') {
                             showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
                         } else {
