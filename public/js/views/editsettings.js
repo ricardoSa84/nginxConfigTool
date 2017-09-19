@@ -124,9 +124,9 @@ window.EditsettingsView = Backbone.View.extend({
                     modem("POST", '/nginx/reload', function(data) {
                         hideMsg('.my-modal-wait');
                         // console.log('chegou aqui:', data);
-                        if (data.status === "nginx reload ok") {
+                        if (data.status === "nginx test ok") {
                             // $('.restart-nginx').prop('disabled', false);
-                            showmsg('.my-modal', "success", "NGinx Test OK!", false);
+                            showmsg('.my-modal', "success", "NGinx Reload OK!", false);
                         } else if (data.status === 'nginx test warning') {
                             // $('.restart-nginx').prop('disabled', false);
                             showmsg('.my-modal', "warning", data.stdout.replace(/\n/g, '<br>'), false);
